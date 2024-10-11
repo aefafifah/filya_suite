@@ -255,3 +255,78 @@ int main() {
     return 0;
 }
 
+
+// pseudocode
+
+// FUNCTION login(admin)
+//     DECLARE input AS STRING
+//     DECLARE input_password AS STRING
+
+//     PRINT "Silahkan login:"
+//     PRINT "Masukkan email atau nomor telepon: "
+//     READ input
+    
+//     PRINT "Masukkan password: "
+//     READ input_password
+
+//     IF (input IS EQUAL TO admin.email OR input IS EQUAL TO admin.no_telp) AND (input_password IS EQUAL TO admin.password) THEN
+//         PRINT "Selamat datang admin"
+//     ELSE
+//         PRINT "Login gagal! Anda bukan admin."
+//         EXIT PROGRAM
+//     END IF
+// END FUNCTION
+
+// FUNCTION main()
+//     DECLARE admin AS DataAdmin
+//     SET admin.email = "filyasuite@admin.com"
+//     SET admin.password = "password"
+//     SET admin.no_telp = "11111111"
+
+//     DECLARE aduan AS Aduan
+//     CALL inisialisasiPengaduan(aduan)
+    
+//     CALL login(admin)
+
+//     DECLARE pilihan AS INTEGER
+//     DO
+//         PRINT "\nMenu:"
+//         PRINT "1. Tampilkan Pengaduan Tempat"
+//         PRINT "2. Tampilkan Pengaduan Fasilitas"
+//         PRINT "3. Tampilkan Pengaduan Kinerja"
+//         PRINT "4. Beri Status Pengaduan Tempat"
+//         PRINT "5. Beri Status Pengaduan Fasilitas"
+//         PRINT "6. Beri Status Pengaduan Kinerja"
+//         PRINT "0. Keluar"
+//         PRINT "Pilih: "
+//         READ pilihan
+
+//         SWITCH (pilihan)
+//             CASE 1:
+//                 CALL tampilkanPengaduanTempat(aduan)
+//                 BREAK
+//             CASE 2:
+//                 CALL tampilkanPengaduanFasilitas(aduan)
+//                 BREAK
+//             CASE 3:
+//                 CALL tampilkanPengaduanKinerja(aduan)
+//                 BREAK
+//             CASE 4:
+//                 CALL beriStatusPengaduanTempat(aduan)
+//                 BREAK
+//             CASE 5:
+//                 CALL beriStatusPengaduanFasilitas(aduan)
+//                 BREAK
+//             CASE 6:
+//                 CALL beriStatusPengaduanKinerja(aduan)
+//                 BREAK
+//             CASE 0:
+//                 PRINT "Selamat datang di halaman login!"
+//                 BREAK
+//             DEFAULT:
+//                 PRINT "Pilihan tidak valid!"
+//                 BREAK
+//         END SWITCH
+//     WHILE (pilihan != 0)
+
+// END FUNCTION

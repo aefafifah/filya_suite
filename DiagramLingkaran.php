@@ -47,7 +47,7 @@
 
         /* Dashboard area dengan gambar latar */
         .dashboard {
-            background-image: url('1.jpg');
+            background-image: url('blubrown.jpg');
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;

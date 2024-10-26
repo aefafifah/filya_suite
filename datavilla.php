@@ -18,6 +18,7 @@
             font-family: Arial, sans-serif;
             display: flex;
         }
+
         /* Sidebar */
         .sidebar {
             width: 250px;
@@ -51,33 +52,63 @@
         /* Konten Utama */
         .main-content {
             flex: 1;
-            padding: 20px;
+            padding: 30px 20px; /* Mengatur padding agar selaras */
             background-color: #FDE49E;
             text-align: center;
+            background-image: url('blubrown.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            position: relative;
         }
+        
+        /* Overlay */
+        .main-content::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #FDE49E;
+            opacity: 0.7;
+            z-index: 1;
+        }
+
+        /* Menjaga elemen tetap di atas overlay */
+        .labels, .data-row, h1 {
+            position: relative;
+            z-index: 2;
+        }
+
         .main-content h1 {
             font-family: 'Baloo 2', cursive;
-            margin-bottom: 20px;
+            margin: 0; /* Menghapus margin atas agar selaras */
+            font-size: 2.5rem;
             font-weight: bold;
+            color: #DD761C;
         }
+        
         .labels, .data-row {
             display: flex;
-            color: #DD761C; /* Warna teks */
+            color: #DD761C;
             margin-bottom: 20px;
-            padding: 10px 0; /* Jarak vertikal */
-            background-color: #fff; /* Latar belakang */
-            border-radius: 5px; /* Sudut membulat */
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Bayangan */
-            justify-content: space-between; /* Memastikan elemen tersebar merata */
+            padding: 10px 0;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            justify-content: space-between;
         }
+        
         .labels {
             font-weight: bold;
-            background-color: transparent; /* Tidak ada latar belakang */
-            box-shadow: none; /* Menghilangkan bayangan */
+            background-color: transparent;
+            box-shadow: none;
         }
+        
         .nama-villa, .kuota, .keterangan, .icon {
-            width: 20%; /* Menjaga lebar yang konsisten */
-            text-align: center; /* Perataan tengah */
+            width: 20%;
+            text-align: center;
         }
     </style>
 </head>
@@ -99,23 +130,10 @@
         <h1><strong>Data Villa</strong></h1>
         
         <?php
-        // Data villa baru
         $villaData = [
-            [
-                'nama_villa' => 'Villa Fancy',
-                'kuota' => 5,
-                'keterangan' => 'Aktif'
-            ],
-            [
-                'nama_villa' => 'Villa Dreamy',
-                'kuota' => 5,
-                'keterangan' => 'Aktif'
-            ],
-            [
-                'nama_villa' => 'Villa Charming',
-                'kuota' => 5,
-                'keterangan' => 'Aktif'
-            ],
+            ['nama_villa' => 'Villa Fancy', 'kuota' => 5, 'keterangan' => 'Aktif'],
+            ['nama_villa' => 'Villa Dreamy', 'kuota' => 5, 'keterangan' => 'Aktif'],
+            ['nama_villa' => 'Villa Charming', 'kuota' => 5, 'keterangan' => 'Aktif'],
         ];
         ?>
 
@@ -129,16 +147,10 @@
         
         <?php foreach ($villaData as $villa): ?>
             <div class="data-row">
-                <div class="nama-villa">
-                    <?php echo htmlspecialchars($villa['nama_villa']); ?>
-                </div>
-                <div class="kuota">
-                    <?php echo htmlspecialchars($villa['kuota']); ?>
-                </div>
-                <div class="keterangan">
-                    <?php echo htmlspecialchars($villa['keterangan']); ?>
-                </div>
-                <div class="icon"><i class="fas fa-pencil-alt"></i></div> <!-- Ikon pensil -->
+                <div class="nama-villa"><?php echo htmlspecialchars($villa['nama_villa']); ?></div>
+                <div class="kuota"><?php echo htmlspecialchars($villa['kuota']); ?></div>
+                <div class="keterangan"><?php echo htmlspecialchars($villa['keterangan']); ?></div>
+                <div class="icon"><i class="fas fa-pencil-alt"></i></div>
             </div>
         <?php endforeach; ?>
     </div>

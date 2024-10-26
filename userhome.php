@@ -59,7 +59,7 @@ $usertype = $_SESSION['usertype'];
                     </li>
                 <?php endif; ?>
                 <li class="nav-item">
-                    <a class="nav-link" href="login.php">Logout</a>
+                    <a class="nav-link" href="logout.php">Logout</a>
                 </li>
             </ul>
         </div>
@@ -94,6 +94,9 @@ $usertype = $_SESSION['usertype'];
                 </div>
             </div>
         </div>
+        <button onclick="window.location.href='eyyo2.php'" style="padding: 10px 15px; background-color: #4CAF50; color: white; border: none; border-radius: 5px; cursor: pointer;">
+    Laporan Fasilitas
+</button>
     </div>
 </div>
 

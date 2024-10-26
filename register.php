@@ -37,7 +37,14 @@ if(isset($_POST['submit'])){
             // Hanya simpan hash password yang benar
             $insert = "INSERT INTO users(nama, email, password, usertype, nomor_telpon, alamat) VALUES('$name','$email','$pass','$user_type','$phone','$address')";
             mysqli_query($data, $insert);
+            $_SESSION['nama'] = $name;
+            $_SESSION['nomor_telpon'] = $phone;
+            $_SESSION['user_id'] = mysqli_insert_id($data); // Mengambil ID pengguna terakhir yang dimasukkan
+            $_SESSION['usertype'] = $user_type; // Atur tipe pengguna
+
             header('location:userhome.php');
+
+
         }
     }
 }

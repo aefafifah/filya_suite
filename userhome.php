@@ -49,7 +49,7 @@ $usertype = $_SESSION['usertype'];
         /* Sidebar */
         .sidebar {
             background-color: #f7d76e;
-            width: 25%;
+            width: 20%;
             padding: 2em;
             color: #f07126;
             display: flex;
@@ -98,7 +98,7 @@ $usertype = $_SESSION['usertype'];
         /* Main content */
         .content {
             position: relative;
-            width: 75%;
+            width: 80%;
             background-image: url('abcd.jpg');
             /* Replace 'background.jpg' with your image URL */
             background-size: cover;

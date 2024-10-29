@@ -1,3 +1,19 @@
+<?php
+session_start();
+
+// Pastikan user telah login
+if (!isset($_SESSION['usertype'])) {
+    header("location:login.php");
+    exit();
+}
+
+// Ambil tipe user dari session
+$usertype = $_SESSION['usertype'];
+?>
+
+<!DOCTYPE html>
+<html lang="id">
+
 <!DOCTYPE html>
 <html lang="id">
 
@@ -61,29 +77,6 @@
             padding: 0.8em 1em;
             border-radius: 8px;
             transition: background-color 0.3s, color 0.3s;
-        }
-
-        /* Transition for smooth appearance */
-        #extraButtons {
-            display: none;
-            flex-direction: column;
-            gap: 0.5em;
-            transition: max-height 0.5s ease;
-            max-height: 0;
-            overflow: hidden;
-        }
-
-        #extraButtons.show {
-            display: flex;
-            max-height: 500px;
-            /* Cukup besar untuk menampilkan tombol */
-        }
-
-
-        .menu-item img {
-            width: 24px;
-            height: 24px;
-            margin-right: 10px;
         }
 
         /* White background and dot on hover only */
@@ -153,21 +146,54 @@
         }
 
         .button {
-            background-color: #DD761C;
+            background-color: #f07126;
             color: #fff;
             border: none;
-            padding: 0.5em 1em;
+            padding: 0.6em 1.8em;
             font-size: 1em;
             cursor: pointer;
-            border-radius: 15px;
+            border-radius: 25px;
             width: 100%;
-            font-weight: bold;
-            transition: background-color 0.3s;
+            text-align: center;
+            transition: background-color 0.3s, color 0.3s;
         }
 
         .button:hover {
             background-color: #FDE49E;
             color: #DD761C;
+        }
+
+        /* Styling tombol ekstra dan animasi */
+        .extra-buttons {
+            overflow: hidden;
+            max-height: 0;
+            transition: max-height 1s ease;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5em;
+        }
+
+        .extra-buttons.show {
+            max-height: 300px;
+        }
+
+        .extra-button {
+            background-color: #f7d76e;
+            color: #DD761C;
+            border: none;
+            padding: 0.6em 1.8em;
+            font-size: 1em;
+            border-radius: 25px;
+            text-align: center;
+            width: 100%;
+            opacity: 0;
+            transform: translateY(-10px);
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+
+        .extra-buttons.show .extra-button {
+            opacity: 1;
+            transform: translateY(0);
         }
     </style>
 </head>
@@ -195,22 +221,23 @@
         <div class="content">
             <h1>Selamat Datang Di Filya Suite</h1>
             <div class="button-container">
-                <button class="button" onclick="showExtraButtons()">Adukan Laporan</button>
+                <button class="button" onclick="toggleExtraButtons()">Adukan Laporan</button>
                 <button class="button">Booking Villa</button>
-                <div id="extraButtons">
-                    <button class="button">Laporan Fasilitas</button>
-                    <button class="button">Laporan Kinerja</button>
-                    <button class="button">Laporan Tempat</button>
+                <div class="extra-buttons" id="extraButtons">
+                    <button class="extra-button">Laporan Fasilitas</button>
+                    <button class="extra-button">Laporan Kinerja</button>
+                    <button class="extra-button">Laporan Tempat</button>
                 </div>
             </div>
         </div>
-        <script>
-            function showExtraButtons() {
-                document.getElementById("extraButtons").style.display = "flex";
-                const extraButtons = document.getElementById("extraButtons");
-                extraButtons.classList.toggle("show");
-            }
-        </script>
+    </div>
+
+    <script>
+        function toggleExtraButtons() {
+            const extraButtons = document.getElementById("extraButtons");
+            extraButtons.classList.toggle("show");
+        }
+    </script>
 </body>
 
 </html>

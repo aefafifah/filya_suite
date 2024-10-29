@@ -1,18 +1,6 @@
-<?php
-session_start();
-
-// Pastikan user telah login
-if (!isset($_SESSION['usertype'])) {
-    header("location:login.php");
-    exit();
-}
-
-// Ambil tipe user dari session
-$usertype = $_SESSION['usertype'];
-?>
-
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -26,7 +14,8 @@ $usertype = $_SESSION['usertype'];
             font-family: Arial, sans-serif;
         }
 
-        html, body {
+        html,
+        body {
             height: 100%;
             width: 100%;
             overflow: hidden;
@@ -55,8 +44,10 @@ $usertype = $_SESSION['usertype'];
         }
 
         .sidebar h2 {
-            font-size: 1.5em;
+            font-size: 1.8em;
             margin-bottom: 2em;
+            font-weight: bold;
+            color: #DD761C;
         }
 
         .menu-item {
@@ -66,11 +57,28 @@ $usertype = $_SESSION['usertype'];
             font-size: 1.2em;
             text-decoration: none;
             color: #DD761C;
+            position: relative;
+            padding: 0.8em 1em;
+            border-radius: 8px;
+            transition: background-color 0.3s, color 0.3s;
         }
 
-        .menu-item:hover {
-            text-decoration: underline;
+        /* Transition for smooth appearance */
+        #extraButtons {
+            display: none;
+            flex-direction: column;
+            gap: 0.5em;
+            transition: max-height 0.5s ease;
+            max-height: 0;
+            overflow: hidden;
         }
+
+        #extraButtons.show {
+            display: flex;
+            max-height: 500px;
+            /* Cukup besar untuk menampilkan tombol */
+        }
+
 
         .menu-item img {
             width: 24px;
@@ -78,11 +86,28 @@ $usertype = $_SESSION['usertype'];
             margin-right: 10px;
         }
 
+        /* White background and dot on hover only */
+        .menu-item:hover {
+            background-color: #FFFFFF;
+            color: #DD761C;
+        }
+
+        .menu-item:hover::before {
+            content: '';
+            position: absolute;
+            left: -10px;
+            width: 8px;
+            height: 8px;
+            background-color: #FFFFFF;
+            border-radius: 50%;
+        }
+
         /* Main content */
         .content {
             position: relative;
             width: 75%;
-            background-image: url('abcd.jpg'); /* Replace 'background.jpg' with your image URL */
+            background-image: url('abcd.jpg');
+            /* Replace 'background.jpg' with your image URL */
             background-size: cover;
             background-position: center;
             padding: 2em;
@@ -103,11 +128,13 @@ $usertype = $_SESSION['usertype'];
             left: 0;
             right: 0;
             bottom: 0;
-            background-color: rgba(255, 255, 255, 0.7); /* Light overlay effect */
+            background-color: rgba(255, 255, 255, 0.7);
+            /* Light overlay effect */
             z-index: 1;
         }
 
-        .content h1, .button-container {
+        .content h1,
+        .button-container {
             position: relative;
             z-index: 2;
         }
@@ -121,55 +148,69 @@ $usertype = $_SESSION['usertype'];
         .button-container {
             display: flex;
             flex-direction: column;
-            gap: 1em;
-            width: 200px;
+            gap: 0.5em;
+            width: 180px;
         }
 
         .button {
-            background-color: #f07126;
+            background-color: #DD761C;
             color: #fff;
             border: none;
-            padding: 0.8em 2em;
-            font-size: 1.2em;
+            padding: 0.5em 1em;
+            font-size: 1em;
             cursor: pointer;
-            border-radius: 5px;
-            transition: background-color 0.3s;
+            border-radius: 15px;
             width: 100%;
+            font-weight: bold;
+            transition: background-color 0.3s;
         }
 
         .button:hover {
             background-color: #FDE49E;
-            color: #f07126;
+            color: #DD761C;
         }
     </style>
 </head>
+
 <body>
     <div class="container">
         <!-- Sidebar -->
         <div class="sidebar">
             <h2>Halo User</h2>
             <a href="#" class="menu-item">
-                <img src="https://img.icons8.com/material-outlined/24/000000/home--v2.png" alt="Home Icon"/>
+                <img src="https://img.icons8.com/material-outlined/24/000000/home--v2.png" alt="Home Icon" />
                 Halaman Utama
             </a>
             <a href="#" class="menu-item">
-                <img src="https://img.icons8.com/ios/24/000000/happy--v1.png" alt="Report Icon"/>
+                <img src="https://img.icons8.com/ios/24/000000/happy--v1.png" alt="Report Icon" />
                 Data Laporan Saya
             </a>
             <a href="#" class="menu-item">
-                <img src="https://img.icons8.com/material-outlined/24/000000/booking.png" alt="Booking Icon"/>
+                <img src="https://img.icons8.com/material-outlined/24/000000/booking.png" alt="Booking Icon" />
                 Data Booking Saya
             </a>
         </div>
-        
+
         <!-- Main Content -->
         <div class="content">
             <h1>Selamat Datang Di Filya Suite</h1>
             <div class="button-container">
-                <button class="button">Adukan Laporan</button>
+                <button class="button" onclick="showExtraButtons()">Adukan Laporan</button>
                 <button class="button">Booking Villa</button>
+                <div id="extraButtons">
+                    <button class="button">Laporan Fasilitas</button>
+                    <button class="button">Laporan Kinerja</button>
+                    <button class="button">Laporan Tempat</button>
+                </div>
             </div>
         </div>
-    </div>
+        <script>
+            function showExtraButtons() {
+                document.getElementById("extraButtons").style.display = "flex";
+                const extraButtons = document.getElementById("extraButtons");
+                extraButtons.classList.toggle("show");
+            }
+        </script>
 </body>
+
 </html>

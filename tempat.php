@@ -48,6 +48,33 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $error_message = "Maaf, terjadi kesalahan saat mengunggah file Anda.";
         }
     }
+
+    // Koneksi ke database
+    $servername = "127.0.0.1"; // Ganti dengan server Anda
+    $username = "username"; // Ganti dengan username database Anda
+    $password = "password"; // Ganti dengan password database Anda
+    $dbname = "filya_suite"; // Nama database Anda
+
+    // Membuat koneksi
+    $conn = new mysqli($servername, $username, $password, $dbname);
+
+    // Memeriksa koneksi
+    if ($conn->connect_error) {
+        die("Koneksi gagal: " . $conn->connect_error);
+    }
+
+    // Menyimpan data ke tabel 'tempat'
+    $sql = "INSERT INTO tempat (nama_pengadu, no_telepon_pengadu, tanggal_menginap, nomor_kamar, jenis_masalah, deskripsi_masalah, file_bukti) 
+            VALUES ('$name', '$phone', '$stay_date', '$damage_location', '$category', '$description', '$target_file')";
+
+    if ($conn->query($sql) === TRUE) {
+        echo "Data berhasil disimpan!";
+    } else {
+        echo "Error: " . $sql . "<br>" . $conn->error;
+    }
+
+    // Menutup koneksi
+    $conn->close();
 }
 ?>
 

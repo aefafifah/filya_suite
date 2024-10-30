@@ -22,6 +22,12 @@
             align-items: stretch;
         }
 
+        /* Fade-out effect for page transition */
+        body.fade-out {
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
         /* Main container */
         .container {
             display: flex;
@@ -62,7 +68,6 @@
             transition: background-color 0.3s, color 0.3s;
         }
 
-        /* White background and dot on hover only */
         .menu-item:hover {
             background-color: #FFFFFF;
             color: #DD761C;
@@ -83,7 +88,6 @@
             position: relative;
             width: 80%;
             background-image: url('abcd.jpg');
-            /* Replace 'background.jpg' with your image URL */
             background-size: cover;
             background-position: center;
             padding: 2em;
@@ -105,7 +109,6 @@
             right: 0;
             bottom: 0;
             background-color: rgba(255, 255, 255, 0.7);
-            /* Light overlay effect */
             z-index: 1;
         }
 
@@ -146,7 +149,7 @@
             color: #DD761C;
         }
 
-        /* Styling tombol ekstra dan animasi */
+        /* Extra buttons styling and hover effects */
         .extra-buttons {
             overflow: hidden;
             max-height: 0;
@@ -169,14 +172,24 @@
             border-radius: 25px;
             text-align: center;
             width: 100%;
-            opacity: 0;
-            transform: translateY(-10px);
-            transition: opacity 0.5s ease, transform 0.5s ease;
+            cursor: pointer;
+            position: relative;
+            transition: background-color 0.3s, color 0.3s;
         }
 
-        .extra-buttons.show .extra-button {
-            opacity: 1;
-            transform: translateY(0);
+        .extra-button:hover {
+            background-color: #FFFFFF;
+            color: #DD761C;
+        }
+
+        .extra-button:hover::before {
+            content: '';
+            position: absolute;
+            left: -10px;
+            width: 8px;
+            height: 8px;
+            background-color: #FFFFFF;
+            border-radius: 50%;
         }
     </style>
 </head>
@@ -207,9 +220,9 @@
                 <button class="button" onclick="toggleExtraButtons()">Adukan Laporan</button>
                 <button class="button">Booking Villa</button>
                 <div class="extra-buttons" id="extraButtons">
-                    <button class="extra-button">Laporan Fasilitas</button>
-                    <button class="extra-button">Laporan Kinerja</button>
-                    <button class="extra-button">Laporan Tempat</button>
+                    <button class="extra-button" onclick="smoothRedirect('fasilitas.php')">Laporan Fasilitas</button>
+                    <button class="extra-button" onclick="smoothRedirect('kinerja.php')">Laporan Kinerja</button>
+                    <button class="extra-button" onclick="smoothRedirect('tempat.php')">Laporan Tempat</button>
                 </div>
             </div>
         </div>
@@ -220,6 +233,19 @@
             const extraButtons = document.getElementById("extraButtons");
             extraButtons.classList.toggle("show");
         }
+
+        function smoothRedirect(url) {
+            document.body.classList.add("fade-out");
+            setTimeout(() => {
+                window.location.href = url;
+            }, 500); // Match timeout with transition duration for smooth effect
+        }
+
+        window.addEventListener("pageshow", (event) => {
+            if (event.persisted) {
+                document.body.classList.remove("fade-out");
+            }
+        });
     </script>
 </body>
 

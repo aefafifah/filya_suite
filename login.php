@@ -7,7 +7,6 @@ $db = "filya_suite";
 // Mulai sesi
 session_start();
 
-
 // Koneksi ke database
 $data = mysqli_connect($host, $user, $password, $db);
 
@@ -17,18 +16,23 @@ if ($data === false) {
 
 // Cek jika login sebagai tamu
 if (isset($_GET['guest']) && $_GET['guest'] == 'true') {
-    $_SESSION['user_id'] = null; // ID pengguna tamu bisa dibiarkan null
-    $_SESSION['usertype'] = 'guest'; // Set usertype sebagai tamu
-    unset($_SESSION['nama']); // Hapus nama jika sebelumnya diset
-    header('location:userhome.php'); // Alihkan ke halaman home
-    exit(); // Hentikan eksekusi setelah header
+    $_SESSION['user_id'] = null;
+    $_SESSION['usertype'] = 'guest';
+    unset($_SESSION['nama']);
+    
+    // Cek usertype untuk menentukan redirect
+    if ($_SESSION['usertype'] === 'user') {
+        header('location:userhome.php');
+    } else {
+        echo "<script>alert('Akun guest tidak dapat mengakses halaman ini');</script>";
+    }
+    exit();
 }
 
 // Proses login jika metode permintaan adalah POST
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Tangkap email atau nomor telepon
-    $identifier = mysqli_real_escape_string($data, $_POST["identifier"]); // Email atau nomor telepon
-    $password = $_POST["password"]; // Password yang dimasukkan
+    $identifier = mysqli_real_escape_string($data, $_POST["identifier"]);
+    $password = $_POST["password"];
 
     // Query untuk mendapatkan user berdasarkan email atau nomor telepon
     $sql = "SELECT * FROM users WHERE email='$identifier' OR nomor_telpon='$identifier'";
@@ -37,19 +41,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (mysqli_num_rows($result) > 0) {
         $row = mysqli_fetch_assoc($result);
 
-        // Verifikasi password
         if (password_verify($password, $row['password'])) {
             $_SESSION["nama"] = $row["nama"];
-            $_SESSION["usertype"] = $row["usertype"]; // Simpan user_type di session
-            $_SESSION["nomor_telpon"] = $row["nomor_telpon"]; // Menyimpan nomor telepon
+            $_SESSION["usertype"] = $row["usertype"];
+            $_SESSION["nomor_telpon"] = $row["nomor_telpon"];
 
             // Arahkan ke halaman sesuai dengan user_type
             if ($_SESSION["usertype"] === "admin") {
                 header("location:adminhome.php");
-            } else {
+            } elseif ($_SESSION["usertype"] === "user") {
                 header("location:userhome.php");
+            } else {
+                echo "<script>alert('Usertype tidak valid untuk akses');</script>";
             }
-            exit(); // Pastikan untuk menghentikan eksekusi script setelah redirect
+            exit();
         } else {
             echo "<script>alert('Password salah');</script>";
         }

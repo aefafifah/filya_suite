@@ -1,14 +1,3 @@
-<?php
-session_start();
-
-// Cek apakah pengguna memiliki akses sebagai 'users'
-if (!isset($_SESSION['usertype']) || $_SESSION['usertype'] !== 'user') {
-    // Jika bukan 'users', arahkan ke halaman login atau tampilkan pesan kesalahan
-    header("location:login.php"); 
-    exit();
-}
-?>
-
 <!DOCTYPE html>
 <html lang="id">
 <head>

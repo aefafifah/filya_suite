@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -55,6 +56,20 @@
             color: #DD761C;
         }
 
+        /* Tambahkan kelas khusus untuk "Halo User" yaitu menyamakan
+        baris dengan menu */
+        .user-greeting {
+            font-size: 1.8em;
+            font-weight: bold;
+            color: #DD761C;
+            padding: 0.8em 1em;
+            /* padding agar selaras dengan menu */
+            margin-bottom: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            /* selaras dengan menu */
+        }
         .menu-item {
             display: flex;
             align-items: center;
@@ -68,6 +83,14 @@
             transition: background-color 0.3s, color 0.3s;
         }
 
+        /*pemberian jarak antar menu ke simbol*/
+        .menu-item img {
+            margin-right: 0.6em;
+            /* Tambah jarak antara ikon dan teks */
+            width: 24px;
+            height: 24px;
+        }
+
         .menu-item:hover {
             background-color: #FFFFFF;
             color: #DD761C;
@@ -76,7 +99,7 @@
         .menu-item:hover::before {
             content: '';
             position: absolute;
-            left: -10px;
+            left: -14px;
             width: 8px;
             height: 8px;
             background-color: #FFFFFF;
@@ -191,14 +214,16 @@
             background-color: #FFFFFF;
             border-radius: 50%;
         }
+
     </style>
 </head>
 
 <body>
     <div class="container">
         <!-- Sidebar -->
+        <!-- Sidebar -->
         <div class="sidebar">
-            <h2>Halo User</h2>
+            <h2 class="user-greeting">Halo User</h2>
             <a href="#" class="menu-item">
                 <img src="https://img.icons8.com/material-outlined/24/000000/home--v2.png" alt="Home Icon" />
                 Halaman Utama
@@ -212,7 +237,6 @@
                 Data Booking Saya
             </a>
         </div>
-
         <!-- Main Content -->
         <div class="content">
             <h1>Selamat Datang Di Filya Suite</h1>
@@ -227,7 +251,6 @@
             </div>
         </div>
     </div>
-
     <script>
         function toggleExtraButtons() {
             const extraButtons = document.getElementById("extraButtons");
@@ -238,7 +261,7 @@
             document.body.classList.add("fade-out");
             setTimeout(() => {
                 window.location.href = url;
-            }, 500); // Match timeout with transition duration for smooth effect
+            }, 300); // Waktu transisi dipercepat ke 300ms
         }
 
         window.addEventListener("pageshow", (event) => {

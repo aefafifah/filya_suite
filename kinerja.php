@@ -186,17 +186,15 @@
                         <option value="Tidak Tersedia saat dibutuhkan">Tidak Tersedia saat dibutuhkan</option>
                         <option value="Lainnya">Lainnya</option>
                     </select>
-                    <!-- Dropdown Ciri-Ciri placed inside the same column -->
-                    <label for="features">Ciri-Ciri:</label>
+                   <!-- Dropdown Ciri-Ciri -->
+                   <label for="features">Ciri-Ciri:</label>
                     <select id="features" name="features" required>
                         <option value="Pendek, Kurus, Sawo Matang, Oval, Gelombang">Pendek, Kurus, Sawo Matang, Oval, Gelombang</option>
                         <option value="Sedang, Sedang, Cerah, Bulat, Lurus">Sedang, Sedang, Cerah, Bulat, Lurus</option>
                         <option value="Tinggi, Berisi, Gelap, Persegi, Keriting">Tinggi, Berisi, Gelap, Persegi, Keriting</option>
-                        <option value="Sangat Tinggi, Gemuk, Sangat Cerah, Lonjong, Panjang">Sangat Tinggi, Gemuk, Sangat Cerah, Lonjong, Panjang</option>
+                        <option value="Sangat Tinggi, Gemuk, Sangat Cerah, Lonjong, Lurus">Sangat Tinggi, Gemuk, Sangat Cerah, Lonjong, Lurus</option>
                         <option value="Sedang, Berisi, Sawo Matang, Segitiga, Bergelombang">Sedang, Berisi, Sawo Matang, Segitiga, Bergelombang</option>
                     </select>
-                </div>
-            </div>
 
             <div class="upload-container">
                 <label for="image-upload">Bukti Masalah:</label>

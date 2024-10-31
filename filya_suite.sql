@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 26, 2024 at 08:43 AM
+-- Generation Time: Oct 31, 2024 at 08:00 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -58,19 +58,40 @@ CREATE TABLE `fasilitas` (
   `jenis_masalah` enum('Wifi','Air Conditioner','Water Heater','Wastafel','Bed','Lainnya') NOT NULL,
   `deskripsi_masalah_fasilitas` text NOT NULL,
   `pilih_kategori_fasilitas` enum('Fasilitas yang dijanjikan tidak tersedia','Fasilitas tidak berfungsi','Kualitas fasilitas buruk','Lainnya') NOT NULL,
-  `id_pengaduan` int(11) NOT NULL
+  `bukti_gambar` varchar(255) DEFAULT NULL,
+  `id_pengaduan` int(11) NOT NULL,
+  `status` enum('Diterima','Ditolak','Diproses') DEFAULT 'Diproses'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `fasilitas`
 --
 
-INSERT INTO `fasilitas` (`nama_pengadu`, `no_telepon_pengadu`, `tanggal_menginap`, `tanggal_melaporkan`, `tempat_kerusakan`, `jenis_masalah`, `deskripsi_masalah_fasilitas`, `pilih_kategori_fasilitas`, `id_pengaduan`) VALUES
-('filya ', '0800000111', '2024-09-04', '2024-09-21', 'kamar', 'Wastafel', 'wastafel macet brooo', 'Kualitas fasilitas buruk', 1),
-('test', '0111111999', '2024-10-16', '2024-10-24', 'Kolam Renang', 'Wifi', 'ganyala lelet ', 'Fasilitas tidak berfungsi', 2),
-('pass', '12345', '2024-10-18', '2024-10-26', 'Villa', 'Water Heater', 'ga anget', 'Fasilitas tidak berfungsi', 3),
-('responsiii', '0000', '2024-10-18', '2024-10-19', 'Parkiran', 'Lainnya', 'Parkiran sempiiit ', 'Fasilitas yang dijanjikan tidak tersedia', 5),
-('responsiii', '0000', '2024-10-09', '2024-10-12', 'Parkiran', 'Lainnya', 'Parkir ga luass blaaasss', 'Fasilitas yang dijanjikan tidak tersedia', 6);
+INSERT INTO `fasilitas` (`nama_pengadu`, `no_telepon_pengadu`, `tanggal_menginap`, `tanggal_melaporkan`, `tempat_kerusakan`, `jenis_masalah`, `deskripsi_masalah_fasilitas`, `pilih_kategori_fasilitas`, `bukti_gambar`, `id_pengaduan`, `status`) VALUES
+('filya ', '0800000111', '2024-09-04', '2024-09-21', 'kamar', 'Wastafel', 'wastafel macet brooo', 'Kualitas fasilitas buruk', NULL, 1, 'Ditolak'),
+('test', '0111111999', '2024-10-16', '2024-10-24', 'Kolam Renang', 'Wifi', 'ganyala lelet ', 'Fasilitas tidak berfungsi', NULL, 2, 'Diproses'),
+('pass', '12345', '2024-10-18', '2024-10-26', 'Villa', 'Water Heater', 'ga anget', 'Fasilitas tidak berfungsi', NULL, 3, 'Diproses'),
+('responsiii', '0000', '2024-10-18', '2024-10-19', 'Parkiran', 'Lainnya', 'Parkiran sempiiit ', 'Fasilitas yang dijanjikan tidak tersedia', NULL, 5, 'Diproses'),
+('responsiii', '0000', '2024-10-09', '2024-10-12', 'Parkiran', 'Lainnya', 'Parkir ga luass blaaasss', 'Fasilitas yang dijanjikan tidak tersedia', NULL, 6, 'Diproses'),
+('testing', '1234567', '2024-10-30', '2024-10-31', 'Kolam Renang', 'Water Heater', 'Kolam renang ', 'Fasilitas tidak berfungsi', NULL, 7, 'Diproses'),
+('testing', '1234567', '2024-10-30', '2024-10-31', 'Villa', 'Water Heater', 'wertyuiop', 'Kualitas fasilitas buruk', NULL, 8, 'Diproses'),
+('testing', '1234567', '2024-10-24', '2024-10-29', 'Kolam Renang', 'Water Heater', 'ujg', 'Kualitas fasilitas buruk', NULL, 9, 'Diproses'),
+('testing', '1234567', '2024-10-23', '2024-10-24', 'Parkiran', 'Wastafel', 'tghjkkhf', 'Fasilitas tidak berfungsi', NULL, 10, 'Diproses'),
+('testing', '1234567', '2024-10-23', '2024-10-24', 'Parkiran', 'Wastafel', 'tghjkkhf', 'Fasilitas tidak berfungsi', NULL, 11, 'Diproses'),
+('testing', '1234567', '2024-10-22', '2024-10-23', 'Villa', 'Wastafel', 'qwertyu', 'Kualitas fasilitas buruk', 'uploads/filya.jpg', 12, 'Diproses'),
+('responsiii', '0000', '2024-10-30', '2024-10-31', 'wastafel', 'Bed', 'qwertyuiop[kjhgfsdfghjkl;', 'Kualitas fasilitas buruk', 'uploads/bg.jpg', 15, 'Diproses'),
+('responsiii', '0000', '2024-10-31', '2024-11-01', 'wastafel', 'Wastafel', 'katanya wastafelnya bisa touchscreen tapi kok .... ', 'Fasilitas yang dijanjikan tidak tersedia', 'uploads/blubrown.jpg', 16, 'Diproses'),
+('responsiii', '0000', '2024-10-29', '2024-10-30', 'wastafel', 'Water Heater', 'qwertyuikjhaklznm,.', 'Fasilitas tidak berfungsi', 'uploads/bg.jpg', 17, 'Diproses'),
+('responsiii', '0000', '2024-10-30', '2024-11-01', 'wastafel', 'Water Heater', 'piuiggrseryfhjbkh', 'Kualitas fasilitas buruk', 'uploads/bg-2.png', 18, 'Diproses'),
+('responsiii', '0000', '2024-10-28', '2024-10-29', 'wastafel', 'Bed', 'qlnbcxghjk', 'Kualitas fasilitas buruk', 'uploads/filya.jpg', 19, 'Diproses'),
+('responsiii', '0000', '2024-10-28', '2024-10-29', 'wastafel', 'Bed', 'qlnbcxghjk', 'Kualitas fasilitas buruk', 'uploads/filya.jpg', 20, 'Diproses'),
+('responsiii', '0000', '2024-10-28', '2024-10-30', 'yyyy', 'Water Heater', 'qwertyukfgjk', 'Fasilitas tidak berfungsi', 'uploads/bluebrown.jpg', 21, 'Diproses'),
+('responsiii', '0000', '2024-10-31', '2024-10-31', 'wastafel', 'Wastafel', 'nmbhg', 'Fasilitas tidak berfungsi', 'uploads/filya.jpg', 22, 'Diproses'),
+('responsiii', '0000', '2024-10-28', '2024-10-30', 'kamar', 'Wastafel', 'gasfywqgsw', 'Kualitas fasilitas buruk', 'uploads/filya.jpg', 23, 'Diproses'),
+('responsiii', '0000', '2024-10-30', '2024-10-31', 'kamar', 'Wastafel', 'hfhgf', 'Kualitas fasilitas buruk', 'uploads/filya.jpg', 24, 'Diproses'),
+('responsiii', '0000', '2024-10-30', '2024-10-31', 'kamar', 'Wastafel', 'hfhgf', 'Kualitas fasilitas buruk', NULL, 25, 'Diproses'),
+('responsiii', '0000', '2024-10-31', '2024-11-01', 'hhjjh', 'Wastafel', 'test', 'Fasilitas tidak berfungsi', 'uploads/filya.jpg', 26, 'Diproses'),
+('responsiii', '0000', '2024-10-30', '2024-10-31', 'qwerty', 'Wastafel', 'qwertyuio', 'Fasilitas tidak berfungsi', 'uploads/bg-1.png', 27, 'Diterima');
 
 -- --------------------------------------------------------
 
@@ -133,6 +154,57 @@ INSERT INTO `pegawai` (`id_pegawai`, `nama`, `jabatan`, `hari`, `waktu_shift`, `
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `pemesanan`
+--
+
+CREATE TABLE `pemesanan` (
+  `id` int(11) NOT NULL,
+  `nama_pemesan` varchar(255) NOT NULL,
+  `email` varchar(255) NOT NULL,
+  `villa_id` int(11) NOT NULL,
+  `jumlah_orang` int(11) NOT NULL,
+  `tanggal_checkin` date NOT NULL,
+  `tanggal_checkout` date NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `pemesanan`
+--
+
+INSERT INTO `pemesanan` (`id`, `nama_pemesan`, `email`, `villa_id`, `jumlah_orang`, `tanggal_checkin`, `tanggal_checkout`, `created_at`) VALUES
+(9, 'qwerty', 'a@com', 2, 5, '2024-11-01', '2024-11-02', '2024-10-29 08:18:26');
+
+--
+-- Triggers `pemesanan`
+--
+DELIMITER $$
+CREATE TRIGGER `kurangi_kuota` AFTER INSERT ON `pemesanan` FOR EACH ROW BEGIN
+  DECLARE sisa_kuota INT;
+
+  -- Kurangi kuota villa berdasarkan jumlah orang yang dipesan
+  UPDATE villa
+  SET kuota = kuota - NEW.jumlah_orang
+  WHERE id = NEW.villa_id;
+
+  -- Ambil sisa kuota untuk villa yang dipesan
+  SELECT kuota INTO sisa_kuota
+  FROM villa
+  WHERE id = NEW.villa_id;
+
+  -- Jika sisa kuota 0 atau kurang, ubah status menjadi 'tidak tersedia'
+  IF sisa_kuota <= 0 THEN
+    UPDATE villa
+    SET status = 'tidak tersedia'
+    WHERE id = NEW.villa_id;
+  END IF;
+END
+$$
+DELIMITER ;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `tempat`
 --
 
@@ -182,7 +254,8 @@ INSERT INTO `users` (`nama`, `nomor_telpon`, `alamat`, `password`, `usertype`, `
 ('responsi', '11111', 'bumi', '$2y$10$QJ5MTRajutx4ElbHVm2kQ.SXv4M7gP8DRPOzT/S/cRoo6C88z9uZK', 'user', 'responsi@gmail.com'),
 ('responsiii', '0000', 'bumi ', '$2y$10$R6QLVLlz8sRS3OTu8YoIf.xGl0CUBerK574I9WfnR4q89ZT2bF5Bq', 'user', 'responsii@gmail.com'),
 ('suite', '0999888666', 'bumi', 'password', 'user', ''),
-('test', '0111111999', 'alamat', 'password', 'user', 'test@gmail.com');
+('test', '0111111999', 'alamat', 'password', 'user', 'test@gmail.com'),
+('testing', '1234567', 'bumiii', '$2y$10$Opw1UFsalQZzaG8/7/vcAOp3VsUV6EqOKHSwEjqbvqlyZx246HPse', 'user', 'testing@com');
 
 -- --------------------------------------------------------
 
@@ -194,8 +267,18 @@ CREATE TABLE `villa` (
   `id` int(11) NOT NULL,
   `nama_villa` varchar(255) NOT NULL,
   `keterangan` text DEFAULT NULL,
-  `status` enum('tersedia','tidak tersedia','dalam pemeliharaan') NOT NULL DEFAULT 'tersedia'
+  `status` enum('tersedia','tidak tersedia','dalam pemeliharaan') NOT NULL DEFAULT 'tersedia',
+  `kuota` int(11) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `villa`
+--
+
+INSERT INTO `villa` (`id`, `nama_villa`, `keterangan`, `status`, `kuota`) VALUES
+(1, 'Dreamy', 'Villa dengan suasana yang menenangkan dan pemandangan indah. Lokasi: Bali.', 'tersedia', 10),
+(2, 'Fancy', 'Villa mewah dengan fasilitas lengkap dan desain yang elegan. Lokasi: Jakarta.', 'tidak tersedia', -5),
+(3, 'Charming', 'Villa yang menawan dan nyaman, ideal untuk keluarga. Lokasi: Yogyakarta.', 'tersedia', 10);
 
 --
 -- Indexes for dumped tables
@@ -244,6 +327,13 @@ ALTER TABLE `pegawai`
   ADD UNIQUE KEY `nama` (`nama`);
 
 --
+-- Indexes for table `pemesanan`
+--
+ALTER TABLE `pemesanan`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `villa_id` (`villa_id`);
+
+--
 -- Indexes for table `tempat`
 --
 ALTER TABLE `tempat`
@@ -273,7 +363,7 @@ ALTER TABLE `villa`
 -- AUTO_INCREMENT for table `fasilitas`
 --
 ALTER TABLE `fasilitas`
-  MODIFY `id_pengaduan` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id_pengaduan` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
 
 --
 -- AUTO_INCREMENT for table `kinerja`
@@ -288,6 +378,12 @@ ALTER TABLE `pegawai`
   MODIFY `id_pegawai` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
+-- AUTO_INCREMENT for table `pemesanan`
+--
+ALTER TABLE `pemesanan`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+
+--
 -- AUTO_INCREMENT for table `tempat`
 --
 ALTER TABLE `tempat`
@@ -297,7 +393,7 @@ ALTER TABLE `tempat`
 -- AUTO_INCREMENT for table `villa`
 --
 ALTER TABLE `villa`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- Constraints for dumped tables
@@ -331,6 +427,12 @@ ALTER TABLE `kinerja`
   ADD CONSTRAINT `fk_tinggibadan` FOREIGN KEY (`tinggi`) REFERENCES `pegawai` (`tinggi`),
   ADD CONSTRAINT `fk_tubuh` FOREIGN KEY (`tubuh`) REFERENCES `pegawai` (`tubuh`),
   ADD CONSTRAINT `fk_wajah` FOREIGN KEY (`wajah`) REFERENCES `pegawai` (`wajah`);
+
+--
+-- Constraints for table `pemesanan`
+--
+ALTER TABLE `pemesanan`
+  ADD CONSTRAINT `pemesanan_ibfk_1` FOREIGN KEY (`villa_id`) REFERENCES `villa` (`id`);
 
 --
 -- Constraints for table `tempat`

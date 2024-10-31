@@ -224,9 +224,7 @@ session_start(); // Pastikan sesi sudah dimulai
             </div>
         </div>
 
-        <div class="mb-3 text-center">
-            <!-- Tombol Upload Buktinya -->
-            <button type="button" class="btn-large">Upload Buktinya</button>
+
 
             <!-- Tombol Back -->
             <button type="button" class="btn-small" onclick="window.history.back();">Back</button>

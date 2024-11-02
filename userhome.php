@@ -12,7 +12,7 @@
             padding: 0;
             box-sizing: border-box;
             font-family: Arial, sans-serif;
-        }
+        }   
 
         html,
         body {
@@ -21,12 +21,12 @@
             overflow: hidden;
             display: flex;
             align-items: stretch;
+            transition: opacity 0.8s ease;
         }
 
         /* Fade-out effect for page transition */
         body.fade-out {
             opacity: 0;
-            transition: opacity 0.5s ease;
         }
 
         /* Main container */
@@ -70,6 +70,7 @@
             justify-content: flex-start;
             /* selaras dengan menu */
         }
+
         .menu-item {
             display: flex;
             align-items: center;
@@ -214,7 +215,6 @@
             background-color: #FFFFFF;
             border-radius: 50%;
         }
-
     </style>
 </head>
 
@@ -252,6 +252,7 @@
         </div>
     </div>
     <script>
+        /* pemanggilan transisi untuk extra button */
         function toggleExtraButtons() {
             const extraButtons = document.getElementById("extraButtons");
             extraButtons.classList.toggle("show");
@@ -261,13 +262,19 @@
             document.body.classList.add("fade-out");
             setTimeout(() => {
                 window.location.href = url;
-            }, 300); // Waktu transisi dipercepat ke 300ms
+            }, 300); // Waktu transisi
         }
 
+        // Fade-in effect for page load or reload
         window.addEventListener("pageshow", (event) => {
-            if (event.persisted) {
+            if (event.persisted || event.type === "pageshow") {
                 document.body.classList.remove("fade-out");
             }
+        });
+
+        // Menghapus fade-out saat halaman pertama kali dimuat
+        window.addEventListener("load", () => {
+            document.body.classList.remove("fade-out");
         });
     </script>
 </body>

@@ -1,3 +1,18 @@
+<?php
+session_start();
+
+// Redirect ke login.php jika pengguna belum login
+if (!isset($_SESSION['nama']) || !isset($_SESSION['usertype'])) {
+    header("Location: login.php");
+    exit();
+}
+
+$nama = $_SESSION['nama'];
+$nomor_telpon = $_SESSION['nomor_telpon'];
+$nomor_telpon = $_SESSION['nomor_telpon'] ?? '';
+$alamat = $_SESSION['alamat'] ?? '';
+?>
+
 <!DOCTYPE html>
 <html lang="id">
 
@@ -21,7 +36,7 @@
             overflow: hidden;
             display: flex;
             align-items: stretch;
-            transition: opacity 0.8s ease;
+            transition: opacity 0.5s ease;
         }
 
         /* Fade-out effect for page transition */
@@ -223,12 +238,12 @@
         <!-- Sidebar -->
         <!-- Sidebar -->
         <div class="sidebar">
-            <h2 class="user-greeting">Halo User</h2>
+            <h2 class="user-greeting">Halo, <?php echo htmlspecialchars($nama); ?>!</h2>
             <a href="#" class="menu-item">
                 <img src="https://img.icons8.com/material-outlined/24/000000/home--v2.png" alt="Home Icon" />
                 Halaman Utama
             </a>
-            <a href="#" class="menu-item">
+            <a href="data_laporan.php"   class="menu-item">
                 <img src="https://img.icons8.com/ios/24/000000/happy--v1.png" alt="Report Icon" />
                 Data Laporan Saya
             </a>
@@ -244,7 +259,7 @@
                 <button class="button" onclick="toggleExtraButtons()">Adukan Laporan</button>
                 <button class="button">Booking Villa</button>
                 <div class="extra-buttons" id="extraButtons">
-                    <button class="extra-button" onclick="smoothRedirect('fasilitas.php')">Laporan Fasilitas</button>
+                    <button class="extra-button" onclick="smoothRedirect('eyyo2.php')">Laporan Fasilitas</button>
                     <button class="extra-button" onclick="smoothRedirect('kinerja.php')">Laporan Kinerja</button>
                     <button class="extra-button" onclick="smoothRedirect('tempat.php')">Laporan Tempat</button>
                 </div>

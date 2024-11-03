@@ -5,6 +5,7 @@ $host = "localhost";
 $user = "root";
 $password = "";
 $db = "filya_suite";
+$nama = $_SESSION['nama'];
 
 $data = mysqli_connect($host, $user, $password, $db);
 
@@ -69,11 +70,12 @@ $data_tersedia = mysqli_num_rows($result) > 0;
         }
 
         /* Sidebar */
+        /* Sidebar */
         .sidebar {
-            background-color: var(--primary-color);
+            background-color: #f7d76e;
             width: 20%;
             padding: 2em;
-            color: var(--secondary-color);
+            color: #f07126;
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -81,11 +83,26 @@ $data_tersedia = mysqli_num_rows($result) > 0;
             height: 100vh;
         }
 
-        .sidebar h2, .user-greeting {
+        .sidebar h2 {
             font-size: 1.8em;
             margin-bottom: 2em;
             font-weight: bold;
-            color: var(--secondary-color);
+            color: #DD761C;
+        }
+
+        /* Tambahkan kelas khusus untuk "Halo User" yaitu menyamakan
+        baris dengan menu */
+        .user-greeting {
+            font-size: 1.8em;
+            font-weight: bold;
+            color: #DD761C;
+            padding: 0.8em 1em;
+            /* padding agar selaras dengan menu */
+            margin-bottom: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            /* selaras dengan menu */
         }
 
         .menu-item {
@@ -94,23 +111,36 @@ $data_tersedia = mysqli_num_rows($result) > 0;
             margin-bottom: 1.5em;
             font-size: 1.2em;
             text-decoration: none;
-            color: var(--secondary-color);
+            color: #DD761C;
             position: relative;
             padding: 0.8em 1em;
             border-radius: 8px;
             transition: background-color 0.3s, color 0.3s;
         }
 
+        /*pemberian jarak antar menu ke simbol*/
         .menu-item img {
             margin-right: 0.6em;
+            /* Tambah jarak antara ikon dan teks */
             width: 24px;
             height: 24px;
         }
 
         .menu-item:hover {
             background-color: #FFFFFF;
-            color: var(--secondary-color);
+            color: #DD761C;
         }
+
+        .menu-item:hover::before {
+            content: '';
+            position: absolute;
+            left: -14px;
+            width: 8px;
+            height: 8px;
+            background-color: #FFFFFF;
+            border-radius: 50%;
+        }
+
 
         .content {
             flex: 1;
@@ -156,13 +186,13 @@ $data_tersedia = mysqli_num_rows($result) > 0;
             background-color: rgba(255, 255, 255, 0.9);
             border-radius: 10px;
             text-align: center;
-        }
+        }   
     </style>
 </head>
 <body>
     <div class="sidebar">
-            <h2> Halo User</h2>
-            <a href="#" class="menu-item">
+    <h2 class="user-greeting">Halo, <?php echo htmlspecialchars($nama); ?>!</h2>
+            <a href="userhome.php" class="menu-item">
                 <img src="https://img.icons8.com/material-outlined/24/000000/home--v2.png" alt="Home Icon" />
                 Halaman Utama
             </a>
@@ -203,7 +233,10 @@ $data_tersedia = mysqli_num_rows($result) > 0;
                 </table>
             <?php else: ?>
                 <div class="no-data">
-                    <p>Tidak ada laporan yang ditemukan untuk nomor telepon Anda.</p>
+                <p>Belum ada Pengaduan yang anda ajukan</p>
+                <p>Mengalami kendala atau merasa kurang puas dengan villa Filya Suite?<br>
+                Yuk ajukan pengaduan Anda di <a href="aduan.php">sini</a>, dan bantu kami dalam meningkatkan kualitas villa Filya Suite.<br>
+                Kami sangat menghargai setiap masukan dari Anda untuk terus menyempurnakan pengalaman Anda bersama kami.</p>
                 </div>
             <?php endif; ?>
         </div>

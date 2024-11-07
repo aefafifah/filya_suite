@@ -247,7 +247,7 @@ $alamat = $_SESSION['alamat'] ?? '';
                 <img src="https://img.icons8.com/ios/24/000000/happy--v1.png" alt="Report Icon" />
                 Data Laporan Saya
             </a>
-            <a href="#" class="menu-item">
+            <a href="data_booking.php" class="menu-item">
                 <img src="https://img.icons8.com/material-outlined/24/000000/booking.png" alt="Booking Icon" />
                 Data Booking Saya
             </a>

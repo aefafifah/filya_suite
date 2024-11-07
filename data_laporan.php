@@ -22,13 +22,17 @@ $nomor_telpon = $_SESSION['nomor_telpon'];
 
 // Query untuk memeriksa laporan berdasarkan nomor telepon di tabel fasilitas, kinerja, dan tempat
 $query = "
-    SELECT 'fasilitas' AS kategori, tanggal_menginap, tanggal_melaporkan AS tanggal_laporan, jenis_masalah, deskripsi_masalah_fasilitas AS deskripsi
+    SELECT 'fasilitas' AS kategori,  tanggal_menginap, tanggal_melaporkan AS tanggal_laporan,
+    tempat_kerusakan AS tempat_objek,
+    jenis_masalah, deskripsi_masalah_fasilitas AS deskripsi, status
     FROM fasilitas WHERE no_telepon_pengadu = ?
     UNION
-    SELECT 'kinerja' AS kategori, tanggal_menginap, waktu_kejadian AS tanggal_laporan, jenis_masalah, deskripsi_masalah AS deskripsi
+    SELECT 'kinerja' AS kategori, tanggal_menginap, waktu_kejadian AS tanggal_laporan, '' AS tempat_objek,
+    jenis_masalah, deskripsi_masalah AS deskripsi, '' AS status
     FROM kinerja WHERE no_telepon_pengadu = ?
     UNION
-    SELECT 'tempat' AS kategori, tanggal_menginap, waktu_pengaduan AS tanggal_laporan, jenis_masalah, deskripsi_masalah AS deskripsi
+    SELECT 'tempat' AS kategori, tanggal_menginap, waktu_pengaduan AS tanggal_laporan, '' AS tempat_objek,
+    jenis_masalah, deskripsi_masalah AS deskripsi, '' AS status
     FROM tempat WHERE no_telepon_pengadu = ?
 ";
 
@@ -166,7 +170,8 @@ $data_tersedia = mysqli_num_rows($result) > 0;
             overflow: hidden;
         }
 
-        .table-container th, .table-container td {
+        .table-container th,
+        .table-container td {
             padding: 15px;
             text-align: left;
             border-bottom: 1px solid #ddd;
@@ -186,25 +191,26 @@ $data_tersedia = mysqli_num_rows($result) > 0;
             background-color: rgba(255, 255, 255, 0.9);
             border-radius: 10px;
             text-align: center;
-        }   
+        }
     </style>
 </head>
+
 <body>
     <div class="sidebar">
-    <h2 class="user-greeting">Halo, <?php echo htmlspecialchars($nama); ?>!</h2>
-            <a href="userhome.php" class="menu-item">
-                <img src="https://img.icons8.com/material-outlined/24/000000/home--v2.png" alt="Home Icon" />
-                Halaman Utama
-            </a>
-            <a href="data_laporan.php"   class="menu-item">
-                <img src="https://img.icons8.com/ios/24/000000/happy--v1.png" alt="Report Icon" />
-                Data Laporan Saya
-            </a>
-            <a href="#" class="menu-item">
-                <img src="https://img.icons8.com/material-outlined/24/000000/booking.png" alt="Booking Icon" />
-                Data Booking Saya
-            </a>
-        </div>
+        <h2 class="user-greeting">Halo, <?php echo htmlspecialchars($nama); ?>!</h2>
+        <a href="userhome.php" class="menu-item">
+            <img src="https://img.icons8.com/material-outlined/24/000000/home--v2.png" alt="Home Icon" />
+            Halaman Utama
+        </a>
+        <a href="data_laporan.php" class="menu-item">
+            <img src="https://img.icons8.com/ios/24/000000/happy--v1.png" alt="Report Icon" />
+            Data Laporan Saya
+        </a>
+        <a href="data_booking.php" class="menu-item">
+            <img src="https://img.icons8.com/material-outlined/24/000000/booking.png" alt="Booking Icon" />
+            Data Booking Saya
+        </a>
+    </div>
     <div class="content">
         <h1>DATA LAPORAN SAYA</h1>
         <div class="table-container">
@@ -233,10 +239,10 @@ $data_tersedia = mysqli_num_rows($result) > 0;
                 </table>
             <?php else: ?>
                 <div class="no-data">
-                <p>Belum ada Pengaduan yang anda ajukan</p>
-                <p>Mengalami kendala atau merasa kurang puas dengan villa Filya Suite?<br>
-                Yuk ajukan pengaduan Anda di <a href="aduan.php">sini</a>, dan bantu kami dalam meningkatkan kualitas villa Filya Suite.<br>
-                Kami sangat menghargai setiap masukan dari Anda untuk terus menyempurnakan pengalaman Anda bersama kami.</p>
+                    <p>Belum ada Kamar villa yang anda booking</p>
+                    <p>Mengalami kendala atau merasa kurang puas dengan villa Filya Suite?<br>
+                        Yuk ajukan pengaduan Anda di <a href="aduan.php">sini</a>, dan bantu kami dalam meningkatkan kualitas villa Filya Suite.<br>
+                        Kami sangat menghargai setiap masukan dari Anda untuk terus menyempurnakan pengalaman Anda bersama kami.</p>
                 </div>
             <?php endif; ?>
         </div>

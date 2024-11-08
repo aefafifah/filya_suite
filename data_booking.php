@@ -69,10 +69,13 @@ $data_tersedia = mysqli_num_rows($result) > 0;
             background-color: #f0f0f0;
             color: var(--text-color);
             min-height: 100vh;
+            transition: opacity 0.5s ease;
         }
 
-        /* Sidebar */
-        /* Sidebar */
+        body.fade-out {
+            opacity: 0;
+        }
+
         .sidebar {
             background-color: #f7d76e;
             width: 20%;
@@ -168,7 +171,8 @@ $data_tersedia = mysqli_num_rows($result) > 0;
             overflow: hidden;
         }
 
-        .table-container th, .table-container td {
+        .table-container th,
+        .table-container td {
             padding: 15px;
             text-align: left;
             border-bottom: 1px solid #ddd;
@@ -188,25 +192,26 @@ $data_tersedia = mysqli_num_rows($result) > 0;
             background-color: rgba(255, 255, 255, 0.9);
             border-radius: 10px;
             text-align: center;
-        }   
+        }
     </style>
 </head>
+
 <body>
     <div class="sidebar">
-    <h2 class="user-greeting">Halo, <?php echo htmlspecialchars($nama); ?>!</h2>
-            <a href="userhome.php" class="menu-item">
-                <img src="https://img.icons8.com/material-outlined/24/000000/home--v2.png" alt="Home Icon" />
-                Halaman Utama
-            </a>
-            <a href="data_laporan.php"   class="menu-item">
-                <img src="https://img.icons8.com/ios/24/000000/happy--v1.png" alt="Report Icon" />
-                Data Laporan Saya
-            </a>
-            <a href="data_booking.php" class="menu-item">
-                <img src="https://img.icons8.com/material-outlined/24/000000/booking.png" alt="Booking Icon" />
-                Data Booking Saya
-            </a>
-        </div>
+        <h2 class="user-greeting">Halo, <?php echo htmlspecialchars($nama); ?>!</h2>
+        <a onclick="smoothRedirect('userhome.php')" class="menu-item">
+            <img src="https://img.icons8.com/material-outlined/24/000000/home--v2.png" alt="Home Icon" />
+            Halaman Utama
+        </a>
+        <a onclick="smoothRedirect('data_laporan.php')" class="menu-item">
+            <img src="https://img.icons8.com/ios/24/000000/happy--v1.png" alt="Report Icon" />
+            Data Laporan Saya
+        </a>
+        <a onclick="smoothRedirect('data_booking.php')" class="menu-item">
+            <img src="https://img.icons8.com/material-outlined/24/000000/booking.png" alt="Booking Icon" />
+            Data Booking Saya
+        </a>
+    </div>
     <div class="content">
         <h1>DATA BOOKING SAYA</h1>
         <div class="table-container">
@@ -237,17 +242,37 @@ $data_tersedia = mysqli_num_rows($result) > 0;
                 </table>
             <?php else: ?>
                 <div class="no-data">
-                <p>Belum ada Kamar villa yang anda booking</p>
-                <p>Bosen di rumah aja dan kerja melulu???</p>
-                <p>Ingin liburan plus staycation enak dan nyaman? divilla Filya Suite? ajaa<br>
-                Yuk Liburan staycation di FillyaSuite dengan full senyum
-                Segera pilih kamar idamanmu di <a href="aduan.php">sini</a>, dan Nikmati 
-                villa FillyaSuite dengan nyaman, dan dengan pelayanan yang memuaskan<br>
-                </p>
+                    <p>Belum ada Kamar villa yang anda booking</p>
+                    <p>Bosen di rumah aja dan kerja melulu???</p>
+                    <p>Ingin liburan plus staycation enak dan nyaman? divilla Filya Suite? ajaa<br>
+                        Yuk Liburan staycation di FillyaSuite dengan full senyum
+                        Segera pilih kamar idamanmu di <a href="booking.php">sini</a>, dan Nikmati
+                        villa FillyaSuite dengan nyaman, dan dengan pelayanan yang memuaskan<br>
+                    </p>
                 </div>
             <?php endif; ?>
         </div>
     </div>
+    <script>
+        function smoothRedirect(url) {
+            document.body.classList.add("fade-out");
+            setTimeout(() => {
+                window.location.href = url;
+            }, 300); // Waktu transisi
+        }
+
+        // Fade-in effect for page load or reload
+        window.addEventListener("pageshow", (event) => {
+            if (event.persisted || event.type === "pageshow") {
+                document.body.classList.remove("fade-out");
+            }
+        });
+
+        // Menghapus fade-out saat halaman pertama kali dimuat
+        window.addEventListener("load", () => {
+            document.body.classList.remove("fade-out");
+        });
+    </script>
 </body>
 
 </html>

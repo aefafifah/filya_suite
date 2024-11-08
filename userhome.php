@@ -27,7 +27,7 @@ $alamat = $_SESSION['alamat'] ?? '';
             padding: 0;
             box-sizing: border-box;
             font-family: Arial, sans-serif;
-        }   
+        }
 
         html,
         body {
@@ -239,15 +239,15 @@ $alamat = $_SESSION['alamat'] ?? '';
         <!-- Sidebar -->
         <div class="sidebar">
             <h2 class="user-greeting">Halo, <?php echo htmlspecialchars($nama); ?>!</h2>
-            <a href="#" class="menu-item">
+            <a onclick="smoothRedirect('userhome.php')" class="menu-item">
                 <img src="https://img.icons8.com/material-outlined/24/000000/home--v2.png" alt="Home Icon" />
                 Halaman Utama
             </a>
-            <a href="data_laporan.php"   class="menu-item">
+            <a onclick="smoothRedirect('data_laporan.php')" class="menu-item">
                 <img src="https://img.icons8.com/ios/24/000000/happy--v1.png" alt="Report Icon" />
                 Data Laporan Saya
             </a>
-            <a href="data_booking.php" class="menu-item">
+            <a onclick="smoothRedirect('data_booking.php')" class="menu-item">
                 <img src="https://img.icons8.com/material-outlined/24/000000/booking.png" alt="Booking Icon" />
                 Data Booking Saya
             </a>
@@ -257,7 +257,7 @@ $alamat = $_SESSION['alamat'] ?? '';
             <h1>Selamat Datang Di Filya Suite</h1>
             <div class="button-container">
                 <button class="button" onclick="toggleExtraButtons()">Adukan Laporan</button>
-                <button class="button">Booking Villa</button>
+                <button class="button" onclick="smoothRedirect('booking.php')">Booking Villa</button>
                 <div class="extra-buttons" id="extraButtons">
                     <button class="extra-button" onclick="smoothRedirect('eyyo2.php')">Laporan Fasilitas</button>
                     <button class="extra-button" onclick="smoothRedirect('kinerja.php')">Laporan Kinerja</button>

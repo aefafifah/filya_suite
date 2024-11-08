@@ -71,6 +71,11 @@ $data_tersedia = mysqli_num_rows($result) > 0;
             background-color: #f0f0f0;
             color: var(--text-color);
             min-height: 100vh;
+            transition: opacity 0.5s ease;
+        }
+
+        body.fade-out {
+            opacity: 0;
         }
 
         /* Sidebar */
@@ -198,15 +203,15 @@ $data_tersedia = mysqli_num_rows($result) > 0;
 <body>
     <div class="sidebar">
         <h2 class="user-greeting">Halo, <?php echo htmlspecialchars($nama); ?>!</h2>
-        <a href="userhome.php" class="menu-item">
+        <a onclick="smoothRedirect('userhome.php')" class="menu-item">
             <img src="https://img.icons8.com/material-outlined/24/000000/home--v2.png" alt="Home Icon" />
             Halaman Utama
         </a>
-        <a href="data_laporan.php" class="menu-item">
+        <a onclick="smoothRedirect('data_laporan.php')" class="menu-item">
             <img src="https://img.icons8.com/ios/24/000000/happy--v1.png" alt="Report Icon" />
             Data Laporan Saya
         </a>
-        <a href="data_booking.php" class="menu-item">
+        <a onclick="smoothRedirect('data_booking.php')" class="menu-item">
             <img src="https://img.icons8.com/material-outlined/24/000000/booking.png" alt="Booking Icon" />
             Data Booking Saya
         </a>
@@ -247,6 +252,26 @@ $data_tersedia = mysqli_num_rows($result) > 0;
             <?php endif; ?>
         </div>
     </div>
+    <script>
+        function smoothRedirect(url) {
+            document.body.classList.add("fade-out");
+            setTimeout(() => {
+                window.location.href = url;
+            }, 300); // Waktu transisi
+        }
+
+        // Fade-in effect for page load or reload
+        window.addEventListener("pageshow", (event) => {
+            if (event.persisted || event.type === "pageshow") {
+                document.body.classList.remove("fade-out");
+            }
+        });
+
+        // Menghapus fade-out saat halaman pertama kali dimuat
+        window.addEventListener("load", () => {
+            document.body.classList.remove("fade-out");
+        });
+    </script>
 </body>
 
 </html>

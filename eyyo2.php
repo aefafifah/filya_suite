@@ -1,5 +1,5 @@
 <?php
-session_start(); // Pastikan sesi sudah dimulai
+session_start(); // Mulai sesi
 ?>
 
 <!DOCTYPE html>
@@ -37,6 +37,7 @@ session_start(); // Pastikan sesi sudah dimulai
             height: 100%;
             background-color: rgba(28, 24, 24, 0.7);
             z-index: 1;
+            pointer-events: none;
         }
 
         .form-overlay {
@@ -48,6 +49,7 @@ session_start(); // Pastikan sesi sudah dimulai
             margin: 50px auto;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
             position: relative;
+            z-index: 2;
         }
 
         .container-form {
@@ -80,7 +82,7 @@ session_start(); // Pastikan sesi sudah dimulai
         .form-select {
             width: 100%;
             height: 78px;
-            border-radius: 20px; /* Sudut membulat */
+            border-radius: 20px;
         }
 
         .btn-custom {
@@ -88,7 +90,7 @@ session_start(); // Pastikan sesi sudah dimulai
             color: #FDE49E;
             border: none;
             width: 100%;
-            border-radius: 20px; /* Sudut membulat */
+            border-radius: 20px;
         }
 
         .btn-custom:hover {
@@ -102,7 +104,7 @@ session_start(); // Pastikan sesi sudah dimulai
             height: 77px;
             border: none;
             font-size: 16px;
-            border-radius: 20px; /* Sudut membulat */
+            border-radius: 20px;
         }
 
         .btn-small {
@@ -112,7 +114,7 @@ session_start(); // Pastikan sesi sudah dimulai
             height: 50px;
             border: 2px solid #DD761C;
             margin: 0 5px;
-            border-radius: 20px; /* Sudut membulat */
+            border-radius: 20px;
         }
 
         .btn-small-submit {
@@ -122,119 +124,109 @@ session_start(); // Pastikan sesi sudah dimulai
             height: 50px;
             border: none;
             margin: 0 5px;
-            border-radius: 20px; /* Sudut membulat */
+            border-radius: 20px;
         }
     </style>
 </head>
 
 <body>
 
-   
-
     <!-- Blurred background -->
     <div class="blur-bg"></div>
 
     <!-- Form section overlay -->
+    <div class="container-form">
+        <div class="form-overlay">
 
-    <?php
-    // Display status messages if any
-    if (isset($_GET['status'])) {
-        if ($_GET['status'] == 'success') {
-            echo "<div class='alert alert-success text-center'>Pengaduan berhasil dikirim!</div>";
-        } elseif ($_GET['status'] == 'error') {
-            echo "<div class='alert alert-danger text-center'>Terjadi kesalahan, silakan coba lagi.</div>";
-        }
-    }
+            <!-- Pesan Status -->
+            <?php
+            if (isset($_GET['status'])) {
+                if ($_GET['status'] == 'success') {
+                    echo "<div class='alert alert-success text-center'>Pengaduan berhasil dikirim!</div>";
+                } elseif ($_GET['status'] == 'error') {
+                    echo "<div class='alert alert-danger text-center'>Terjadi kesalahan, silakan coba lagi.</div>";
+                }
+            }
+            ?>
 
-    // Memeriksa apakah sesi pengguna sudah ada
-    // if (isset($_SESSION['usertype'])) {
-    //     echo "Nama Pengadu: " . htmlspecialchars($_SESSION['nama']) . "<br>";
-    //     echo "No Telepon Pengadu: " . htmlspecialchars($_SESSION['nomor_telpon']) . "<br>"; // Make sure this matches the session variable name
-    // } else {
-    //     echo "Tidak ada sesi yang aktif.";
-    // }
-    ?>
+            <form method="POST" action="fasilitas.php" enctype="multipart/form-data">
+                <div class="row">
+                    <!-- Kolom Kiri -->
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label for="namaPengadu" class="form-label">Nama Pengadu</label>
+                            <textarea class="form-control" id="namaPengadu" name="namaPengadu" rows="3" placeholder="Masukkan nama anda" required></textarea>
+                        </div>
 
-<form method="POST" action="fasilitas.php" enctype="multipart/form-data">
-        <div class="row">
-            <!-- Kolom Kiri -->
-            <div class="col-md-6">
-                <div class="mb-3">
-                    <label for="namaPengadu" class="form-label">Nama Pengadu</label>
-                    <input type="text" class="form-control" id="namaPengadu" name="namaPengadu" value="<?php echo htmlspecialchars($_SESSION['nama'] ?? ''); ?>" readonly>
+                        <div class="mb-3">
+                            <label for="noTeleponPengadu" class="form-label">No Telepon Pengadu</label>
+                            <textarea class="form-control" id="noTeleponPengadu" name="noTeleponPengadu" rows="3" placeholder="Masukkan nomor anda" required></textarea>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="tanggalMenginap" class="form-label">Tanggal Menginap</label>
+                            <input type="date" class="form-control" id="tanggalMenginap" name="tanggalMenginap" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="deskripsiMasalah" class="form-label">Deskripsi Masalah</label>
+                            <textarea class="form-control" id="deskripsiMasalah" name="deskripsiMasalah" rows="3" placeholder="Deskripsikan masalah yang terjadi" required></textarea>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="uploadBukti" class="form-label">Upload Bukti</label>
+                            <input type="file" class="form-control" id="uploadBukti" name="uploadBukti" accept="image/*" required>
+                            <small class="form-text text-muted">Upload bukti dalam format gambar (JPG, PNG, etc.).</small>
+                        </div>
+                    </div>
+
+                    <!-- Kolom Kanan -->
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label for="tanggalMelaporkan" class="form-label">Tanggal Melaporkan</label>
+                            <input type="date" class="form-control" id="tanggalMelaporkan" name="tanggalMelaporkan" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="tempatKerusakan" class="form-label">Tempat Kerusakan</label>
+                            <input type="text" class="form-control" id="tempatKerusakan" name="tempatKerusakan" placeholder="Lokasi Kerusakan" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="jenisMasalah" class="form-label">Jenis Masalah</label>
+                            <select class="form-select" id="jenisMasalah" name="jenisMasalah" required>
+                                <option selected disabled>Pilih Jenis Masalah</option>
+                                <option value="Wifi">Wifi</option>
+                                <option value="Air Conditioner">Air Conditioner</option>
+                                <option value="Water Heater">Water Heater</option>
+                                <option value="Wastafel">Wastafel</option>
+                                <option value="Bed">Bed</option>
+                                <option value="Lainnya">Lainnya</option>
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="pilihKategori" class="form-label">Pilih Kategori</label>
+                            <select class="form-select" id="pilihKategori" name="pilihKategori" required>
+                                <option selected disabled>Pilih Kategori</option>
+                                <option value="Fasilitas yang dijanjikan tidak tersedia">Fasilitas yang dijanjikan tidak tersedia</option>
+                                <option value="Fasilitas tidak berfungsi">Fasilitas tidak berfungsi</option>
+                                <option value="Kualitas fasilitas buruk">Kualitas fasilitas buruk</option>
+                                <option value="Lainnya">Lainnya</option>
+                            </select>
+                        </div>
+                    </div>
                 </div>
 
-                <div class="mb-3">
-                    <label for="noTeleponPengadu" class="form-label">No Telepon Pengadu</label>
-                    <input type="text" class="form-control" id="noTeleponPengadu" name="noTeleponPengadu" value="<?php echo htmlspecialchars($_SESSION['nomor_telpon'] ?? ''); ?>" readonly>
+                <div class="mb-3 text-center">
+                    <!-- Tombol Back -->
+                    <button type="button" class="btn-small" onclick="window.history.back();">Back</button>
+                    <!-- Tombol Submit -->
+                    <button type="submit" class="btn-small-submit">Submit</button>
                 </div>
-
-                <div class="mb-3">
-                    <label for="tanggalMenginap" class="form-label">Tanggal Menginap</label>
-                    <input type="date" class="form-control" id="tanggalMenginap" name="tanggalMenginap" required>
-                </div>
-
-                <div class="mb-3">
-                    <label for="deskripsiMasalah" class="form-label">Deskripsi Masalah</label>
-                    <textarea class="form-control" id="deskripsiMasalah" name="deskripsiMasalah" rows="3" placeholder="Deskripsikan masalah yang terjadi" required></textarea>
-                </div>
-
-                <div class="mb-3">
-                    <label for="uploadBukti" class="form-label">Upload Bukti</label>
-                    <input type="file" class="form-control" id="uploadBukti" name="uploadBukti" accept="image/*" required>
-                    <small class="form-text text-muted">Upload bukti dalam format gambar (JPG, PNG, etc.).</small>
-                </div>
-            </div>
-
-            <!-- Kolom Kanan -->
-            <div class="col-md-6">
-                <div class="mb-3">
-                    <label for="tanggalMelaporkan" class="form-label">Tanggal Melaporkan</label>
-                    <input type="date" class="form-control" id="tanggalMelaporkan" name="tanggalMelaporkan" required>
-                </div>
-
-                <div class="mb-3">
-                    <label for="tempatKerusakan" class="form-label">Tempat Kerusakan</label>
-                    <input type="text" class="form-control" id="tempatKerusakan" name="tempatKerusakan" placeholder="Lokasi Kerusakan" required>
-                </div>
-
-                <div class="mb-3">
-                    <label for="jenisMasalah" class="form-label">Jenis Masalah</label>
-                    <select class="form-select" id="jenisMasalah" name="jenisMasalah" required>
-                        <option selected disabled>Pilih Jenis Masalah</option>
-                        <option value="Wifi">Wifi</option>
-                        <option value="Air Conditioner">Air Conditioner</option>
-                        <option value="Water Heater">Water Heater</option>
-                        <option value="Wastafel">Wastafel</option>
-                        <option value="Bed">Bed</option>
-                        <option value="Lainnya">Lainnya</option>
-                    </select>
-                </div>
-
-                <div class="mb-3">
-                    <label for="pilihKategori" class="form-label">Pilih Kategori</label>
-                    <select class="form-select" id="pilihKategori" name="pilihKategori" required>
-                        <option selected disabled>Pilih Kategori</option>
-                        <option value="Fasilitas yang dijanjikan tidak tersedia">Fasilitas yang dijanjikan tidak tersedia</option>
-                        <option value="Fasilitas tidak berfungsi">Fasilitas tidak berfungsi</option>
-                        <option value="Kualitas fasilitas buruk">Kualitas fasilitas buruk</option>
-                        <option value="Lainnya">Lainnya</option>
-                    </select>
-                </div>
-            </div>
+            </form>
         </div>
-
-
-
-            <!-- Tombol Back -->
-            <button type="button" class="btn-small" onclick="window.history.back();">Back</button>
-
-            <!-- Tombol Submit -->
-            <button type="submit" class="btn-small-submit">Submit</button>
-        </div>
-    </form>
-
-
+    </div>
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>

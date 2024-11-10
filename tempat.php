@@ -2,79 +2,105 @@
 // Memulai proses jika ada data yang dikirim
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Mengamankan inputan
-    $name = htmlspecialchars(trim($_POST['name']));
-    $phone = htmlspecialchars(trim($_POST['phone']));
-    $stay_date = htmlspecialchars(trim($_POST['stay_date']));
-    $report_date = htmlspecialchars(trim($_POST['report_date']));
-    $description = htmlspecialchars(trim($_POST['description']));
-    $damage_location = htmlspecialchars(trim($_POST['damage_location']));
-    $category = htmlspecialchars(trim($_POST['category']));
-    
-    // Mengambil data file upload
-    $image = $_FILES['image-upload'];
+    $name = isset($_POST['name']) ? htmlspecialchars(trim($_POST['name'])) : '';
+    $phone = isset($_POST['phone']) ? htmlspecialchars(trim($_POST['phone'])) : '';
+    $stay_date = isset($_POST['stay_date']) ? htmlspecialchars(trim($_POST['stay_date'])) : '';
+    $report_date = isset($_POST['report_date']) ? htmlspecialchars(trim($_POST['report_date'])) : '';
+    $description = isset($_POST['description']) ? htmlspecialchars(trim($_POST['description'])) : '';
+    $damage_location = isset($_POST['damage_location']) ? htmlspecialchars(trim($_POST['damage_location'])) : '';
+    $category = isset($_POST['category']) ? htmlspecialchars(trim($_POST['category'])) : '';
 
-    // Variabel untuk mengecek status upload
+    // Mengambil data file upload
+    $image = isset($_FILES['image-upload']) ? $_FILES['image-upload'] : null;
+
+    // Variabel untuk pengecekan status upload
     $uploadOk = 1;
     $target_dir = "uploads/";
     $target_file = $target_dir . basename($image["name"]);
     $imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
 
     // Mengecek apakah file adalah gambar
-    $check = getimagesize($image["tmp_name"]);
-    if ($check === false) {
-        $error_message = "File ini bukan gambar.";
-        $uploadOk = 0;
-    }
+    if ($image) {
+        $check = getimagesize($image["tmp_name"]);
+        if ($check === false) {
+            $error_message = "File ini bukan gambar.";
+            $uploadOk = 0;
+        }
 
-    // Mengecek ukuran file
-    if ($image["size"] > 2000000) {
-        $error_message = "Maaf, file Anda terlalu besar.";
-        $uploadOk = 0;
-    }
+        // Mengecek ukuran file
+        if ($image["size"] > 2000000) {
+            $error_message = "Maaf, file Anda terlalu besar.";
+            $uploadOk = 0;
+        }
 
-    // Mengecek tipe file
-    if (!in_array($imageFileType, ['jpg', 'jpeg', 'png', 'gif'])) {
-        $error_message = "Maaf, hanya file JPG, JPEG, PNG & GIF yang diizinkan.";
-        $uploadOk = 0;
-    }
+        // Mengecek tipe file
+        if (!in_array($imageFileType, ['jpg', 'jpeg', 'png', 'gif'])) {
+            $error_message = "Maaf, hanya file JPG, JPEG, PNG & GIF yang diizinkan.";
+            $uploadOk = 0;
+        }
 
-    // Proses upload jika semua pengecekan lulus
-    if ($uploadOk == 0) {
-        $error_message = "Maaf, file Anda tidak berhasil diunggah.";
-    } else {
-        if (move_uploaded_file($image["tmp_name"], $target_file)) {
-            $success_message = "File " . htmlspecialchars(basename($image["name"])) . " telah berhasil diunggah.";
-        } else {
-            $error_message = "Maaf, terjadi kesalahan saat mengunggah file Anda.";
+        // Proses upload jika semua pengecekan lulus
+        if ($uploadOk == 1) {
+            if (move_uploaded_file($image["tmp_name"], $target_file)) {
+                $success_message = "File " . htmlspecialchars(basename($image["name"])) . " telah berhasil diunggah.";
+            } else {
+                $error_message = "Maaf, terjadi kesalahan saat mengunggah file Anda.";
+            }
         }
     }
 
-    // Koneksi ke database
-    $servername = "127.0.0.1"; // Ganti dengan server Anda
-    $username = "username"; // Ganti dengan username database Anda
-    $password = "password"; // Ganti dengan password database Anda
-    $dbname = "filya_suite"; // Nama database Anda
+    // Jika tidak ada error, lanjutkan ke pengecekan database
+    if (!isset($error_message)) {
+        // Koneksi ke database
+        $servername = "localhost";
+        $username = "root"; 
+        $password = "";
+        $dbname = "filya_suite"; 
 
-    // Membuat koneksi
-    $conn = new mysqli($servername, $username, $password, $dbname);
+        // Membuat koneksi
+        $conn = new mysqli($servername, $username, $password, $dbname);
 
-    // Memeriksa koneksi
-    if ($conn->connect_error) {
-        die("Koneksi gagal: " . $conn->connect_error);
+        // Memeriksa koneksi
+        if ($conn->connect_error) {
+            die("Koneksi gagal: " . $conn->connect_error);
+        }
+
+        // Mengecek apakah nama dan nomor telepon ada di tabel users
+        $stmt_check = $conn->prepare("SELECT nama FROM users WHERE nomor_telpon = ? AND nama = ?");
+        $stmt_check->bind_param("ss", $phone, $name);
+        $stmt_check->execute();
+        $stmt_check->store_result();
+
+        // Tambahkan nama dan nomor telepon hanya jika tidak ada
+        if ($stmt_check->num_rows == 0) {
+            // Menambahkan nama dan nomor telepon ke tabel users jika belum ada
+            $stmt_insert_user = $conn->prepare("INSERT INTO users (nama, nomor_telpon) VALUES (?, ?)");
+            $stmt_insert_user->bind_param("ss", $name, $phone);
+            if (!$stmt_insert_user->execute()) {
+                $error_message = "Error menambahkan nomor telepon ke tabel users: " . $stmt_insert_user->error;
+            }
+            $stmt_insert_user->close();
+        }
+        $stmt_check->close();
+
+        // Jika tidak ada error pada penambahan user, lanjutkan menambahkan data ke tabel tempat
+        if (!isset($error_message)) {
+            $stmt = $conn->prepare("INSERT INTO tempat (nama_pengadu, no_telepon_pengadu, tanggal_menginap, nomor_kamar, jenis_masalah, deskripsi_masalah, file_bukti, waktu_pengaduan) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+            $stmt->bind_param("ssssssss", $name, $phone, $stay_date, $damage_location, $category, $description, $target_file, $report_date);
+
+            if ($stmt->execute()) {
+                $success_message = "Data berhasil disimpan!";
+            } else {
+                $error_message = "Error: " . $stmt->error;
+            }
+
+            // Menutup koneksi  
+            $stmt->close();
+        }
+
+        // Menutup koneksi
+        $conn->close();
     }
-
-    // Menyimpan data ke tabel 'tempat'
-    $sql = "INSERT INTO tempat (nama_pengadu, no_telepon_pengadu, tanggal_menginap, nomor_kamar, jenis_masalah, deskripsi_masalah, file_bukti) 
-            VALUES ('$name', '$phone', '$stay_date', '$damage_location', '$category', '$description', '$target_file')";
-
-    if ($conn->query($sql) === TRUE) {
-        echo "Data berhasil disimpan!";
-    } else {
-        echo "Error: " . $sql . "<br>" . $conn->error;
-    }
-
-    // Menutup koneksi
-    $conn->close();
 }
 ?>
 
@@ -87,8 +113,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400&display=swap" rel="stylesheet">
     <style>
         body {
-            width: 100vw; /* Menggunakan lebar viewport */
-            height: 100vh; /* Menggunakan tinggi viewport */
+            width: 100vw; 
+            height: 100vh; 
             margin: 0;
             font-family: 'Outfit', sans-serif;
             color: #FDE49E;
@@ -98,7 +124,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
 
         .blur-bg {
-            background-image: url('bglogin-register.jpg'); /* Gambar latar belakang yang sama */
+            background-image: url('bglogin-register.jpg'); 
             background-size: cover;
             background-position: center;
             position: fixed;
@@ -231,10 +257,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 </head>
 <body>
 
-    <div class="blur-bg"></div> <!-- Elemen latar belakang blur -->
+    <div class="blur-bg"></div> 
 
     <div class="form-container">
-        <h1>LAPORAN TEMPAT</h1> <!-- Judul dipindahkan ke sini -->
+        <h1>LAPORAN TEMPAT</h1>
 
         <form action="" method="POST" enctype="multipart/form-data">
             <div class="form-row">

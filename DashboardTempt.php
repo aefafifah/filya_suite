@@ -187,7 +187,7 @@ $result = $conn->query($sql);
                                 <td><?php echo isset($row['waktu_pengaduan']) ? $row['waktu_pengaduan'] : ''; ?></td>
                                 <td>
                                 <?php if (!empty($row['file_bukti'])): ?>
-                                <a href="abcd.jpg" target="">Lihat Bukti</a>
+                                <a href="<?php echo isset($row['file_bukti']) ? $row['file_bukti'] : '' ; ?>" target="">Lihat Bukti</a>
                                 <?php else: ?>
                                 Tidak Ada Bukti
                                 <?php endif; ?>

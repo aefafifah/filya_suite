@@ -169,8 +169,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <input type="text" class="form-control" id="file_bukti" name="file_bukti" value="<?php echo $row['file_bukti']; ?>" required>
             </div>
             <div class="d-flex justify-content-between">
-                <button type="submit" class="btn btn-primary">Update</button>
                 <a href="../DashboardTempt.php" class="btn btn-secondary">Kembali</a>
+                <button type="submit" class="btn btn-primary">Update</button>
             </div>
         </form>
     </div>

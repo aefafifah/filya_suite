@@ -122,7 +122,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <input type="text" name="bentuk_wajah" class="form-control mb-2" placeholder="Bentuk Wajah" required>
             </div>
         </div>
-        <button type="submit" class="btn btn-primary">Tambah Pegawai</button>
+            <div class="d-flex justify-content-between">
+            <a href="Dashboarddatapegawai.php" class="btn btn-secondary">Kembali</a>
+            <button type="submit" class="btn btn-primary btn-sm" style="width: auto;">Tambah Pegawai</button>
+        </div>
     </form>
 </div>
 

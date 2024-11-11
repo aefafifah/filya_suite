@@ -1,3 +1,17 @@
+<?php
+session_start();
+
+// Redirect ke login.php jika pengguna belum login
+if (!isset($_SESSION['nama']) || !isset($_SESSION['usertype'])) {
+    header("Location: login.php");
+    exit();
+}
+
+$nama = $_SESSION['nama'];
+$nomor_telpon = $_SESSION['nomor_telpon'];
+$nomor_telpon = $_SESSION['nomor_telpon'] ?? '';
+$alamat = $_SESSION['alamat'] ?? '';
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>

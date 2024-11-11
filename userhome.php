@@ -230,6 +230,14 @@ $alamat = $_SESSION['alamat'] ?? '';
             background-color: #FFFFFF;
             border-radius: 50%;
         }
+        /* Flashing animation for triggered effect */
+        @keyframes flash {
+            0%, 100% { background-color: #f7d76e; }
+            50% { background-color: #FFD700; } /* Warna flash */
+        }
+        .flash-triggered {
+            animation: flash 0.5s ease-in-out infinite;
+        }
     </style>
 </head>
 
@@ -266,11 +274,14 @@ $alamat = $_SESSION['alamat'] ?? '';
             </div>
         </div>
     </div>
-    <script>
-        /* pemanggilan transisi untuk extra button */
-        function toggleExtraButtons() {
+<script>
+        function toggleExtraButtons(show = false) {
             const extraButtons = document.getElementById("extraButtons");
-            extraButtons.classList.toggle("show");
+            if (show) {
+                extraButtons.classList.add("show");
+            } else {
+                extraButtons.classList.toggle("show");
+            }
         }
 
         function smoothRedirect(url) {
@@ -280,16 +291,27 @@ $alamat = $_SESSION['alamat'] ?? '';
             }, 300); // Waktu transisi
         }
 
-        // Fade-in effect for page load or reload
         window.addEventListener("pageshow", (event) => {
             if (event.persisted || event.type === "pageshow") {
                 document.body.classList.remove("fade-out");
             }
         });
 
-        // Menghapus fade-out saat halaman pertama kali dimuat
         window.addEventListener("load", () => {
             document.body.classList.remove("fade-out");
+
+// Periksa apakah showExtra ada di URL
+const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.has('showExtra')) {
+                toggleExtraButtons(true); // Tampilkan ekstra tombol
+                const extraButtons = document.querySelectorAll(".extra-button");
+                extraButtons.forEach(button => button.classList.add("flash-triggered"));
+                
+                // Hentikan efek flash setelah 3 detik
+                setTimeout(() => {
+                    extraButtons.forEach(button => button.classList.remove("flash-triggered"));
+                }, 3000);
+            }
         });
     </script>
 </body>

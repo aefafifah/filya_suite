@@ -246,7 +246,7 @@ $data_tersedia = mysqli_num_rows($result) > 0;
                 <div class="no-data">
                     <p>Belum ada Kamar villa yang anda booking</p>
                     <p>Mengalami kendala atau merasa kurang puas dengan villa Filya Suite?<br>
-                        Yuk ajukan pengaduan Anda di <a href="aduan.php">sini</a>, dan bantu kami dalam meningkatkan kualitas villa Filya Suite.<br>
+                        Yuk ajukan pengaduan Anda di <a href="userhome.php?showExtra=true">sini</a>, dan bantu kami dalam meningkatkan kualitas villa Filya Suite.<br>
                         Kami sangat menghargai setiap masukan dari Anda untuk terus menyempurnakan pengalaman Anda bersama kami.</p>
                 </div>
             <?php endif; ?>

@@ -1,3 +1,53 @@
+<?php
+// Koneksi ke database
+$servername = "localhost";
+$username = "root";
+$password = "";
+$dbname = "filya_suite";
+
+// Membuat koneksi
+$conn = new mysqli($servername, $username, $password, $dbname);
+
+// Cek koneksi
+if ($conn->connect_error) {
+    die("Koneksi gagal: " . $conn->connect_error);
+}
+
+// Proses form saat disubmit
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $nama_pengadu = $_POST['name'];
+    $tanggal_melaporkan = $_POST['report_date'];
+    $nomor_telepon = $_POST['phone'];
+    $tanggal_menginap = $_POST['stay_date'];
+    $deskripsi_masalah = $_POST['description'];
+    $jenis_masalah = $_POST['category'];
+    $ciri_ciri = $_POST['features'];
+    $bukti_masalah = null;
+
+    // Memproses file upload
+    if (isset($_FILES['image-upload']) && $_FILES['image-upload']['error'] == 0) {
+        $bukti_masalah = file_get_contents($_FILES['image-upload']['tmp_name']);
+    } else {
+        $bukti_masalah = null;
+    }
+
+    // Query untuk menyimpan data
+    $stmt = $conn->prepare("INSERT INTO laporan (nama_pengadu, tanggal_melaporkan, nomor_telepon, tanggal_menginap, deskripsi_masalah, jenis_masalah, ciri_ciri, bukti_masalah) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+    $stmt->bind_param("ssssssss", $nama_pengadu, $tanggal_melaporkan, $nomor_telepon, $tanggal_menginap, $deskripsi_masalah, $jenis_masalah, $ciri_ciri, $bukti_masalah);
+
+    if ($stmt->execute()) {
+        $success_message = "Laporan berhasil dikirim!";
+    } else {
+        $error_message = "Gagal mengirim laporan: " . $conn->error;
+    }
+
+    $stmt->close();
+}
+
+$conn->close();
+?>
+
+
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -186,15 +236,17 @@
                         <option value="Tidak Tersedia saat dibutuhkan">Tidak Tersedia saat dibutuhkan</option>
                         <option value="Lainnya">Lainnya</option>
                     </select>
-                   <!-- Dropdown Ciri-Ciri -->
-                   <label for="features">Ciri-Ciri:</label>
+                    <!-- Dropdown Ciri-Ciri placed inside the same column -->
+                    <label for="features">Ciri-Ciri:</label>
                     <select id="features" name="features" required>
                         <option value="Pendek, Kurus, Sawo Matang, Oval, Gelombang">Pendek, Kurus, Sawo Matang, Oval, Gelombang</option>
                         <option value="Sedang, Sedang, Cerah, Bulat, Lurus">Sedang, Sedang, Cerah, Bulat, Lurus</option>
                         <option value="Tinggi, Berisi, Gelap, Persegi, Keriting">Tinggi, Berisi, Gelap, Persegi, Keriting</option>
-                        <option value="Sangat Tinggi, Gemuk, Sangat Cerah, Lonjong, Lurus">Sangat Tinggi, Gemuk, Sangat Cerah, Lonjong, Lurus</option>
+                        <option value="Sangat Tinggi, Gemuk, Sangat Cerah, Lonjong, Panjang">Sangat Tinggi, Gemuk, Sangat Cerah, Lonjong, Panjang</option>
                         <option value="Sedang, Berisi, Sawo Matang, Segitiga, Bergelombang">Sedang, Berisi, Sawo Matang, Segitiga, Bergelombang</option>
                     </select>
+                </div>
+            </div>
 
             <div class="upload-container">
                 <label for="image-upload">Bukti Masalah:</label>

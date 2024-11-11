@@ -90,7 +90,7 @@ $conn->close();
             font-family: Arial, sans-serif;
         }
         .container {
-            max-width: 600px;
+            max-width: 900px; /* Membuat kontainer lebih lebar */
             background-color: #ffffff;
             padding: 30px;
             margin: 50px auto;
@@ -151,44 +151,62 @@ $conn->close();
             gap: 10px; /* Menambahkan jarak antar tombol */
             margin-top: 20px;
         }
+        .row {
+            margin-left: -15px;
+            margin-right: -15px;
+        }
+        .col-md-6, .col-lg-6 {
+            padding-left: 15px;
+            padding-right: 15px;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <h2>Edit Data Laporan Fasilitas</h2>
         <form method="post">
-            <div class="mb-3">
-                <label for="nama_pengadu" class="form-label">Nama Pengadu</label>
-                <input type="text" class="form-control" name="nama_pengadu" value="<?php echo htmlspecialchars($fasilitas['nama_pengadu']); ?>" required>
+            <div class="row">
+                <!-- Kolom Kiri -->
+                <div class="col-md-6 col-lg-6">
+                    <div class="mb-3">
+                        <label for="nama_pengadu" class="form-label">Nama Pengadu</label>
+                        <input type="text" class="form-control" name="nama_pengadu" value="<?php echo htmlspecialchars($fasilitas['nama_pengadu']); ?>" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="no_telepon_pengadu" class="form-label">Nomor Telepon</label>
+                        <input type="text" class="form-control" name="no_telepon_pengadu" value="<?php echo htmlspecialchars($fasilitas['no_telepon_pengadu']); ?>" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="tanggal_menginap" class="form-label">Tanggal Menginap</label>
+                        <input type="date" class="form-control" name="tanggal_menginap" value="<?php echo htmlspecialchars($fasilitas['tanggal_menginap']); ?>" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="tanggal_melaporkan" class="form-label">Tanggal Melaporkan</label>
+                        <input type="date" class="form-control" name="tanggal_melaporkan" value="<?php echo htmlspecialchars($fasilitas['tanggal_melaporkan']); ?>" required>
+                    </div>
+                </div>
+
+                <!-- Kolom Kanan -->
+                <div class="col-md-6 col-lg-6">
+                    <div class="mb-3">
+                        <label for="tempat_kerusakan" class="form-label">Tempat Kerusakan</label>
+                        <input type="text" class="form-control" name="tempat_kerusakan" value="<?php echo htmlspecialchars($fasilitas['tempat_kerusakan']); ?>" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="jenis_masalah" class="form-label">Jenis Masalah</label>
+                        <input type="text" class="form-control" name="jenis_masalah" value="<?php echo htmlspecialchars($fasilitas['jenis_masalah']); ?>" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="deskripsi_masalah_fasilitas" class="form-label">Deskripsi Masalah</label>
+                        <textarea class="form-control" name="deskripsi_masalah_fasilitas" required><?php echo htmlspecialchars($fasilitas['deskripsi_masalah_fasilitas']); ?></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="pilih_kategori_fasilitas" class="form-label">Kategori Fasilitas</label>
+                        <input type="text" class="form-control" name="pilih_kategori_fasilitas" value="<?php echo htmlspecialchars($fasilitas['pilih_kategori_fasilitas']); ?>" required>
+                    </div>
+                </div>
             </div>
-            <div class="mb-3">
-                <label for="no_telepon_pengadu" class="form-label">Nomor Telepon</label>
-                <input type="text" class="form-control" name="no_telepon_pengadu" value="<?php echo htmlspecialchars($fasilitas['no_telepon_pengadu']); ?>" required>
-            </div>
-            <div class="mb-3">
-                <label for="tanggal_menginap" class="form-label">Tanggal Menginap</label>
-                <input type="date" class="form-control" name="tanggal_menginap" value="<?php echo htmlspecialchars($fasilitas['tanggal_menginap']); ?>" required>
-            </div>
-            <div class="mb-3">
-                <label for="tanggal_melaporkan" class="form-label">Tanggal Melaporkan</label>
-                <input type="date" class="form-control" name="tanggal_melaporkan" value="<?php echo htmlspecialchars($fasilitas['tanggal_melaporkan']); ?>" required>
-            </div>
-            <div class="mb-3">
-                <label for="tempat_kerusakan" class="form-label">Tempat Kerusakan</label>
-                <input type="text" class="form-control" name="tempat_kerusakan" value="<?php echo htmlspecialchars($fasilitas['tempat_kerusakan']); ?>" required>
-            </div>
-            <div class="mb-3">
-                <label for="jenis_masalah" class="form-label">Jenis Masalah</label>
-                <input type="text" class="form-control" name="jenis_masalah" value="<?php echo htmlspecialchars($fasilitas['jenis_masalah']); ?>" required>
-            </div>
-            <div class="mb-3">
-                <label for="deskripsi_masalah_fasilitas" class="form-label">Deskripsi Masalah</label>
-                <textarea class="form-control" name="deskripsi_masalah_fasilitas" required><?php echo htmlspecialchars($fasilitas['deskripsi_masalah_fasilitas']); ?></textarea>
-            </div>
-            <div class="mb-3">
-                <label for="pilih_kategori_fasilitas" class="form-label">Kategori Fasilitas</label>
-                <input type="text" class="form-control" name="pilih_kategori_fasilitas" value="<?php echo htmlspecialchars($fasilitas['pilih_kategori_fasilitas']); ?>" required>
-            </div>
+
             <div class="d-flex">
                 <a href="../DashbordFasilitas.php" class="btn-secondary">Kembali</a>
                 <button type="submit">Simpan</button>

@@ -50,7 +50,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 }
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -65,7 +64,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             font-family: Arial, sans-serif;
         }
         .container {
-            max-width: 600px;
+            max-width: 900px; /* Lebarkan container */
             background-color: #ffffff;
             padding: 30px;
             margin: 50px auto;
@@ -129,42 +128,52 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <div class="container mt-5">
         <h2>Edit Data Pegawai</h2>
         <form method="POST">
-            <div class="mb-3">
-                <label for="nama" class="form-label">Nama</label>
-                <input type="text" class="form-control" id="nama" name="nama" value="<?= htmlspecialchars($pegawai['nama']); ?>" required>
+            <div class="row">
+                <!-- Kolom Kiri -->
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label for="nama" class="form-label">Nama</label>
+                        <input type="text" class="form-control" id="nama" name="nama" value="<?= htmlspecialchars($pegawai['nama']); ?>" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="jabatan" class="form-label">Jabatan</label>
+                        <input type="text" class="form-control" id="jabatan" name="jabatan" value="<?= htmlspecialchars($pegawai['jabatan']); ?>" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="hari" class="form-label">Hari</label>
+                        <input type="text" class="form-control" id="hari" name="hari" value="<?= htmlspecialchars($pegawai['hari']); ?>" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="waktu_shift" class="form-label">Waktu Shift</label>
+                        <input type="text" class="form-control" id="waktu_shift" name="waktu_shift" value="<?= htmlspecialchars($pegawai['waktu_shift']); ?>" required>
+                    </div>
+                </div>
+
+                <!-- Kolom Kanan -->
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label for="tinggi" class="form-label">Tinggi</label>
+                        <input type="number" class="form-control" id="tinggi" name="tinggi" value="<?= htmlspecialchars($pegawai['tinggi']); ?>" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="berat_badan" class="form-label">Berat Badan</label>
+                        <input type="number" class="form-control" id="berat_badan" name="berat_badan" value="<?= htmlspecialchars($pegawai['berat_badan']); ?>" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="warna_kulit" class="form-label">Warna Kulit</label>
+                        <input type="text" class="form-control" id="warna_kulit" name="warna_kulit" value="<?= htmlspecialchars($pegawai['warna_kulit']); ?>" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="warna_rambut" class="form-label">Warna Rambut</label>
+                        <input type="text" class="form-control" id="warna_rambut" name="warna_rambut" value="<?= htmlspecialchars($pegawai['warna_rambut']); ?>" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="bentuk_wajah" class="form-label">Bentuk Wajah</label>
+                        <input type="text" class="form-control" id="bentuk_wajah" name="bentuk_wajah" value="<?= htmlspecialchars($pegawai['bentuk_wajah']); ?>" required>
+                    </div>
+                </div>
             </div>
-            <div class="mb-3">
-                <label for="jabatan" class="form-label">Jabatan</label>
-                <input type="text" class="form-control" id="jabatan" name="jabatan" value="<?= htmlspecialchars($pegawai['jabatan']); ?>" required>
-            </div>
-            <div class="mb-3">
-                <label for="hari" class="form-label">Hari</label>
-                <input type="text" class="form-control" id="hari" name="hari" value="<?= htmlspecialchars($pegawai['hari']); ?>" required>
-            </div>
-            <div class="mb-3">
-                <label for="waktu_shift" class="form-label">Waktu Shift</label>
-                <input type="text" class="form-control" id="waktu_shift" name="waktu_shift" value="<?= htmlspecialchars($pegawai['waktu_shift']); ?>" required>
-            </div>
-            <div class="mb-3">
-                <label for="tinggi" class="form-label">Tinggi</label>
-                <input type="number" class="form-control" id="tinggi" name="tinggi" value="<?= htmlspecialchars($pegawai['tinggi']); ?>" required>
-            </div>
-            <div class="mb-3">
-                <label for="berat_badan" class="form-label">Berat Badan</label>
-                <input type="number" class="form-control" id="berat_badan" name="berat_badan" value="<?= htmlspecialchars($pegawai['berat_badan']); ?>" required>
-            </div>
-            <div class="mb-3">
-                <label for="warna_kulit" class="form-label">Warna Kulit</label>
-                <input type="text" class="form-control" id="warna_kulit" name="warna_kulit" value="<?= htmlspecialchars($pegawai['warna_kulit']); ?>" required>
-            </div>
-            <div class="mb-3">
-                <label for="warna_rambut" class="form-label">Warna Rambut</label>
-                <input type="text" class="form-control" id="warna_rambut" name="warna_rambut" value="<?= htmlspecialchars($pegawai['warna_rambut']); ?>" required>
-            </div>
-            <div class="mb-3">
-                <label for="bentuk_wajah" class="form-label">Bentuk Wajah</label>
-                <input type="text" class="form-control" id="bentuk_wajah" name="bentuk_wajah" value="<?= htmlspecialchars($pegawai['bentuk_wajah']); ?>" required>
-            </div>
+
             <div class="d-flex justify-content-between">
                 <a href="../Dashboarddatapegawai.php" class="btn btn-secondary">Kembali</a>
                 <button type="submit" class="btn btn-primary">Update</button>

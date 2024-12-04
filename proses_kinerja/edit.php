@@ -13,7 +13,7 @@ if ($conn->connect_error) {
 
 // Mendapatkan data laporan berdasarkan ID
 $id = $_GET['id'];
-$sql = "SELECT * FROM laporan WHERE id = $id";
+$sql = "SELECT * FROM kinerja WHERE id_pengaduan = $id";
 $result = $conn->query($sql);
 
 if ($result->num_rows > 0) {
@@ -26,22 +26,38 @@ if ($result->num_rows > 0) {
 // Memproses form edit
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $nama_pengadu = $_POST['nama_pengadu'];
-    $nomor_telepon = $_POST['nomor_telepon'];
+    $no_telepon_pengadu = $_POST['no_telepon_pengadu'];
     $tanggal_menginap = $_POST['tanggal_menginap'];
-    $tanggal_melaporkan = $_POST['tanggal_melaporkan'];
+    $id_pegawai = $_POST['id_pegawai'];
+    $nama_pegawai = $_POST['nama_pegawai'];
+    $jabatan_pegawai = $_POST['jabatan_pegawai'];
+    $waktu_kejadian = $_POST['waktu_kejadian'];
     $jenis_masalah = $_POST['jenis_masalah'];
     $deskripsi_masalah = $_POST['deskripsi_masalah'];
-    $ciri_ciri = $_POST['ciri_ciri'];
-    
-    $sql = "UPDATE laporan SET 
+    $file_bukti = $_POST['file_bukti'];
+    $tinggi = $_POST['tinggi'];
+    $tubuh = $_POST['tubuh'];
+    $kulit = $_POST['kulit'];
+    $rambut = $_POST['rambut'];
+    $wajah = $_POST['wajah'];
+
+    $sql = "UPDATE kinerja SET 
             nama_pengadu='$nama_pengadu', 
-            nomor_telepon='$nomor_telepon', 
+            no_telepon_pengadu='$no_telepon_pengadu', 
             tanggal_menginap='$tanggal_menginap', 
-            tanggal_melaporkan='$tanggal_melaporkan', 
+            id_pegawai='$id_pegawai', 
+            nama_pegawai='$nama_pegawai', 
+            jabatan_pegawai='$jabatan_pegawai', 
+            waktu_kejadian='$waktu_kejadian', 
             jenis_masalah='$jenis_masalah', 
-            deskripsi_masalah='$deskripsi_masalah',
-            ciri_ciri='$ciri_ciri'
-            WHERE id=$id";
+            deskripsi_masalah='$deskripsi_masalah', 
+            file_bukti='$file_bukti', 
+            tinggi='$tinggi', 
+            tubuh='$tubuh', 
+            kulit='$kulit', 
+            rambut='$rambut', 
+            wajah='$wajah'
+            WHERE id_pengaduan=$id";
 
     if ($conn->query($sql) === TRUE) {
         echo "Data berhasil diperbarui.";
@@ -53,7 +69,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 $conn->close();
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -137,33 +152,98 @@ $conn->close();
                 <input type="text" class="form-control" id="nama_pengadu" name="nama_pengadu" value="<?php echo $laporan['nama_pengadu']; ?>" required>
             </div>
             <div class="mb-3">
-                <label for="nomor_telepon" class="form-label">Nomor Telepon</label>
-                <input type="text" class="form-control" id="nomor_telepon" name="nomor_telepon" value="<?php echo $laporan['nomor_telepon']; ?>" required>
+                <label for="no_telepon_pengadu" class="form-label">Nomor Telepon Pengadu</label>
+                <input type="text" class="form-control" id="no_telepon_pengadu" name="no_telepon_pengadu" value="<?php echo $laporan['no_telepon_pengadu']; ?>" required>
             </div>
             <div class="mb-3">
                 <label for="tanggal_menginap" class="form-label">Tanggal Menginap</label>
                 <input type="date" class="form-control" id="tanggal_menginap" name="tanggal_menginap" value="<?php echo $laporan['tanggal_menginap']; ?>" required>
             </div>
             <div class="mb-3">
-                <label for="tanggal_melaporkan" class="form-label">Tanggal Melaporkan</label>
-                <input type="date" class="form-control" id="tanggal_melaporkan" name="tanggal_melaporkan" value="<?php echo $laporan['tanggal_melaporkan']; ?>" required>
+                <label for="id_pegawai" class="form-label">ID Pegawai</label>
+                <input type="number" class="form-control" id="id_pegawai" name="id_pegawai" value="<?php echo $laporan['id_pegawai']; ?>" required>
+            </div>
+            <div class="mb-3">
+                <label for="nama_pegawai" class="form-label">Nama Pegawai</label>
+                <input type="text" class="form-control" id="nama_pegawai" name="nama_pegawai" value="<?php echo $laporan['nama_pegawai']; ?>" required>
+            </div>
+            <div class="mb-3">
+                <label for="jabatan_pegawai" class="form-label">Jabatan Pegawai</label>
+                <select class="form-control" id="jabatan_pegawai" name="jabatan_pegawai">
+                    <option value="Resepsionis" <?php echo $laporan['jabatan_pegawai'] == 'Resepsionis' ? 'selected' : ''; ?>>Resepsionis</option>
+                    <option value="House Keeper" <?php echo $laporan['jabatan_pegawai'] == 'House Keeper' ? 'selected' : ''; ?>>House Keeper</option>
+                    <option value="Security" <?php echo $laporan['jabatan_pegawai'] == 'Security' ? 'selected' : ''; ?>>Security</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="waktu_kejadian" class="form-label">Waktu Kejadian</label>
+                <input type="datetime-local" class="form-control" id="waktu_kejadian" name="waktu_kejadian" value="<?php echo $laporan['waktu_kejadian']; ?>" required>
             </div>
             <div class="mb-3">
                 <label for="jenis_masalah" class="form-label">Jenis Masalah</label>
-                <input type="text" class="form-control" id="jenis_masalah" name="jenis_masalah" value="<?php echo $laporan['jenis_masalah']; ?>" required>
+                <select class="form-control" id="jenis_masalah" name="jenis_masalah">
+                    <option value="Pelayanan Lambat" <?php echo $laporan['jenis_masalah'] == 'Pelayanan Lambat' ? 'selected' : ''; ?>>Pelayanan Lambat</option>
+                    <option value="Sikap Tidak Profesional" <?php echo $laporan['jenis_masalah'] == 'Sikap Tidak Profesional' ? 'selected' : ''; ?>>Sikap Tidak Profesional</option>
+                    <option value="Pelayanan Tidak Ramah" <?php echo $laporan['jenis_masalah'] == 'Pelayanan Tidak Ramah' ? 'selected' : ''; ?>>Pelayanan Tidak Ramah</option>
+                    <option value="Sikap Karyawan Buruk" <?php echo $laporan['jenis_masalah'] == 'Sikap Karyawan Buruk' ? 'selected' : ''; ?>>Sikap Karyawan Buruk</option>
+                    <option value="Pelayanan Tidak Memuaskan" <?php echo $laporan['jenis_masalah'] == 'Pelayanan Tidak Memuaskan' ? 'selected' : ''; ?>>Pelayanan Tidak Memuaskan</option>
+                    <option value="Tidak Tersedia Saat Dibutuhkan" <?php echo $laporan['jenis_masalah'] == 'Tidak Tersedia Saat Dibutuhkan' ? 'selected' : ''; ?>>Tidak Tersedia Saat Dibutuhkan</option>
+                    <option value="Lainnya" <?php echo $laporan['jenis_masalah'] == 'Lainnya' ? 'selected' : ''; ?>>Lainnya</option>
+                </select>
             </div>
             <div class="mb-3">
                 <label for="deskripsi_masalah" class="form-label">Deskripsi Masalah</label>
-                <textarea class="form-control" id="deskripsi_masalah" name="deskripsi_masalah" required><?php echo $laporan['deskripsi_masalah']; ?></textarea>
+                <textarea class="form-control" id="deskripsi_masalah" name="deskripsi_masalah" rows="3" required><?php echo $laporan['deskripsi_masalah']; ?></textarea>
             </div>
             <div class="mb-3">
-                <label for="ciri_ciri" class="form-label">Ciri-Ciri</label>
-                <input type="text" class="form-control" id="ciri_ciri" name="ciri_ciri" value="<?php echo $laporan['ciri_ciri']; ?>" required>
+                <label for="file_bukti" class="form-label">File Bukti</label>
+                <input type="text" class="form-control" id="file_bukti" name="file_bukti" value="<?php echo $laporan['file_bukti']; ?>">
             </div>
-            <!-- Menukar urutan tombol -->
-            <div class="d-flex justify-content-between">
-                <a href="../DashbordKinerja.php" class="btn btn-secondary">Kembali</a>
-                <button type="submit" class="btn btn-primary">Simpan</button>
+            <div class="mb-3">
+                <label for="tinggi" class="form-label">Tinggi Badan</label>
+                <select class="form-control" id="tinggi" name="tinggi">
+                    <option value="pendek" <?php echo $laporan['tinggi'] == 'pendek' ? 'selected' : ''; ?>>Pendek</option>
+                    <option value="sedang" <?php echo $laporan['tinggi'] == 'sedang' ? 'selected' : ''; ?>>Sedang</option>
+                    <option value="tinggi" <?php echo $laporan['tinggi'] == 'tinggi' ? 'selected' : ''; ?>>Tinggi</option>
+                    <option value="sangat tinggi" <?php echo $laporan['tinggi'] == 'sangat tinggi' ? 'selected' : ''; ?>>Sangat Tinggi</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="tubuh" class="form-label">Jenis Tubuh</label>
+                <select class="form-control" id="tubuh" name="tubuh">
+                    <option value="kurus" <?php echo $laporan['tubuh'] == 'kurus' ? 'selected' : ''; ?>>Kurus</option>
+                    <option value="sedang" <?php echo $laporan['tubuh'] == 'sedang' ? 'selected' : ''; ?>>Sedang</option>
+                    <option value="berisi" <?php echo $laporan['tubuh'] == 'berisi' ? 'selected' : ''; ?>>Berisi</option>
+                    <option value="gemuk" <?php echo $laporan['tubuh'] == 'gemuk' ? 'selected' : ''; ?>>Gemuk</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="kulit" class="form-label">Warna Kulit</label>
+                <select class="form-control" id="kulit" name="kulit">
+                    <option value="cerah" <?php echo $laporan['kulit'] == 'cerah' ? 'selected' : ''; ?>>Cerah</option>
+                    <option value="sawo matang" <?php echo $laporan['kulit'] == 'sawo matang' ? 'selected' : ''; ?>>Sawo Matang</option>
+                    <option value="gelap" <?php echo $laporan['kulit'] == 'gelap' ? 'selected' : ''; ?>>Gelap</option>
+                    <option value="sangat cerah" <?php echo $laporan['kulit'] == 'sangat cerah' ? 'selected' : ''; ?>>Sangat Cerah</option>
+                    <option value="sangat gelap" <?php echo $laporan['kulit'] == 'sangat gelap' ? 'selected' : ''; ?>>Sangat Gelap</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="rambut" class="form-label">Jenis Rambut</label>
+                <input type="text" class="form-control" id="rambut" name="rambut" value="<?php echo $laporan['rambut']; ?>" required>
+            </div>
+            <div class="mb-3">
+                <label for="wajah" class="form-label">Bentuk Wajah</label>
+                <select class="form-control" id="wajah" name="wajah">
+                    <option value="oval" <?php echo $laporan['wajah'] == 'oval' ? 'selected' : ''; ?>>Oval</option>
+                    <option value="bulat" <?php echo $laporan['wajah'] == 'bulat' ? 'selected' : ''; ?>>Bulat</option>
+                    <option value="persegi" <?php echo $laporan['wajah'] == 'persegi' ? 'selected' : ''; ?>>Persegi</option>
+                    <option value="lonjong" <?php echo $laporan['wajah'] == 'lonjong' ? 'selected' : ''; ?>>Lonjong</option>
+                    <option value="segitiga" <?php echo $laporan['wajah'] == 'segitiga' ? 'selected' : ''; ?>>Segitiga</option>
+                </select>
+            </div>
+            <div class="d-flex">
+                <button type="submit" class="btn btn-primary">Update Laporan</button>
+                <a href="../DashbordKinerja.php" class="btn btn-secondary">Batal</a>
             </div>
         </form>
     </div>

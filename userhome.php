@@ -259,6 +259,10 @@ $alamat = $_SESSION['alamat'] ?? '';
                 <img src="https://img.icons8.com/material-outlined/24/000000/booking.png" alt="Booking Icon" />
                 Data Booking Saya
             </a>
+            <a onclick="smoothRedirect('logout.php')" class="menu-item">
+                <img src="https://img.icons8.com/material-outlined/24/000000/booking.png" alt="Booking Icon" />
+                Logout
+            </a>
         </div>
         <!-- Main Content -->
         <div class="content">

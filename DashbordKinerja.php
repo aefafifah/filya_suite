@@ -14,8 +14,27 @@ if ($conn->connect_error) {
 }
 
 // Mengambil data dari database
-$sql = "SELECT * FROM laporan";
+$sql = "SELECT * FROM kinerja";
 $result = $conn->query($sql);
+
+// Proses update status
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_status'])) {
+    $new_status = $_POST['status'];
+    $id_pengaduan = $_POST['id_pengaduan'];
+
+    // Update status di database
+    $stmt = $conn->prepare("UPDATE kinerja SET status = ? WHERE id_pengaduan = ?");
+    $stmt->bind_param("si", $new_status, $id_pengaduan);
+
+    if ($stmt->execute()) {
+        header("Location: " . $_SERVER['PHP_SELF']); // Refresh halaman setelah update
+        exit();
+    } else {
+        echo "Gagal mengupdate status.";
+    }
+
+    $stmt->close();
+}
 ?>
 
 <!DOCTYPE html>
@@ -173,10 +192,13 @@ $result = $conn->query($sql);
                         <th>Nama Pengadu</th>
                         <th>Nomor Telepon</th>
                         <th>Tanggal Menginap</th>
-                        <th>Tanggal Melaporkan</th>
+                        <th>Nama Pegawai</th>
+                        <th>Jabatan Pegawai</th>
+                        <th>Waktu Kejadian</th>
                         <th>Jenis Masalah</th>
                         <th>Deskripsi Masalah</th>
                         <th>File Bukti</th>
+                        <th>Status</th>
                         <th>Aksi</th>
                     </tr>
                 </thead>
@@ -185,23 +207,37 @@ $result = $conn->query($sql);
                         <?php while($laporan = $result->fetch_assoc()) : ?>
                             <tr>
                                 <td><?php echo $laporan['nama_pengadu']; ?></td>
-                                <td><?php echo $laporan['nomor_telepon']; ?></td>
+                                <td><?php echo $laporan['no_telepon_pengadu']; ?></td>
                                 <td><?php echo $laporan['tanggal_menginap']; ?></td>
-                                <td><?php echo $laporan['tanggal_melaporkan']; ?></td>
+                                <td><?php echo $laporan['nama_pegawai']; ?></td>
+                                <td><?php echo $laporan['jabatan_pegawai']; ?></td>
+                                <td><?php echo $laporan['waktu_kejadian']; ?></td>
                                 <td><?php echo $laporan['jenis_masalah']; ?></td>
                                 <td><?php echo $laporan['deskripsi_masalah']; ?></td>
                                 <td>
-                                <?php if (!empty($laporan['bukti_masalah'])): ?>
+                                <?php if (!empty($laporan['file_bukti'])): ?>
                                 <a href="abcd.jpg" target="_blank">Lihat Bukti</a>
                                 <?php else: ?>
                                 Tidak Ada Bukti
                                 <?php endif; ?>
                                 </td>
+                                <td>
+                                    <form method="POST" action="">
+                                        <input type="hidden" name="id_pengaduan"
+                                            value="<?php echo htmlspecialchars($laporan['id_pengaduan']); ?>">
+                                        <select name="status" class="form-select">
+                                            <option value="Diterima" <?php echo ($laporan['status'] == 'Diterima') ? 'selected' : ''; ?>>Diterima</option>
+                                            <option value="Ditolak" <?php echo ($laporan['status'] == 'Ditolak') ? 'selected' : ''; ?>>Ditolak</option>
+                                            <option value="Diproses" <?php echo ($laporan['status'] == 'Diproses') ? 'selected' : ''; ?>>Diproses</option>
+                                        </select>
+                                        <button type="submit" name="update_status" class="btn btn-primary mt-2">Update</button>
+                                    </form>
+                                </td>
                                 <td class="text-center">
-                                    <a href="proses_kinerja/edit.php?id=<?php echo $laporan['id']; ?>" class="btn btn-warning btn-sm d-inline-flex align-items-center me-1">
+                                    <a href="proses_kinerja/edit.php?id=<?php echo $laporan['id_pengaduan']; ?>" class="btn btn-warning btn-sm d-inline-flex align-items-center me-1">
                                         <i class="fas fa-pencil-alt"></i>
                                     </a>
-                                    <a href="proses_kinerja/delete.php?id=<?php echo $laporan['id']; ?>" class="btn btn-danger btn-sm d-inline-flex align-items-center" onclick="return confirm('Apakah Anda yakin ingin menghapus data ini?')">
+                                    <a href="proses_kinerja/delete.php?id=<?php echo $laporan['id_pengaduan']; ?>" class="btn btn-danger btn-sm d-inline-flex align-items-center" onclick="return confirm('Apakah Anda yakin ingin menghapus data ini?')">
                                         <i class="fas fa-trash-alt"></i>
                                     </a>
                                 </td>
@@ -209,7 +245,7 @@ $result = $conn->query($sql);
                         <?php endwhile; ?>
                     <?php else : ?>
                         <tr>
-                            <td colspan="8">Tidak ada data laporan yang tersedia.</td>
+                            <td colspan="10">Tidak ada data laporan yang tersedia.</td>
                         </tr>
                     <?php endif; ?>
                 </tbody>

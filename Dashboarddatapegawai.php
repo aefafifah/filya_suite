@@ -1,10 +1,10 @@
 <?php
-if (include 'koneksi.php') {
-}
+require_once 'koneksi.php'; // Pastikan koneksi database terhubung.
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -21,6 +21,7 @@ if (include 'koneksi.php') {
             margin: 0;
             padding: 0;
         }
+
         body {
             font-family: Arial, sans-serif;
             background-color: #fafafa;
@@ -105,9 +106,17 @@ if (include 'koneksi.php') {
         }
 
         /* Tabel */
+        .table-table-striped {
+            overflow-x: auto;
+            overflow-y: auto;
+            margin-top: 90px;
+            z-index: 2;
+            position: relative;
+            max-height: 500px;
+        }
+
         table {
             width: 100%;
-            margin-top: 30px;
             border-collapse: collapse;
             background-color: #fff;
             border-radius: 5px;
@@ -115,9 +124,13 @@ if (include 'koneksi.php') {
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
             position: relative;
             z-index: 2;
+            border-collapse: collapse;
+            table-layout: auto;
         }
 
-        th, td {
+
+        th,
+        td {
             padding: 12px;
             text-align: center;
             border-bottom: 1px solid #ddd;
@@ -135,6 +148,7 @@ if (include 'koneksi.php') {
         }
     </style>
 </head>
+
 <body>
 
     <!-- Sidebar -->
@@ -154,9 +168,9 @@ if (include 'koneksi.php') {
 
         <!-- Button Tambah Pegawai di pojok kiri atas -->
         <a href="tambah_pegawai.php" class="btn btn-primary btn-tambah">Tambah Pegawai</a>
-        
+
         <!-- Tabel Data Pegawai -->
-        <table class="table table-striped">
+        <table class="table-table-striped">
             <thead>
                 <tr>
                     <th>Nama</th>
@@ -164,52 +178,53 @@ if (include 'koneksi.php') {
                     <th>Hari</th>
                     <th>Waktu Shift</th>
                     <th>Tinggi</th>
-                    <th>Berat Badan</th>
+                    <th>Tubuh</th>
                     <th>Warna Kulit</th>
                     <th>Warna Rambut</th>
-                    <th>Bentuk Wajah</th>
                     <th>Aksi</th>
                 </tr>
             </thead>
             <tbody>
                 <?php
-                if (isset($conn)) {
-                    $query = "SELECT * FROM data_pegawai";
+                if ($conn) {
+                    $query = "SELECT * FROM pegawai"; // Sesuaikan nama tabel Anda.
                     $result = mysqli_query($conn, $query);
 
                     if ($result && mysqli_num_rows($result) > 0):
                         while ($pegawai = mysqli_fetch_assoc($result)):
-                ?>
-                    <tr>
-                        <td><?= htmlspecialchars($pegawai['nama']); ?></td>
-                        <td><?= htmlspecialchars($pegawai['jabatan']); ?></td>
-                        <td><?= htmlspecialchars($pegawai['hari']); ?></td>
-                        <td><?= htmlspecialchars($pegawai['waktu_shift']); ?></td>
-                        <td><?= htmlspecialchars($pegawai['tinggi']); ?></td>
-                        <td><?= htmlspecialchars($pegawai['berat_badan']); ?></td>
-                        <td><?= htmlspecialchars($pegawai['warna_kulit']); ?></td>
-                        <td><?= htmlspecialchars($pegawai['warna_rambut']); ?></td>
-                        <td><?= htmlspecialchars($pegawai['bentuk_wajah']); ?></td>
-                        <td class="text-center">
-                            <a href="proses_datapegawai/edit.php?id=<?= $pegawai['id']; ?>" class="btn btn-warning btn-sm">
-                                <i class="fas fa-pencil-alt"></i>
-                            </a>
-                            <a href="proses_datapegawai/delete.php?id=<?= $pegawai['id']; ?>" class="btn btn-danger btn-sm" onclick="return confirm('Apakah Anda yakin ingin menghapus data ini?')">
-                                <i class="fas fa-trash-alt"></i>
-                            </a>
-                        </td>
-                    </tr>
-                <?php
+                            ?>
+                            <tr>
+                                <td><?= htmlspecialchars($pegawai['nama']); ?></td>
+                                <td><?= htmlspecialchars($pegawai['jabatan']); ?></td>
+                                <td><?= htmlspecialchars($pegawai['hari']); ?></td>
+                                <td><?= htmlspecialchars($pegawai['waktu_shift']); ?></td>
+                                <td><?= htmlspecialchars($pegawai['tinggi']); ?></td>
+                                <td><?= htmlspecialchars($pegawai['tubuh']); ?></td>
+                                <td><?= htmlspecialchars($pegawai['kulit']); ?></td>
+                                <td><?= htmlspecialchars($pegawai['rambut']); ?></td>
+                                <td class="text-center">
+                                    <a href="proses_datapegawai/edit.php?id=<?= $pegawai['id_pegawai']; ?>"
+                                        class="btn btn-warning btn-sm">
+                                        <i class="fas fa-pencil-alt"></i>
+                                    </a>
+                                    <a href="proses_datapegawai/delete.php?id=<?= $pegawai['id_pegawai']; ?>"
+                                        class="btn btn-danger btn-sm"
+                                        onclick="return confirm('Apakah Anda yakin ingin menghapus data ini?')">
+                                        <i class="fas fa-trash-alt"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                            <?php
                         endwhile;
                     else:
-                ?>
-                    <tr>
-                        <td colspan="10" class="text-center">Tidak ada data pegawai.</td>
-                    </tr>
-                <?php
+                        ?>
+                        <tr>
+                            <td colspan="9" class="text-center">Tidak ada data pegawai.</td>
+                        </tr>
+                        <?php
                     endif;
                 } else {
-                    echo "<tr><td colspan='10' class='text-center'>Koneksi database tidak tersedia.</td></tr>";
+                    echo "<tr><td colspan='9' class='text-center'>Koneksi database tidak tersedia.</td></tr>";
                 }
                 ?>
             </tbody>
@@ -219,4 +234,5 @@ if (include 'koneksi.php') {
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
 </body>
+
 </html>

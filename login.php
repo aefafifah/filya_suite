@@ -41,7 +41,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             // Arahkan ke halaman sesuai dengan user_type
             if ($_SESSION["usertype"] === "admin") {
-                header("location:adminhome.php");
+                header("location:Dashboardadmin.php");
             } else {
                 header("location:userhome.php");
             }

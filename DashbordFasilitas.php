@@ -12,14 +12,49 @@ $conn = new mysqli($servername, $username, $password, $dbname);
 if ($conn->connect_error) {
     die("Koneksi gagal: " . $conn->connect_error);
 }
+// Konfigurasi Pagination
+$limit = 10; // Jumlah data per halaman
+$page = isset($_GET['page']) ? (int) $_GET['page'] : 1; // Halaman saat ini
+$page = max($page, 1); // Pastikan halaman minimal adalah 1
+$offset = ($page - 1) * $limit; // Offset untuk query
 
-// Mengambil data dari database
-$sql = "SELECT * FROM fasilitas";
+// Menghitung Total Data
+$total_query = "SELECT COUNT(*) AS total FROM fasilitas";
+$total_result = $conn->query($total_query);
+$total_row = $total_result->fetch_assoc();
+$total_data = $total_row['total'];
+
+// Hitung Total Halaman
+$total_pages = ceil($total_data / $limit);
+
+// Mengambil data dari database dengan limit dan offset
+$sql = "SELECT * FROM fasilitas LIMIT $limit OFFSET $offset";
 $result = $conn->query($sql);
+
+// Proses update status
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_status'])) {
+    $new_status = $_POST['status'];
+    $id_pengaduan = $_POST['id_pengaduan'];
+
+    // Update status di database
+    $stmt = $conn->prepare("UPDATE fasilitas SET status = ? WHERE id_pengaduan = ?");
+    $stmt->bind_param("si", $new_status, $id_pengaduan);
+
+    if ($stmt->execute()) {
+        header("Location: " . $_SERVER['PHP_SELF']); // Refresh halaman setelah update
+        exit();
+    } else {
+        echo "Gagal mengupdate status.";
+    }
+
+    $stmt->close();
+}
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -29,11 +64,12 @@ $result = $conn->query($sql);
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700&display=swap" rel="stylesheet">
 
     <style>
-                * {
+        * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
         }
+
         body {
             font-family: Arial, sans-serif;
             background-color: #fafafa;
@@ -100,7 +136,7 @@ $result = $conn->query($sql);
             right: 0;
             bottom: 0;
             background-color: rgba(253, 228, 158, 0.7);
-            z-index: 1;
+            /* z-index: 2; */
         }
 
         .main-content h1 {
@@ -118,9 +154,11 @@ $result = $conn->query($sql);
         /* Table */
         .table-responsive {
             overflow-x: auto;
+            overflow-y: auto;
             margin-top: 90px;
             z-index: 2;
             position: relative;
+            max-height: 500px;
         }
 
         table {
@@ -132,9 +170,13 @@ $result = $conn->query($sql);
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
             position: relative;
             z-index: 2;
+            border-collapse: collapse;
+            table-layout: auto;
         }
 
-        th, td {
+
+        th,
+        td {
             padding: 12px;
             text-align: center;
             border-bottom: 1px solid #ddd;
@@ -150,8 +192,16 @@ $result = $conn->query($sql);
         tr:hover {
             background-color: #f9f9f9;
         }
+
+        th:last-child,
+        td:last-child {
+            width: 150px;
+            text-align: center;
+
+        }
     </style>
 </head>
+
 <body>
 
     <!-- Sidebar -->
@@ -181,26 +231,58 @@ $result = $conn->query($sql);
                         <th>Jenis Masalah</th>
                         <th>Deskripsi Masalah</th>
                         <th>Kategori Fasilitas</th>
+                        <th>Bukti Gambar</th>
+                        <th>Status</th>
                         <th>Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
                     <?php if (isset($result) && $result->num_rows > 0): ?>
-                        <?php while($fasilitas = $result->fetch_assoc()): ?>
+                        <?php while ($fasilitas = $result->fetch_assoc()): ?>
                             <tr>
                                 <td><?php echo isset($fasilitas['nama_pengadu']) ? $fasilitas['nama_pengadu'] : ''; ?></td>
-                                <td><?php echo isset($fasilitas['no_telepon_pengadu']) ? $fasilitas['no_telepon_pengadu'] : ''; ?></td>
-                                <td><?php echo isset($fasilitas['tanggal_menginap']) ? $fasilitas['tanggal_menginap'] : ''; ?></td>
-                                <td><?php echo isset($fasilitas['tanggal_melaporkan']) ? $fasilitas['tanggal_melaporkan'] : ''; ?></td>
-                                <td><?php echo isset($fasilitas['tempat_kerusakan']) ? $fasilitas['tempat_kerusakan'] : ''; ?></td>
+                                <td><?php echo isset($fasilitas['no_telepon_pengadu']) ? $fasilitas['no_telepon_pengadu'] : ''; ?>
+                                </td>
+                                <td><?php echo isset($fasilitas['tanggal_menginap']) ? $fasilitas['tanggal_menginap'] : ''; ?>
+                                </td>
+                                <td><?php echo isset($fasilitas['tanggal_melaporkan']) ? $fasilitas['tanggal_melaporkan'] : ''; ?>
+                                </td>
+                                <td><?php echo isset($fasilitas['tempat_kerusakan']) ? $fasilitas['tempat_kerusakan'] : ''; ?>
+                                </td>
                                 <td><?php echo isset($fasilitas['jenis_masalah']) ? $fasilitas['jenis_masalah'] : ''; ?></td>
-                                <td><?php echo isset($fasilitas['deskripsi_masalah_fasilitas']) ? $fasilitas['deskripsi_masalah_fasilitas'] : ''; ?></td>
-                                <td><?php echo isset($fasilitas['pilih_kategori_fasilitas']) ? $fasilitas['pilih_kategori_fasilitas'] : ''; ?></td>
+                                <td><?php echo isset($fasilitas['deskripsi_masalah_fasilitas']) ? $fasilitas['deskripsi_masalah_fasilitas'] : ''; ?>
+                                </td>
+                                <td><?php echo isset($fasilitas['pilih_kategori_fasilitas']) ? htmlspecialchars($fasilitas['pilih_kategori_fasilitas']) : ''; ?>
+                                </td>
                                 <td>
-                                    <a href="proses_fasilitas/edit.php?id=<?php echo $fasilitas['id_pengaduan']; ?>" class="btn btn-warning btn-sm">
+                                    <?php if (!empty($fasilitas['bukti_gambar'])): ?>
+                                        <a href="<?php echo htmlspecialchars($fasilitas['bukti_gambar']); ?>" target="_blank">Lihat
+                                            Bukti</a>
+                                    <?php else: ?>
+                                        Tidak ada bukti
+                                    <?php endif; ?>
+                                </td>
+
+                                <td>
+                                    <form method="POST" action="">
+                                        <input type="hidden" name="id_pengaduan"
+                                            value="<?php echo htmlspecialchars($fasilitas['id_pengaduan']); ?>">
+                                        <select name="status" class="form-select">
+                                            <option value="Diterima" <?php echo ($fasilitas['status'] == 'Diterima') ? 'selected' : ''; ?>>Diterima</option>
+                                            <option value="Ditolak" <?php echo ($fasilitas['status'] == 'Ditolak') ? 'selected' : ''; ?>>Ditolak</option>
+                                            <option value="Diproses" <?php echo ($fasilitas['status'] == 'Diproses') ? 'selected' : ''; ?>>Diproses</option>
+                                        </select>
+                                        <button type="submit" name="update_status" class="btn btn-primary mt-2">Update</button>
+                                    </form>
+                                </td>
+                                <td>
+                                    <a href="proses_fasilitas/edit.php?id=<?php echo $fasilitas['id_pengaduan']; ?>"
+                                        class="btn btn-warning btn-sm">
                                         <i class="fas fa-pencil-alt"></i>
                                     </a>
-                                    <a href="proses_fasilitas/delete.php?id=<?php echo $fasilitas['id_pengaduan']; ?>" class="btn btn-danger btn-sm" onclick="return confirm('Apakah Anda yakin ingin menghapus data ini?')">
+                                    <a href="proses_fasilitas/delete.php?id=<?php echo $fasilitas['id_pengaduan']; ?>"
+                                        class="btn btn-danger btn-sm"
+                                        onclick="return confirm('Apakah Anda yakin ingin menghapus data ini?')">
                                         <i class="fas fa-trash-alt"></i>
                                     </a>
                                 </td>
@@ -208,16 +290,40 @@ $result = $conn->query($sql);
                         <?php endwhile; ?>
                     <?php else: ?>
                         <tr>
-                            <td colspan="9">Tidak ada data ditemukan</td>
+                            <td colspan="10">Tidak ada data ditemukan</td>
                         </tr>
                     <?php endif; ?>
                 </tbody>
             </table>
         </div>
+
+        <!-- Pagination -->
+        <nav aria-label="Page navigation">
+            <ul class="pagination justify-content-center mt-4">
+                <?php if ($page > 1): ?>
+                    <li class="page-item">
+                        <a class="page-link" href="?page=<?php echo $page - 1; ?>">Previous</a>
+                    </li>
+                <?php endif; ?>
+
+                <?php for ($i = 1; $i <= $total_pages; $i++): ?>
+                    <li class="page-item <?php echo ($i == $page) ? 'active' : ''; ?>">
+                        <a class="page-link" href="?page=<?php echo $i; ?>"><?php echo $i; ?></a>
+                    </li>
+                <?php endfor; ?>
+
+                <?php if ($page < $total_pages): ?>
+                    <li class="page-item">
+                        <a class="page-link" href="?page=<?php echo $page + 1; ?>">Next</a>
+                    </li>
+                <?php endif; ?>
+            </ul>
+        </nav>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>
 
 <?php

@@ -1,5 +1,12 @@
 <?php
 session_start();
+$servername = "localhost";
+$username = "root";
+$password = "";
+$dbname = "filya_suite";
+
+// Membuat koneksi
+$conn = new mysqli($servername, $username, $password, $dbname);
 
 // Redirect ke login.php jika pengguna belum login
 if (!isset($_SESSION['nama']) || !isset($_SESSION['usertype'])) {
@@ -8,10 +15,50 @@ if (!isset($_SESSION['nama']) || !isset($_SESSION['usertype'])) {
 }
 
 $nama = $_SESSION['nama'];
-$nomor_telpon = $_SESSION['nomor_telpon'];
 $nomor_telpon = $_SESSION['nomor_telpon'] ?? '';
 $alamat = $_SESSION['alamat'] ?? '';
+
+// Mengambil data kategori laporan
+$sql = "SELECT kategori, COUNT(*) AS jumlah
+        FROM (
+            SELECT 'kinerja' AS kategori, id_pengaduan AS id FROM kinerja
+            UNION ALL
+            SELECT 'tempat' AS kategori, id_pengaduan AS id FROM tempat
+            UNION ALL
+            SELECT 'fasilitas' AS kategori, id_pengaduan AS id FROM fasilitas
+        ) AS laporan
+        GROUP BY kategori";
+
+$result = $conn->query($sql);
+$data = [];
+if ($result->num_rows > 0) {
+    while ($row = $result->fetch_assoc()) {
+        $data[$row['kategori']] = $row['jumlah'];
+    }
+}
+
+// Mengambil data status villa secara langsung dari database
+$sqlVilla = "SELECT status, COUNT(*) AS jumlah FROM villa GROUP BY status";
+$resultVilla = $conn->query($sqlVilla);
+
+// Initialize villa data in case no data is returned
+$data['villa_tersedia'] = 0;  // Set default to 0 if no data found
+$data['villa_tidak_tersedia'] = 0;  // Set default to 0 if no data found
+
+if ($resultVilla->num_rows > 0) {
+    while ($row = $resultVilla->fetch_assoc()) {
+        if ($row['status'] == 'tersedia') {
+            $data['villa_tersedia'] = $row['jumlah'];
+        } elseif ($row['status'] == 'tidak tersedia') {
+            $data['villa_tidak_tersedia'] = $row['jumlah'];
+        }
+    }
+} else {
+    echo "Tidak ada data villa.";
+}
+
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -22,13 +69,13 @@ $alamat = $_SESSION['alamat'] ?? '';
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         body {
             font-family: 'Arial', sans-serif;
             background-color: #fafafa;
         }
-        
+
         .sidebar {
             background-color: #FFFFFF;
             height: 100vh;
@@ -83,70 +130,22 @@ $alamat = $_SESSION['alamat'] ?? '';
             background-color: white;
             border-radius: 10px;
             box-shadow: 10px 10px 0px 0px #F57C00;
-            width: 500px;
-            height: auto;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            text-align: center;
+            width: 800px;
             padding: 20px;
             position: relative;
             z-index: 2;
         }
 
-        .main-card h2 {
-            font-family: 'Barlow', sans-serif;
-            font-size: 24px;
-            font-weight: 700;
-            margin-bottom: 20px;
-        }
-
-        .circular-progress {
-            position: relative;
-            width: 120px;
-            height: 120px;
-            border-radius: 50%;
-            background: conic-gradient(#6DC5D1 0% 80%, #5E93BE 0%);
-            margin: 0 auto 20px;
-        }
-
-        .circular-progress.orange {
-            background: conic-gradient(#FDE49E 0% 62%, #FEAF00 0%);
-        }
-
-        .percentage {
-            position: absolute;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-family: 'Barlow', sans-serif;
-            font-size: 24px;
-            font-weight: 700;
-            color: #333;
-        }
-
-        .progress-row {
+        .chart-container {
             display: flex;
             justify-content: space-around;
-            margin-bottom: 20px;
+            flex-wrap: wrap;
         }
 
-        .progress-col {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            flex: 1;
-            margin: 0 10px;
-        }
-
-        .content {
-            display: none; /* Initially hide all content sections */
-        }
-
-        .content.active {
-            display: block; /* Show the active content section */
+        .chart-wrapper {
+            width: 250px;
+            margin: 20px;
+            height: 200px;
         }
     </style>
 </head>
@@ -162,65 +161,37 @@ $alamat = $_SESSION['alamat'] ?? '';
                 <a href="DashboardTempt.php"><i class="fas fa-thumbs-up"></i> Data Laporan Tempat</a>
                 <a href="Dashboarddatapegawai.php"><i class="fas fa-user"></i> Data Pegawai</a>
                 <a href="datavilla.php"><i class="fas fa-building"></i> Data Villa</a>
+                <a href="logout.php"><i class="fas fa-building"></i> Logout</a>
             </div>
 
             <!-- Dashboard -->
             <div class="col-md-10 dashboard">
                 <div class="main-card">
                     <h2>Filya Suite Progress</h2>
-                    <div id="dashboardContent" class="content active">
-                        <!-- Dashboard Content Here -->
-                        <p>Welcome to the dashboard!</p>
-                    </div>
-                    <div id="performanceReportContent" class="content">
-                        <!-- Performance Report Content Here -->
-                        <p>Performance Report Content.</p>
-                    </div>
-                    <div id="facilitiesReportContent" class="content">
-                        <!-- Facilities Report Content Here -->
-                        <p>Facilities Report Content.</p>
-                    </div>
-                    <div id="locationReportContent" class="content">
-                        <!-- Location Report Content Here -->
-                        <p>Location Report Content.</p>
-                    </div>
-                    <div id="employeeDataContent" class="content">
-                        <!-- Employee Data Content Here -->
-                        <p>Employee Data Content.</p>
-                    </div>
-                    <div id="villaDataContent" class="content">
-                        <!-- Villa Data Content Here -->
-                        <p>Villa Data Content.</p>
-                    </div>
+                    <div class="chart-container">
+                        <!-- Chart for Kinerja -->
+                        <div class="chart-wrapper">
+                            <canvas id="kinerjaChart"></canvas>
+                        </div>
 
-                    <!-- Progress Circles -->
-                    <div class="progress-row">
-                        <div class="progress-col orange">
-                            <div class="circular-progress">
-                                <div class="percentage">80%</div>
-                            </div>
-                            <p>Kinerja Pegawai</p>
+                        <!-- Chart for Tempat -->
+                        <div class="chart-wrapper">
+                            <canvas id="tempatChart"></canvas>
                         </div>
-                        <div class="progress-col">
-                            <div class="circular-progress orange">
-                                <div class="percentage">62%</div>
-                            </div>
-                            <p>Fasilitas</p>
-                        </div>
-                    </div>
 
-                    <div class="progress-row">
-                        <div class="progress-col orange">
-                            <div class="circular-progress">
-                                <div class="percentage">80%</div>
-                            </div>
-                            <p>Total Villa dipakai</p>
+                        <!-- Chart for Fasilitas -->
+                        <div class="chart-wrapper">
+                            <canvas id="fasilitasChart"></canvas>
                         </div>
-                        <div class="progress-col">
-                            <div class="circular-progress orange">
-                                <div class="percentage">62%</div>
-                            </div>
-                            <p>Tempat</p>
+
+                        <!-- Chart for Villa Tersedia -->
+                        <div class="chart-wrapper">
+                            <canvas id="villaTersediaChart"></canvas>
+                        </div>
+
+                        <!-- Chart for Villa Tidak Tersedia -->
+                        <div class="chart-wrapper">
+                            <canvas id="villaTidakTersediaChart"></canvas>
                         </div>
                     </div>
                 </div>
@@ -228,17 +199,66 @@ $alamat = $_SESSION['alamat'] ?? '';
         </div>
     </div>
 
+    <!-- Doughnut Chart Scripts -->
     <script>
-        function showContent(contentId) {
-            // Hide all content sections
-            const contents = document.querySelectorAll('.content');
-            contents.forEach(content => content.classList.remove('active'));
+        const createChart = (ctx, data, label, colors) => {
+            return new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: [label, "Total"],
+                    datasets: [{
+                        data: [data, 100 - data],
+                        backgroundColor: colors,
+                        hoverOffset: 4
+                    }]
+                },
+                options: {
+                    plugins: {
+                        tooltip: { enabled: true }
+                    }
+                }
+            });
+        };
 
-            // Show the selected content section
-            document.getElementById(contentId).classList.add('active');
-        }
+        // Kinerja Chart
+        createChart(
+            document.getElementById('kinerjaChart'),
+            <?= ($data['kinerja'] / array_sum($data)) * 100 ?>,
+            "Kinerja",
+            ["#6DC5D1", "#E0E0E0"]
+        );
+
+        // Tempat Chart
+        createChart(
+            document.getElementById('tempatChart'),
+            <?= ($data['tempat'] / array_sum($data)) * 100 ?>,
+            "Tempat",
+            ["#FDE49E", "#E0E0E0"]
+        );
+
+        // Fasilitas Chart
+        createChart(
+            document.getElementById('fasilitasChart'),
+            <?= ($data['fasilitas'] / array_sum($data)) * 100 ?>,
+            "Fasilitas",
+            ["#FEB941", "#E0E0E0"]
+        );
+
+        // Villa Tersedia Chart
+        createChart(
+            document.getElementById('villaTersediaChart'),
+            <?= ($data['villa_tersedia'] / array_sum($data)) * 100 ?>,
+            "Villa Tersedia",
+            ["#FDE49E", "#E0E0E0"]
+        );
+
+        // Villa Tidak Tersedia Chart
+        createChart(
+            document.getElementById('villaTidakTersediaChart'),
+            <?= ($data['villa_tidak_tersedia'] / array_sum($data)) * 100 ?>,
+            "Villa Tidak Tersedia",
+            ["#DD761C", "#E0E0E0"]
+        );
     </script>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

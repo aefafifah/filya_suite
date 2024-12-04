@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 11, 2024 at 10:43 AM
+-- Generation Time: Dec 04, 2024 at 12:20 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -35,13 +35,6 @@ CREATE TABLE `admin` (
   `id_laporan` int(11) DEFAULT NULL,
   `waktu_update` datetime DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `admin`
---
-
-INSERT INTO `admin` (`tanggal_progress`, `status_laporan`, `bukti_progres`, `keterangan_progres`, `id_laporan`, `waktu_update`) VALUES
-('2024-09-22', 'Ditolak', 'upload.img', 'lu ngarang ya bro', 1, '2024-09-22 16:21:10');
 
 -- --------------------------------------------------------
 
@@ -87,17 +80,7 @@ CREATE TABLE `fasilitas` (
 --
 
 INSERT INTO `fasilitas` (`nama_pengadu`, `no_telepon_pengadu`, `tanggal_menginap`, `tanggal_melaporkan`, `tempat_kerusakan`, `jenis_masalah`, `deskripsi_masalah_fasilitas`, `pilih_kategori_fasilitas`, `bukti_gambar`, `id_pengaduan`, `status`) VALUES
-('filya ', '0800000111', '2024-09-04', '2024-09-21', 'kamar', 'Wastafel', 'wastafel macet brooo', 'Kualitas fasilitas buruk', NULL, 1, 'Ditolak'),
-('test', '0111111999', '2024-10-16', '2024-10-24', 'Kolam Renang', 'Wifi', 'ganyala lelet ', 'Fasilitas tidak berfungsi', NULL, 2, 'Diproses'),
-('pass', '12345', '2024-10-18', '2024-10-26', 'Villa', 'Water Heater', 'ga anget', 'Fasilitas tidak berfungsi', NULL, 3, 'Diproses'),
-('responsiii', '0000', '2024-10-18', '2024-10-19', 'Parkiran', 'Lainnya', 'Parkiran sempiiit ', 'Fasilitas yang dijanjikan tidak tersedia', NULL, 5, 'Diproses'),
-('responsiii', '0000', '2024-10-09', '2024-10-12', 'Parkiran', 'Lainnya', 'Parkir ga luass blaaasss', 'Fasilitas yang dijanjikan tidak tersedia', NULL, 6, 'Diproses'),
-('testing', '1234567', '2024-10-30', '2024-10-31', 'Kolam Renang', 'Water Heater', 'Kolam renang ', 'Fasilitas tidak berfungsi', NULL, 7, 'Diproses'),
-('testing', '1234567', '2024-10-30', '2024-10-31', 'Villa', 'Water Heater', 'wertyuiop', 'Kualitas fasilitas buruk', NULL, 8, 'Diproses'),
-('testing', '1234567', '2024-10-24', '2024-10-29', 'Kolam Renang', 'Water Heater', 'ujg', 'Kualitas fasilitas buruk', NULL, 9, 'Diproses'),
-('testing', '1234567', '2024-10-23', '2024-10-24', 'Parkiran', 'Wastafel', 'tghjkkhf', 'Fasilitas tidak berfungsi', NULL, 10, 'Diproses'),
-('testing', '1234567', '2024-10-23', '2024-10-24', 'Parkiran', 'Wastafel', 'tghjkkhf', 'Fasilitas tidak berfungsi', NULL, 11, 'Diproses'),
-('testing', '1234567', '2024-10-22', '2024-10-23', 'Villa', 'Wastafel', 'qwertyu', 'Kualitas fasilitas buruk', 'uploads/filya.jpg', 12, 'Diproses'),
+('testing', '1234567', '2024-10-22', '2024-10-23', 'Villa', 'Wastafel', 'qwertyu', 'Kualitas fasilitas buruk', 'uploads/filya.jpg', 12, 'Ditolak'),
 ('responsiii', '0000', '2024-10-30', '2024-10-31', 'wastafel', 'Bed', 'qwertyuiop[kjhgfsdfghjkl;', 'Kualitas fasilitas buruk', 'uploads/bg.jpg', 15, 'Diproses'),
 ('responsiii', '0000', '2024-10-31', '2024-11-01', 'wastafel', 'Wastafel', 'katanya wastafelnya bisa touchscreen tapi kok .... ', 'Fasilitas yang dijanjikan tidak tersedia', 'uploads/blubrown.jpg', 16, 'Diproses'),
 ('responsiii', '0000', '2024-10-29', '2024-10-30', 'wastafel', 'Water Heater', 'qwertyuikjhaklznm,.', 'Fasilitas tidak berfungsi', 'uploads/bg.jpg', 17, 'Diproses'),
@@ -108,7 +91,6 @@ INSERT INTO `fasilitas` (`nama_pengadu`, `no_telepon_pengadu`, `tanggal_menginap
 ('responsiii', '0000', '2024-10-31', '2024-10-31', 'wastafel', 'Wastafel', 'nmbhg', 'Fasilitas tidak berfungsi', 'uploads/filya.jpg', 22, 'Diproses'),
 ('responsiii', '0000', '2024-10-28', '2024-10-30', 'kamar', 'Wastafel', 'gasfywqgsw', 'Kualitas fasilitas buruk', 'uploads/filya.jpg', 23, 'Diproses'),
 ('responsiii', '0000', '2024-10-30', '2024-10-31', 'kamar', 'Wastafel', 'hfhgf', 'Kualitas fasilitas buruk', 'uploads/filya.jpg', 24, 'Diproses'),
-('responsiii', '0000', '2024-10-30', '2024-10-31', 'kamar', 'Wastafel', 'hfhgf', 'Kualitas fasilitas buruk', NULL, 25, 'Diproses'),
 ('responsiii', '0000', '2024-10-31', '2024-11-01', 'hhjjh', 'Wastafel', 'test', 'Fasilitas tidak berfungsi', 'uploads/filya.jpg', 26, 'Diproses'),
 ('responsiii', '0000', '2024-10-30', '2024-10-31', 'qwerty', 'Wastafel', 'qwertyuio', 'Fasilitas tidak berfungsi', 'uploads/bg-1.png', 27, 'Diterima');
 
@@ -134,15 +116,16 @@ CREATE TABLE `kinerja` (
   `tubuh` enum('kurus','sedang','berisi','gemuk') NOT NULL,
   `kulit` enum('cerah','sawo matang','gelap','sangat cerah','sangat gelap') NOT NULL,
   `rambut` varchar(50) NOT NULL,
-  `wajah` enum('oval','bulat','persegi','lonjong','segitiga') NOT NULL
+  `wajah` enum('oval','bulat','persegi','lonjong','segitiga') NOT NULL,
+  `status` enum('Diterima','Ditolak','Diproses') NOT NULL DEFAULT 'Diproses'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `kinerja`
 --
 
-INSERT INTO `kinerja` (`id_pengaduan`, `nama_pengadu`, `no_telepon_pengadu`, `tanggal_menginap`, `id_pegawai`, `nama_pegawai`, `jabatan_pegawai`, `waktu_kejadian`, `jenis_masalah`, `deskripsi_masalah`, `file_bukti`, `tinggi`, `tubuh`, `kulit`, `rambut`, `wajah`) VALUES
-(1, 'filya ', '0800000111', '2024-09-04', 1, 'budi ', 'House Keeper', '2024-09-04 16:18:35', 'Pelayanan Tidak Memuaskan', 'jutek banget namanya budi', 'upload.img', 'sedang', 'sedang', 'sawo matang', 'cepak', 'segitiga');
+INSERT INTO `kinerja` (`id_pengaduan`, `nama_pengadu`, `no_telepon_pengadu`, `tanggal_menginap`, `id_pegawai`, `nama_pegawai`, `jabatan_pegawai`, `waktu_kejadian`, `jenis_masalah`, `deskripsi_masalah`, `file_bukti`, `tinggi`, `tubuh`, `kulit`, `rambut`, `wajah`, `status`) VALUES
+(1, 'filya ', '0800000111', '2024-09-04', 1, 'budi ', 'House Keeper', '2024-09-04 16:18:35', 'Pelayanan Tidak Memuaskan', 'jutek banget namanya budi', 'upload.img', 'sedang', 'sedang', 'sawo matang', 'cepak', 'segitiga', 'Ditolak');
 
 -- --------------------------------------------------------
 
@@ -186,7 +169,9 @@ CREATE TABLE `pegawai` (
 --
 
 INSERT INTO `pegawai` (`id_pegawai`, `nama`, `jabatan`, `hari`, `waktu_shift`, `tinggi`, `tubuh`, `kulit`, `rambut`, `wajah`) VALUES
-(1, 'budi ', 'House Keeper', 'Rabu', '08:15:06', 'sedang', 'sedang', 'sawo matang', 'cepak', 'segitiga');
+(1, 'budi ', 'House Keeper', 'Rabu', '08:15:06', 'sedang', 'sedang', 'sawo matang', 'cepak', 'segitiga'),
+(5, 'buya', 'Security', 'Jumat', '11:41:00', 'sedang', 'berisi', 'gelap', 'Ungu', 'oval'),
+(15, 'Test', 'House Keeper', 'Jumat', '12:10:00', 'tinggi', 'kurus', 'sangat cerah', 'Ungu', 'oval');
 
 -- --------------------------------------------------------
 
@@ -254,15 +239,16 @@ CREATE TABLE `tempat` (
   `jenis_masalah` enum('Kerusakan Bangunan','Kebersihan Villa','Perawatan yang Kurang','Suasana Villa, Merasa Tidak Aman atau Lainnya','Perbedaan Kondisi Properti dengan Foto Properti di Iklan','Masalah Aksesibilitas','Kenyamanan pada Waktu Penginapan','Lainnya') NOT NULL,
   `deskripsi_masalah` text NOT NULL,
   `waktu_pengaduan` datetime DEFAULT current_timestamp(),
-  `file_bukti` varchar(255) DEFAULT NULL
+  `file_bukti` varchar(255) DEFAULT NULL,
+  `status` enum('Diterima','Ditolak','Diproses') NOT NULL DEFAULT 'Diproses'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `tempat`
 --
 
-INSERT INTO `tempat` (`id_pengaduan`, `nama_pengadu`, `no_telepon_pengadu`, `tanggal_menginap`, `nomor_kamar`, `jenis_masalah`, `deskripsi_masalah`, `waktu_pengaduan`, `file_bukti`) VALUES
-(1, 'filya ', '0800000111', '2024-09-04', '10A', 'Perawatan yang Kurang', 'kolam renangnya warna ijo ', '2024-09-21 16:14:54', 'upload.img ');
+INSERT INTO `tempat` (`id_pengaduan`, `nama_pengadu`, `no_telepon_pengadu`, `tanggal_menginap`, `nomor_kamar`, `jenis_masalah`, `deskripsi_masalah`, `waktu_pengaduan`, `file_bukti`, `status`) VALUES
+(2, 'responsiii', '0000', '2024-12-19', '10A', 'Suasana Villa, Merasa Tidak Aman atau Lainnya', 'hdjskdgcjsdgc', '2024-12-02 13:52:36', 'hajhahs', 'Diproses');
 
 -- --------------------------------------------------------
 
@@ -366,14 +352,7 @@ ALTER TABLE `laporan`
 -- Indexes for table `pegawai`
 --
 ALTER TABLE `pegawai`
-  ADD PRIMARY KEY (`id_pegawai`),
-  ADD UNIQUE KEY `jabatan` (`jabatan`),
-  ADD UNIQUE KEY `tinggi` (`tinggi`,`tubuh`,`kulit`,`rambut`,`wajah`),
-  ADD UNIQUE KEY `tubuh` (`tubuh`),
-  ADD UNIQUE KEY `rambut` (`rambut`),
-  ADD UNIQUE KEY `kulit` (`kulit`),
-  ADD UNIQUE KEY `wajah` (`wajah`),
-  ADD UNIQUE KEY `nama` (`nama`);
+  ADD PRIMARY KEY (`id_pegawai`);
 
 --
 -- Indexes for table `pemesanan`
@@ -436,7 +415,7 @@ ALTER TABLE `laporan`
 -- AUTO_INCREMENT for table `pegawai`
 --
 ALTER TABLE `pegawai`
-  MODIFY `id_pegawai` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id_pegawai` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT for table `pemesanan`
@@ -448,7 +427,7 @@ ALTER TABLE `pemesanan`
 -- AUTO_INCREMENT for table `tempat`
 --
 ALTER TABLE `tempat`
-  MODIFY `id_pengaduan` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id_pengaduan` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `villa`
@@ -464,7 +443,7 @@ ALTER TABLE `villa`
 -- Constraints for table `admin`
 --
 ALTER TABLE `admin`
-  ADD CONSTRAINT `fk_laporan` FOREIGN KEY (`id_laporan`) REFERENCES `fasilitas` (`id_pengaduan`),
+  ADD CONSTRAINT `fk_laporan` FOREIGN KEY (`id_laporan`) REFERENCES `fasilitas` (`id_pengaduan`) ON DELETE CASCADE,
   ADD CONSTRAINT `fk_laporan_tempat` FOREIGN KEY (`id_laporan`) REFERENCES `tempat` (`id_pengaduan`),
   ADD CONSTRAINT `fk_laporanadu` FOREIGN KEY (`id_laporan`) REFERENCES `kinerja` (`id_pengaduan`);
 
@@ -472,22 +451,19 @@ ALTER TABLE `admin`
 -- Constraints for table `fasilitas`
 --
 ALTER TABLE `fasilitas`
-  ADD CONSTRAINT `fk_namapengadu` FOREIGN KEY (`nama_pengadu`) REFERENCES `users` (`nama`),
+  ADD CONSTRAINT `fk_namapengadu` FOREIGN KEY (`nama_pengadu`) REFERENCES `users` (`nama`) ON DELETE CASCADE,
   ADD CONSTRAINT `fk_notelp` FOREIGN KEY (`no_telepon_pengadu`) REFERENCES `users` (`nomor_telpon`);
 
 --
 -- Constraints for table `kinerja`
 --
 ALTER TABLE `kinerja`
-  ADD CONSTRAINT `fk_idpegawai` FOREIGN KEY (`nama_pegawai`) REFERENCES `pegawai` (`nama`),
-  ADD CONSTRAINT `fk_jabatan` FOREIGN KEY (`jabatan_pegawai`) REFERENCES `pegawai` (`jabatan`),
-  ADD CONSTRAINT `fk_kulit` FOREIGN KEY (`kulit`) REFERENCES `pegawai` (`kulit`),
-  ADD CONSTRAINT `fk_nama` FOREIGN KEY (`nama_pengadu`) REFERENCES `users` (`nama`),
-  ADD CONSTRAINT `fk_no_telpon` FOREIGN KEY (`no_telepon_pengadu`) REFERENCES `users` (`nomor_telpon`),
-  ADD CONSTRAINT `fk_rambut` FOREIGN KEY (`rambut`) REFERENCES `pegawai` (`rambut`),
-  ADD CONSTRAINT `fk_tinggibadan` FOREIGN KEY (`tinggi`) REFERENCES `pegawai` (`tinggi`),
-  ADD CONSTRAINT `fk_tubuh` FOREIGN KEY (`tubuh`) REFERENCES `pegawai` (`tubuh`),
-  ADD CONSTRAINT `fk_wajah` FOREIGN KEY (`wajah`) REFERENCES `pegawai` (`wajah`);
+  ADD CONSTRAINT `fk_idpegawai` FOREIGN KEY (`nama_pegawai`) REFERENCES `pegawai` (`nama`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `fk_kulit` FOREIGN KEY (`kulit`) REFERENCES `pegawai` (`kulit`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `fk_nama` FOREIGN KEY (`nama_pengadu`) REFERENCES `users` (`nama`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `fk_no_telpon` FOREIGN KEY (`no_telepon_pengadu`) REFERENCES `users` (`nomor_telpon`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `fk_tinggibadan` FOREIGN KEY (`tinggi`) REFERENCES `pegawai` (`tinggi`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `fk_tubuh` FOREIGN KEY (`tubuh`) REFERENCES `pegawai` (`tubuh`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `pemesanan`

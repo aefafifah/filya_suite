@@ -161,7 +161,7 @@ if ($resultVilla->num_rows > 0) {
                 <a href="DashboardTempt.php"><i class="fas fa-thumbs-up"></i> Data Laporan Tempat</a>
                 <a href="Dashboarddatapegawai.php"><i class="fas fa-user"></i> Data Pegawai</a>
                 <a href="datavilla.php"><i class="fas fa-building"></i> Data Villa</a>
-                <a href="logout.php"><i class="fas fa-building"></i> Logout</a>
+                <a href="logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a>
             </div>
 
             <!-- Dashboard -->
@@ -199,66 +199,107 @@ if ($resultVilla->num_rows > 0) {
         </div>
     </div>
 
-    <!-- Doughnut Chart Scripts -->
     <script>
-        const createChart = (ctx, data, label, colors) => {
-            return new Chart(ctx, {
+        // Plugin untuk menambahkan teks di tengah
+        Chart.register({
+            id: 'centerText',
+            beforeDraw(chart) {
+                const { width, height, ctx } = chart;
+                const dataset = chart.data.datasets[0];
+                const value = dataset.data[0]; // Ambil nilai pertama
+                
+                ctx.save();
+                ctx.font = "bold 16px Arial";
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillStyle = dataset.backgroundColor[0]; // Warna teks sesuai grafik
+                ctx.fillText(`${value}%`, width / 2, height / 2); // Teks di tengah
+                ctx.restore();
+            }
+        });
+
+        // Data dari PHP
+        const data = {
+            kinerja: <?= isset($data['kinerja']) ? $data['kinerja'] : 0 ?>,
+            tempat: <?= isset($data['tempat']) ? $data['tempat'] : 0 ?>,
+            fasilitas: <?= isset($data['fasilitas']) ? $data['fasilitas'] : 0 ?>,
+            villa_tersedia: <?= isset($data['villa_tersedia']) ? $data['villa_tersedia'] : 0 ?>,
+            villa_tidak_tersedia: <?= isset($data['villa_tidak_tersedia']) ? $data['villa_tidak_tersedia'] : 0 ?>
+        };
+
+        const total = Object.values(data).reduce((a, b) => a + b, 0);
+
+        // Fungsi untuk membuat chart dengan judul dan angka di tengah
+        function createChartWithTitle(element, percentage, label, colors, title) {
+            new Chart(element, {
                 type: 'doughnut',
                 data: {
-                    labels: [label, "Total"],
+                    labels: [label, "Lainnya"],
                     datasets: [{
-                        data: [data, 100 - data],
-                        backgroundColor: colors,
-                        hoverOffset: 4
+                        data: [percentage, 100 - percentage],
+                        backgroundColor: colors
                     }]
                 },
                 options: {
+                    cutout: '75%', // Ukuran lubang di tengah
                     plugins: {
-                        tooltip: { enabled: true }
+                        legend: { display: false }, // Sembunyikan legenda
+                        title: { // Tambahkan judul
+                            display: true,
+                            text: title,
+                            font: {
+                                size: 16,
+                                weight: 'bold',
+                            },
+                            color: '#333',
+                            padding: {
+                                top: 10,
+                                bottom: 10,
+                            }
+                        },
+                        centerText: {} // Aktifkan plugin untuk teks di tengah
                     }
                 }
             });
-        };
+        }
 
-        // Kinerja Chart
-        createChart(
+        // Membuat semua chart dengan judul dan angka di tengah
+        createChartWithTitle(
             document.getElementById('kinerjaChart'),
-            <?= ($data['kinerja'] / array_sum($data)) * 100 ?>,
+            Math.round((data.kinerja / total) * 100),
             "Kinerja",
-            ["#6DC5D1", "#E0E0E0"]
+            ["#6DC5D1", "#E0E0E0"],
+            "Laporan Kinerja"
         );
-
-        // Tempat Chart
-        createChart(
+        createChartWithTitle(
             document.getElementById('tempatChart'),
-            <?= ($data['tempat'] / array_sum($data)) * 100 ?>,
+            Math.round((data.tempat / total) * 100),
             "Tempat",
-            ["#FDE49E", "#E0E0E0"]
+            ["#FDE49E", "#E0E0E0"],
+            "Laporan Tempat"
         );
-
-        // Fasilitas Chart
-        createChart(
+        createChartWithTitle(
             document.getElementById('fasilitasChart'),
-            <?= ($data['fasilitas'] / array_sum($data)) * 100 ?>,
+            Math.round((data.fasilitas / total) * 100),
             "Fasilitas",
-            ["#FEB941", "#E0E0E0"]
+            ["#FEB941", "#E0E0E0"],
+            "Laporan Fasilitas"
         );
-
-        // Villa Tersedia Chart
-        createChart(
+        createChartWithTitle(
             document.getElementById('villaTersediaChart'),
-            <?= ($data['villa_tersedia'] / array_sum($data)) * 100 ?>,
+            Math.round((data.villa_tersedia / total) * 100),
             "Villa Tersedia",
-            ["#FDE49E", "#E0E0E0"]
+            ["#FDE49E", "#E0E0E0"],
+            "Villa Tersedia"
         );
-
-        // Villa Tidak Tersedia Chart
-        createChart(
+        createChartWithTitle(
             document.getElementById('villaTidakTersediaChart'),
-            <?= ($data['villa_tidak_tersedia'] / array_sum($data)) * 100 ?>,
+            Math.round((data.villa_tidak_tersedia / total) * 100),
             "Villa Tidak Tersedia",
-            ["#DD761C", "#E0E0E0"]
+            ["#DD761C", "#E0E0E0"],
+            "Villa Tidak Tersedia"
         );
     </script>
+
 </body>
 </html>

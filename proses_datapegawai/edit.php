@@ -1,184 +1,139 @@
 <?php
-include '../koneksi.php'; // Include the database connection
+// Sertakan file koneksi ke database
+include '../koneksi.php';
 
-// Check if an ID is provided
+// Periksa apakah ID pegawai tersedia di URL
 if (isset($_GET['id'])) {
     $id = $_GET['id'];
 
-    // Fetch employee data based on the provided ID
-    $query = "SELECT * FROM data_pegawai WHERE id = $id";
+    // Ambil data pegawai berdasarkan ID
+    $query = "SELECT * FROM pegawai WHERE id_pegawai = '$id'";
     $result = mysqli_query($conn, $query);
 
-    if ($result && mysqli_num_rows($result) > 0) {
+    // Periksa apakah data pegawai ditemukan
+    if (mysqli_num_rows($result) > 0) {
         $pegawai = mysqli_fetch_assoc($result);
     } else {
-        echo "Data tidak ditemukan.";
-        exit;
+        echo "<script>alert('Data pegawai tidak ditemukan.'); window.location.href='Dashboarddatapegawai.php';</script>";
+        exit();
     }
+} else {
+    echo "<script>alert('ID pegawai tidak ditemukan.'); window.location.href='Dashboarddatapegawai.php';</script>";
+    exit();
 }
 
-// Process form submission
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $nama = $_POST['nama'];
-    $jabatan = $_POST['jabatan'];
-    $hari = $_POST['hari'];
-    $waktu_shift = $_POST['waktu_shift'];
-    $tinggi = $_POST['tinggi'];
-    $berat_badan = $_POST['berat_badan'];
-    $warna_kulit = $_POST['warna_kulit'];
-    $warna_rambut = $_POST['warna_rambut'];
-    $bentuk_wajah = $_POST['bentuk_wajah'];
+// Proses update data pegawai jika form disubmit
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $nama = mysqli_real_escape_string($conn, $_POST['nama']);
+    $jabatan = mysqli_real_escape_string($conn, $_POST['jabatan']);
+    $hari = mysqli_real_escape_string($conn, $_POST['hari']);
+    $waktu_shift = mysqli_real_escape_string($conn, $_POST['waktu_shift']);
+    $tinggi = mysqli_real_escape_string($conn, $_POST['tinggi']);
+    $tubuh = mysqli_real_escape_string($conn, $_POST['tubuh']);
+    $kulit = mysqli_real_escape_string($conn, $_POST['kulit']);
+    $rambut = mysqli_real_escape_string($conn, $_POST['rambut']);
 
-    // Update the employee data in the database
-    $query = "UPDATE data_pegawai SET 
-                nama='$nama', 
-                jabatan='$jabatan', 
-                hari='$hari', 
-                waktu_shift='$waktu_shift', 
-                tinggi='$tinggi', 
-                berat_badan='$berat_badan', 
-                warna_kulit='$warna_kulit', 
-                warna_rambut='$warna_rambut', 
-                bentuk_wajah='$bentuk_wajah' 
-              WHERE id = $id";
+    // Query untuk update data pegawai
+    $query = "UPDATE pegawai SET 
+              nama = '$nama', 
+              jabatan = '$jabatan', 
+              hari = '$hari', 
+              waktu_shift = '$waktu_shift', 
+              tinggi = '$tinggi', 
+              tubuh = '$tubuh', 
+              kulit = '$kulit', 
+              rambut = '$rambut' 
+              WHERE id_pegawai = '$id'";
 
     if (mysqli_query($conn, $query)) {
-        header("Location: ../Dashboarddatapegawai.php"); // Redirect to the main page
-        exit;
+        echo "<script>alert('Data pegawai berhasil diupdate'); window.location.href='../Dashboarddatapegawai.php';</script>";
     } else {
-        echo "Gagal mengupdate data.";
+        echo "<script>alert('Gagal mengupdate data pegawai: " . mysqli_error($conn) . "');</script>";
     }
 }
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edit Pegawai</title>
+    <title>Edit Data Pegawai</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         body {
             background-color: #f3f4f6;
-            background-image: url('../blubrown.jpg');
             font-family: Arial, sans-serif;
         }
+
         .container {
-            max-width: 900px; /* Lebarkan container */
             background-color: #ffffff;
+            border-radius: 8px;
             padding: 30px;
-            margin: 50px auto;
-            border-radius: 12px;
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
         }
+
         h2 {
-            text-align: center;
+            font-size: 2rem;
             color: #333;
-            font-size: 24px;
             font-weight: bold;
-            margin-bottom: 25px;
-        }
-        label {
-            color: #555;
-            font-weight: 500;
-        }
-        .form-control {
-            border: 1px solid #ced4da;
-            border-radius: 6px;
-            margin-bottom: 15px;
-            padding: 10px;
-            font-size: 16px;
-            transition: all 0.3s ease;
-        }
-        .form-control:focus {
-            border-color: #007bff;
-            box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
-        }
-        .btn-primary {
-            background-color: #007bff;
-            border: none;
-            font-size: 16px;
-            padding: 10px 20px;
-            border-radius: 6px;
-            transition: background-color 0.3s ease;
-        }
-        .btn-primary:hover {
-            background-color: #0056b3;
-        }
-        .btn-secondary {
-            background-color: #6c757d;
-            border: none;
-            font-size: 16px;
-            padding: 10px 20px;
-            border-radius: 6px;
-            transition: background-color 0.3s ease;
-        }
-        .btn-secondary:hover {
-            background-color: #5a6268;
-        }
-        .d-flex {
-            display: flex;
-            gap: 10px;
-            justify-content: space-between;
-            margin-top: 20px;
         }
     </style>
 </head>
+
 <body>
     <div class="container mt-5">
-        <h2>Edit Data Pegawai</h2>
-        <form method="POST">
+        <h2 class="text-center mb-4">Edit Data Pegawai</h2>
+        <form action="" method="POST" class="mb-4">
             <div class="row">
-                <!-- Kolom Kiri -->
                 <div class="col-md-6">
-                    <div class="mb-3">
-                        <label for="nama" class="form-label">Nama</label>
-                        <input type="text" class="form-control" id="nama" name="nama" value="<?= htmlspecialchars($pegawai['nama']); ?>" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="jabatan" class="form-label">Jabatan</label>
-                        <input type="text" class="form-control" id="jabatan" name="jabatan" value="<?= htmlspecialchars($pegawai['jabatan']); ?>" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="hari" class="form-label">Hari</label>
-                        <input type="text" class="form-control" id="hari" name="hari" value="<?= htmlspecialchars($pegawai['hari']); ?>" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="waktu_shift" class="form-label">Waktu Shift</label>
-                        <input type="text" class="form-control" id="waktu_shift" name="waktu_shift" value="<?= htmlspecialchars($pegawai['waktu_shift']); ?>" required>
-                    </div>
+                    <input type="text" name="nama" class="form-control mb-2" value="<?= htmlspecialchars($pegawai['nama']); ?>" required>
+                    <select name="jabatan" class="form-control mb-2" required>
+                        <option value="Resepsionis" <?= $pegawai['jabatan'] == 'Resepsionis' ? 'selected' : ''; ?>>Resepsionis</option>
+                        <option value="House Keeper" <?= $pegawai['jabatan'] == 'House Keeper' ? 'selected' : ''; ?>>House Keeper</option>
+                        <option value="Security" <?= $pegawai['jabatan'] == 'Security' ? 'selected' : ''; ?>>Security</option>
+                    </select>
+                    <select name="hari" class="form-control mb-2" required>
+                        <option value="Senin" <?= $pegawai['hari'] == 'Senin' ? 'selected' : ''; ?>>Senin</option>
+                        <option value="Selasa" <?= $pegawai['hari'] == 'Selasa' ? 'selected' : ''; ?>>Selasa</option>
+                        <option value="Rabu" <?= $pegawai['hari'] == 'Rabu' ? 'selected' : ''; ?>>Rabu</option>
+                        <option value="Kamis" <?= $pegawai['hari'] == 'Kamis' ? 'selected' : ''; ?>>Kamis</option>
+                        <option value="Jumat" <?= $pegawai['hari'] == 'Jumat' ? 'selected' : ''; ?>>Jumat</option>
+                        <option value="Sabtu" <?= $pegawai['hari'] == 'Sabtu' ? 'selected' : ''; ?>>Sabtu</option>
+                        <option value="Minggu" <?= $pegawai['hari'] == 'Minggu' ? 'selected' : ''; ?>>Minggu</option>
+                    </select>
+                    <input type="time" name="waktu_shift" class="form-control mb-2" value="<?= htmlspecialchars($pegawai['waktu_shift']); ?>" required>
                 </div>
-
-                <!-- Kolom Kanan -->
                 <div class="col-md-6">
-                    <div class="mb-3">
-                        <label for="tinggi" class="form-label">Tinggi</label>
-                        <input type="number" class="form-control" id="tinggi" name="tinggi" value="<?= htmlspecialchars($pegawai['tinggi']); ?>" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="berat_badan" class="form-label">Berat Badan</label>
-                        <input type="number" class="form-control" id="berat_badan" name="berat_badan" value="<?= htmlspecialchars($pegawai['berat_badan']); ?>" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="warna_kulit" class="form-label">Warna Kulit</label>
-                        <input type="text" class="form-control" id="warna_kulit" name="warna_kulit" value="<?= htmlspecialchars($pegawai['warna_kulit']); ?>" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="warna_rambut" class="form-label">Warna Rambut</label>
-                        <input type="text" class="form-control" id="warna_rambut" name="warna_rambut" value="<?= htmlspecialchars($pegawai['warna_rambut']); ?>" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="bentuk_wajah" class="form-label">Bentuk Wajah</label>
-                        <input type="text" class="form-control" id="bentuk_wajah" name="bentuk_wajah" value="<?= htmlspecialchars($pegawai['bentuk_wajah']); ?>" required>
-                    </div>
+                    <select name="tinggi" class="form-control mb-2" required>
+                        <option value="pendek" <?= $pegawai['tinggi'] == 'pendek' ? 'selected' : ''; ?>>Pendek</option>
+                        <option value="sedang" <?= $pegawai['tinggi'] == 'sedang' ? 'selected' : ''; ?>>Sedang</option>
+                        <option value="tinggi" <?= $pegawai['tinggi'] == 'tinggi' ? 'selected' : ''; ?>>Tinggi</option>
+                        <option value="sangat tinggi" <?= $pegawai['tinggi'] == 'sangat tinggi' ? 'selected' : ''; ?>>Sangat Tinggi</option>
+                    </select>
+                    <select name="tubuh" class="form-control mb-2" required>
+                        <option value="kurus" <?= $pegawai['tubuh'] == 'kurus' ? 'selected' : ''; ?>>Kurus</option>
+                        <option value="sedang" <?= $pegawai['tubuh'] == 'sedang' ? 'selected' : ''; ?>>Sedang</option>
+                        <option value="berisi" <?= $pegawai['tubuh'] == 'berisi' ? 'selected' : ''; ?>>Berisi</option>
+                        <option value="gemuk" <?= $pegawai['tubuh'] == 'gemuk' ? 'selected' : ''; ?>>Gemuk</option>
+                    </select>
+                    <select name="kulit" class="form-control mb-2" required>
+                        <option value="cerah" <?= $pegawai['kulit'] == 'cerah' ? 'selected' : ''; ?>>Cerah</option>
+                        <option value="sawo matang" <?= $pegawai['kulit'] == 'sawo matang' ? 'selected' : ''; ?>>Sawo Matang</option>
+                        <option value="gelap" <?= $pegawai['kulit'] == 'gelap' ? 'selected' : ''; ?>>Gelap</option>
+                        <option value="sangat cerah" <?= $pegawai['kulit'] == 'sangat cerah' ? 'selected' : ''; ?>>Sangat Cerah</option>
+                        <option value="sangat gelap" <?= $pegawai['kulit'] == 'sangat gelap' ? 'selected' : ''; ?>>Sangat Gelap</option>
+                    </select>
+                    <input type="text" name="rambut" class="form-control mb-2" value="<?= htmlspecialchars($pegawai['rambut']); ?>" required>
                 </div>
             </div>
-
             <div class="d-flex justify-content-between">
-                <a href="../Dashboarddatapegawai.php" class="btn btn-secondary">Kembali</a>
-                <button type="submit" class="btn btn-primary">Update</button>
+                <a href="Dashboarddatapegawai.php" class="btn btn-secondary">Kembali</a>
+                <button type="submit" class="btn btn-primary">Update Pegawai</button>
             </div>
         </form>
     </div>
 </body>
+
 </html>

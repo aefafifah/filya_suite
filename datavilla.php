@@ -1,3 +1,28 @@
+<?php
+$host = "localhost"; // Host database
+$username = "root"; // Username database
+$password = ""; // Password database (sesuaikan jika perlu)
+$dbname = "filya_suite"; // Nama database Anda
+
+// Membuat koneksi ke database
+$conn = new mysqli($host, $username, $password, $dbname);
+
+// Cek apakah koneksi berhasil
+if ($conn->connect_error) {
+    die("Koneksi gagal: " . $conn->connect_error);
+}
+
+// Mengambil data dari database
+$sql = "SELECT * FROM villa"; // Ganti 'villas' dengan nama tabel Anda yang sebenarnya
+$result = $conn->query($sql);
+?>
+
+<?php
+// Menutup koneksi database
+$conn->close();
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -138,71 +163,58 @@
 </head>
 <body>
 
-    <!-- Sidebar -->
-    <div class="sidebar">
-        <h2>Halo Admin</h2>
-        <a href="Dashboardadmin.php"><i class="fas fa-home"></i> Dashboard</a>
-        <a href="DashbordKinerja.php"><i class="fas fa-smile"></i> Data Laporan Kinerja</a>
-        <a href="DashbordFasilitas.php"><i class="fas fa-chalkboard"></i> Data Laporan Fasilitas</a>
-        <a href="DashboardTempt.php"><i class="fas fa-thumbs-up"></i> Data Laporan Tempat</a>
-        <a href="Dashboarddatapegawai.php"><i class="fas fa-user"></i> Data Pegawai</a>
-        <a href="datavilla.php"><i class="fas fa-building"></i> Data Villa</a>
-    </div>
+
+            <div class="sidebar">
+                <h2>Halo Admin</h2>
+                <a href="Dashboardadmin.php"><i class="fas fa-home"></i> Dashboard</a>
+                <a href="DashbordKinerja.php"><i class="fas fa-smile"></i> Data Laporan Kinerja</a>
+                <a href="DashbordFasilitas.php"><i class="fas fa-chalkboard"></i> Data Laporan Fasilitas</a>
+                <a href="DashboardTempt.php"><i class="fas fa-thumbs-up"></i> Data Laporan Tempat</a>
+                <a href="Dashboarddatapegawai.php"><i class="fas fa-user"></i> Data Pegawai</a>
+                <a href="datavilla.php"><i class="fas fa-building"></i> Data Villa</a>
+                <a href="logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a>
+            </div>
 
     <!-- Main Content -->
     <div class="main-content">
         <h1><strong>Data Villa</strong></h1>
 
         <div class="table-responsive">
-            <table>
-                <thead>
-                    <tr>
-                        <th>Nama Villa</th>
-                        <th>Kuota</th>
-                        <th>Keterangan</th>
-                        <th>Aksi</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>Villa Fancy</td>
-                        <td>5</td>
-                        <td>Aktif</td>
-                        <td>
-                    <a href="edit.php?id=1" class="btn btn-warning btn-sm">
-                    <i class="fas fa-pencil-alt"></i>
+        <table>
+    <thead>
+        <tr>
+            <th>Nama Villa</th>
+            <th>Kuota</th>
+            <th>Keterangan</th>
+            <th>Status</th>
+            <th>Aksi</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php
+        if ($result->num_rows > 0) {
+            while($row = $result->fetch_assoc()) {
+                echo "<tr>";
+                echo "<td>" . $row['nama_villa'] . "</td>";
+                echo "<td>" . $row['kuota'] . "</td>";
+                echo "<td>" . $row['keterangan'] . "</td>";
+                echo "<td>" . $row['status'] . "</td>";
+                echo "<td>
+                    <a href='proses_villa/edit.php?id=" . $row['id'] . "' class='btn btn-warning btn-sm'>
+                        <i class='fas fa-pencil-alt'></i>
                     </a>
-                    <a href="delete.php?id=1" class="btn btn-danger btn-sm" onclick="return confirm('Apakah Anda yakin ingin menghapus data ini?')">
-                    <i class="fas fa-trash-alt"></i>
+                    <a href='delete.php?id=" . $row['id'] . "' class='btn btn-danger btn-sm' onclick='return confirm(\"Apakah Anda yakin ingin menghapus data ini?\")'>
+                        <i class='fas fa-trash-alt'></i>
                     </a>
-                    </td>
-                    </tr>
-                    <tr>
-                        <td>Villa Dreamy</td>
-                        <td>5</td>
-                        <td>Aktif</td>
-                        <td>
-                        <a href="edit.php?id=1" class="btn btn-warning btn-sm">
-                    <i class="fas fa-pencil-alt"></i>
-                    </a>
-                    <a href="delete.php?id=1" class="btn btn-danger btn-sm" onclick="return confirm('Apakah Anda yakin ingin menghapus data ini?')">
-                    <i class="fas fa-trash-alt"></i>
-                    </td>
-                    </tr>
-                    <tr>
-                        <td>Villa Charming</td>
-                        <td>5</td>
-                        <td>Aktif</td>
-                        <td>
-                        <a href="edit.php?id=1" class="btn btn-warning btn-sm">
-                    <i class="fas fa-pencil-alt"></i>
-                    </a>
-                    <a href="delete.php?id=1" class="btn btn-danger btn-sm" onclick="return confirm('Apakah Anda yakin ingin menghapus data ini?')">
-                    <i class="fas fa-trash-alt"></i>
-                    </td>
-                    </tr>
-                </tbody>
-            </table>
+                </td>";
+                echo "</tr>";
+            }
+        } else {
+            echo "<tr><td colspan='4'>Tidak ada data</td></tr>";
+        }
+        ?>
+    </tbody>
+</table>
         </div>
     </div>
 

@@ -204,16 +204,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_status'])) {
 
 <body>
 
-    <!-- Sidebar -->
-    <div class="sidebar">
-        <h2>Halo Admin</h2>
-        <a href="Dashboardadmin.php"><i class="fas fa-home"></i> Dashboard</a>
-        <a href="DashbordKinerja.php"><i class="fas fa-smile"></i> Data Laporan Kinerja</a>
-        <a href="DashbordFasilitas.php"><i class="fas fa-chalkboard"></i> Data Laporan Fasilitas</a>
-        <a href="DashboardTempt.php"><i class="fas fa-thumbs-up"></i> Data Laporan Tempat</a>
-        <a href="Dashboarddatapegawai.php"><i class="fas fa-user"></i> Data Pegawai</a>
-        <a href="datavilla.php"><i class="fas fa-building"></i> Data Villa</a>
-    </div>
+<div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="col-md-2 sidebar">
+                <h2>Halo Admin</h2>
+                <a href="Dashboardadmin.php"><i class="fas fa-home"></i> Dashboard</a>
+                <a href="DashbordKinerja.php"><i class="fas fa-smile"></i> Data Laporan Kinerja</a>
+                <a href="DashbordFasilitas.php"><i class="fas fa-chalkboard"></i> Data Laporan Fasilitas</a>
+                <a href="DashboardTempt.php"><i class="fas fa-thumbs-up"></i> Data Laporan Tempat</a>
+                <a href="Dashboarddatapegawai.php"><i class="fas fa-user"></i> Data Pegawai</a>
+                <a href="datavilla.php"><i class="fas fa-building"></i> Data Villa</a>
+                <a href="logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a>
+            </div>
 
     <!-- Main Content -->
     <div class="main-content">

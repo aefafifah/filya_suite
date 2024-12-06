@@ -62,7 +62,7 @@ $alamat = $_SESSION['alamat'] ?? '';
             justify-content: center;
             align-items: flex-start;
             height: 100vh;
-        }
+        }   
 
         .sidebar h2 {
             font-size: 1.8em;
@@ -97,6 +97,8 @@ $alamat = $_SESSION['alamat'] ?? '';
             padding: 0.8em 1em;
             border-radius: 8px;
             transition: background-color 0.3s, color 0.3s;
+            cursor: pointer;
+
         }
 
         /*pemberian jarak antar menu ke simbol*/
@@ -133,7 +135,6 @@ $alamat = $_SESSION['alamat'] ?? '';
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
             text-align: center;
             color: #f07126;
             overflow: hidden;
@@ -158,6 +159,7 @@ $alamat = $_SESSION['alamat'] ?? '';
         }
 
         .content h1 {
+            top: 20%;
             font-size: 2.5em;
             margin-bottom: 1.5em;
             font-weight: bold;
@@ -168,6 +170,11 @@ $alamat = $_SESSION['alamat'] ?? '';
             flex-direction: column;
             gap: 0.5em;
             width: 180px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+
         }
 
         .button {
@@ -256,11 +263,11 @@ $alamat = $_SESSION['alamat'] ?? '';
                 Data Laporan Saya
             </a>
             <a onclick="smoothRedirect('data_booking.php')" class="menu-item">
-                <img src="https://img.icons8.com/material-outlined/24/000000/booking.png" alt="Booking Icon" />
+                <img src="https://img.icons8.com/?size=100&id=4027&format=png&color=000000" alt="Booking Icon" />
                 Data Booking Saya
             </a>
             <a onclick="smoothRedirect('logout.php')" class="menu-item">
-                <img src="https://img.icons8.com/material-outlined/24/000000/booking.png" alt="Booking Icon" />
+                <img src="https://img.icons8.com/?size=100&id=2444&format=png&color=000000" alt="Booking Icon" />
                 Logout
             </a>
         </div>

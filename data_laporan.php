@@ -125,6 +125,7 @@ $data_tersedia = mysqli_num_rows($result) > 0;
             padding: 0.8em 1em;
             border-radius: 8px;
             transition: background-color 0.3s, color 0.3s;
+            cursor: pointer;
         }
 
         /*pemberian jarak antar menu ke simbol*/
@@ -150,16 +151,51 @@ $data_tersedia = mysqli_num_rows($result) > 0;
             border-radius: 50%;
         }
 
+        .menu-item.active {
+            color: white;
+            /* Warna putih permanen */
+            font-weight: bold;
+            /* Opsional: Menambahkan penekanan visual */
+        }
 
         .content {
             flex: 1;
-            padding: 20px;
+            padding: 2em;
             background-image: url('abcd.jpg');
             background-size: cover;
             background-position: center;
+            position: relative;
+            z-index: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: #f07126;
+            height: 100vh;
+            /* Full page height */
+            overflow: hidden;
         }
 
+        /* Smoke overlay */
+        .content::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.7);
+            /* Semi-transparent white for smoke effect */
+
+            z-index: -1;
+            /* Place behind the content */
+        }
+
+
         .content h1 {
+            position: absolute;
+            top: 26%;
+            left: 50%;
+            transform: translate(-50%, -50%);
             color: var(--highlight-color);
             font-size: 36px;
             margin-bottom: 10px;
@@ -196,6 +232,11 @@ $data_tersedia = mysqli_num_rows($result) > 0;
             background-color: rgba(255, 255, 255, 0.9);
             border-radius: 10px;
             text-align: center;
+            position: absolute;
+            top: 52%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 75%;
         }
     </style>
 </head>
@@ -212,8 +253,12 @@ $data_tersedia = mysqli_num_rows($result) > 0;
             Data Laporan Saya
         </a>
         <a onclick="smoothRedirect('data_booking.php')" class="menu-item">
-            <img src="https://img.icons8.com/material-outlined/24/000000/booking.png" alt="Booking Icon" />
+            <img src="https://img.icons8.com/?size=100&id=4027&format=png&color=000000" alt="Booking Icon" />
             Data Booking Saya
+        </a>
+        <a onclick="smoothRedirect('logout.php')" class="menu-item">
+            <img src="https://img.icons8.com/?size=100&id=2444&format=png&color=000000" alt="Booking Icon" />
+            Logout
         </a>
     </div>
     <div class="content">

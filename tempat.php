@@ -1,4 +1,7 @@
 <?php
+session_start(); // Mulai sesi
+$nama_pengguna = isset($_SESSION['nama']) ? htmlspecialchars($_SESSION['nama']) : '';
+$nomor_telpon = isset($_SESSION['nomor_telpon']) ? htmlspecialchars($_SESSION['nomor_telpon']) : '';
 // Memulai proses jika ada data yang dikirim
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Mengamankan inputan
@@ -266,7 +269,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <div class="form-row">
                 <div>
                     <label for="name">Nama Pengadu:</label>
-                    <input type="text" id="name" name="name" required>
+                    <textarea id="name" name="name"  required readonly><?php echo $nama_pengguna; ?></textarea>
                 </div>
                 <div>
                     <label for="report_date">Tanggal Melaporkan:</label>
@@ -277,7 +280,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <div class="form-row">
                 <div>
                     <label for="phone">Nomor Telepon:</label>
-                    <input type="tel" id="phone" name="phone" required>
+                    <textarea id="phone" name="phone"  required readonly><?php echo $nomor_telpon; ?></textarea>
                 </div>
                 <div>
                     <label for="stay_date">Tanggal Menginap:</label>

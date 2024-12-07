@@ -1,5 +1,7 @@
 <?php
 session_start(); // Mulai sesi
+$nama_pengguna = isset($_SESSION['nama']) ? htmlspecialchars($_SESSION['nama']) : '';
+$nomor_telpon = isset($_SESSION['nomor_telpon']) ? htmlspecialchars($_SESSION['nomor_telpon']) : '';
 ?>
 
 <!DOCTYPE html>
@@ -155,12 +157,12 @@ session_start(); // Mulai sesi
                     <div class="col-md-6">
                         <div class="mb-3">
                             <label for="namaPengadu" class="form-label">Nama Pengadu</label>
-                            <textarea class="form-control" id="namaPengadu" name="namaPengadu" rows="3" placeholder="Masukkan nama anda" required></textarea>
+                            <textarea class="form-control" id="namaPengadu" name="namaPengadu" rows="3" placeholder="Masukkan nama anda" required readonly><?php echo $nama_pengguna; ?></textarea>
                         </div>
 
-                        <div class="mb-3">
+                        <<div class="mb-3">
                             <label for="noTeleponPengadu" class="form-label">No Telepon Pengadu</label>
-                            <textarea class="form-control" id="noTeleponPengadu" name="noTeleponPengadu" rows="3" placeholder="Masukkan nomor anda" required></textarea>
+                            <textarea class="form-control" id="noTeleponPengadu" name="noTeleponPengadu" rows="3" placeholder="Masukkan nomor anda" required readonly><?php echo $nomor_telpon; ?></textarea>
                         </div>
 
                         <div class="mb-3">

@@ -315,7 +315,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </div>
 
             <div class="button-container">
-                <button type="button" class="back-button" onclick="window.history.back();">Back</button>
+            <button type="button" onclick="window.location.href='userhome.php';">Kembali</button>
                 <button type="submit" class="submit-button">Submit</button>
             </div>
         </form>

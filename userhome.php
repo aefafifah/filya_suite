@@ -2,16 +2,20 @@
 session_start();
 
 // Redirect ke login.php jika pengguna belum login
-if (!isset($_SESSION['nama']) || !isset($_SESSION['usertype'])) {
+if (!isset($_SESSION['usertype'])) {
     header("Location: login.php");
     exit();
 }
 
-$nama = $_SESSION['nama'];
-$nomor_telpon = $_SESSION['nomor_telpon'];
+$nama = $_SESSION['nama'] ?? 'Tamu';  // Menangani pengguna tamu
 $nomor_telpon = $_SESSION['nomor_telpon'] ?? '';
 $alamat = $_SESSION['alamat'] ?? '';
+
+// Cek jika pengguna adalah tamu
+$isGuest = $_SESSION['usertype'] === 'guest';
 ?>
+
+
 
 <!DOCTYPE html>
 <html lang="id">
@@ -20,6 +24,7 @@ $alamat = $_SESSION['alamat'] ?? '';
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Filya Suite</title>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
         /* Reset CSS */
         * {
@@ -250,33 +255,36 @@ $alamat = $_SESSION['alamat'] ?? '';
 
 <body>
     <div class="container">
-        <!-- Sidebar -->
-        <!-- Sidebar -->
-        <div class="sidebar">
-            <h2 class="user-greeting">Halo, <?php echo htmlspecialchars($nama); ?>!</h2>
-            <a onclick="smoothRedirect('userhome.php')" class="menu-item">
-                <img src="https://img.icons8.com/material-outlined/24/000000/home--v2.png" alt="Home Icon" />
-                Halaman Utama
-            </a>
-            <a onclick="smoothRedirect('data_laporan.php')" class="menu-item">
-                <img src="https://img.icons8.com/ios/24/000000/happy--v1.png" alt="Report Icon" />
-                Data Laporan Saya
-            </a>
-            <a onclick="smoothRedirect('data_booking.php')" class="menu-item">
-                <img src="https://img.icons8.com/?size=100&id=4027&format=png&color=000000" alt="Booking Icon" />
-                Data Booking Saya
-            </a>
-            <a onclick="smoothRedirect('logout.php')" class="menu-item">
-                <img src="https://img.icons8.com/?size=100&id=2444&format=png&color=000000" alt="Booking Icon" />
-                Logout
-            </a>
-        </div>
+    <div class="sidebar">
+    <h2 class="user-greeting">Halo, <?php echo htmlspecialchars($nama); ?>!</h2>
+    <a onclick="smoothRedirect('userhome.php')" class="menu-item">
+        <img src="https://img.icons8.com/material-outlined/24/000000/home--v2.png" alt="Home Icon" />
+        Halaman Utama
+    </a>
+    
+    <?php if (!$isGuest): ?>
+        <a onclick="smoothRedirect('data_laporan.php')" class="menu-item">
+            <img src="https://img.icons8.com/ios/24/000000/happy--v1.png" alt="Report Icon" />
+            Data Laporan Saya
+        </a>
+        <a onclick="smoothRedirect('data_booking.php')" class="menu-item">
+            <img src="https://img.icons8.com/?size=100&id=4027&format=png&color=000000" alt="Booking Icon" />
+            Data Booking Saya
+        </a>
+    <?php endif; ?>
+    
+    <a onclick="smoothRedirect('logout.php')" class="menu-item">
+        <img src="https://img.icons8.com/?size=100&id=2444&format=png&color=000000" alt="Logout Icon" />
+        Logout
+    </a>
+    </div>
         <!-- Main Content -->
         <div class="content">
             <h1>Selamat Datang Di Filya Suite</h1>
             <div class="button-container">
                 <button class="button" onclick="toggleExtraButtons()">Adukan Laporan</button>
-                <button class="button" onclick="smoothRedirect('booking.php')">Booking Villa</button>
+                <button class="button" onclick="handleBooking()">Booking Villa</button>
+
                 <div class="extra-buttons" id="extraButtons">
                     <button class="extra-button" onclick="smoothRedirect('eyyo2.php')">Laporan Fasilitas</button>
                     <button class="extra-button" onclick="smoothRedirect('kinerja.php')">Laporan Kinerja</button>
@@ -324,6 +332,28 @@ const urlParams = new URLSearchParams(window.location.search);
                 }, 3000);
             }
         });
+
+        function handleBooking() {
+    const isGuest = <?php echo json_encode($isGuest); ?>; // Mendapatkan status guest dari PHP
+
+    if (isGuest) {
+        Swal.fire({
+            icon: 'warning',
+            title: 'Perhatian!',
+            text: 'Anda harus daftar sebagai user terlebih dahulu.',
+            confirmButtonText: 'Daftar',
+            showCancelButton: true,
+            cancelButtonText: 'Tutup',
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = 'register.php';  // Arahkan ke halaman register
+            }
+        });
+    } else {
+        window.location.href = 'booking.php';  // Lanjutkan ke halaman booking jika bukan guest
+    }
+}
+
     </script>
 </body>
 

@@ -220,7 +220,7 @@ session_start(); // Mulai sesi
 
                 <div class="mb-3 text-center">
                     <!-- Tombol Back -->
-                    <button type="button" class="btn-small" onclick="window.history.back();">Back</button>
+                    <button type="button" onclick="window.location.href='userhome.php';">Kembali</button>
                     <!-- Tombol Submit -->
                     <button type="submit" class="btn-small-submit">Submit</button>
                 </div>

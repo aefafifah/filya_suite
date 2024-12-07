@@ -284,7 +284,7 @@ $data_tersedia = mysqli_num_rows($result) > 0;
                     <p>Bosen di rumah aja dan kerja melulu???</p>
                     <p>Ingin liburan plus staycation enak dan nyaman? divilla Filya Suite? ajaa<br>
                         Yuk Liburan staycation di FillyaSuite dengan full senyum
-                        Segera pilih kamar idamanmu di <a href="booking.php">sini</a>, dan Nikmati
+                        Segera pilih kamar idamanmu di <a href="#" onclick="smoothRedirect('booking.php')">sini</a>, dan Nikmati
                         villa FillyaSuite dengan nyaman, dan dengan pelayanan yang memuaskan<br>
                     </p>
                 </div>

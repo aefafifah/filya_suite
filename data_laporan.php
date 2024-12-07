@@ -79,7 +79,6 @@ $data_tersedia = mysqli_num_rows($result) > 0;
         }
 
         /* Sidebar */
-        /* Sidebar */
         .sidebar {
             background-color: #f7d76e;
             width: 20%;
@@ -99,19 +98,15 @@ $data_tersedia = mysqli_num_rows($result) > 0;
             color: #DD761C;
         }
 
-        /* Tambahkan kelas khusus untuk "Halo User" yaitu menyamakan
-        baris dengan menu */
         .user-greeting {
             font-size: 1.8em;
             font-weight: bold;
             color: #DD761C;
             padding: 0.8em 1em;
-            /* padding agar selaras dengan menu */
             margin-bottom: 1.5em;
             display: flex;
             align-items: center;
             justify-content: flex-start;
-            /* selaras dengan menu */
         }
 
         .menu-item {
@@ -288,10 +283,11 @@ $data_tersedia = mysqli_num_rows($result) > 0;
                     <?php endwhile; ?>
                 </table>
             <?php else: ?>
+
                 <div class="no-data">
                     <p>Belum ada Kamar villa yang anda booking</p>
                     <p>Mengalami kendala atau merasa kurang puas dengan villa Filya Suite?<br>
-                        Yuk ajukan pengaduan Anda di <a href="userhome.php?showExtra=true">sini</a>, dan bantu kami dalam meningkatkan kualitas villa Filya Suite.<br>
+                        Yuk ajukan pengaduan Anda di <a href="#" onclick="smoothRedirect('userhome.php?showExtra=true')">sini</a>, dan bantu kami dalam meningkatkan kualitas villa Filya Suite.<br>
                         Kami sangat menghargai setiap masukan dari Anda untuk terus menyempurnakan pengalaman Anda bersama kami.</p>
                 </div>
             <?php endif; ?>

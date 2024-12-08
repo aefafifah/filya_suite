@@ -200,7 +200,37 @@ $data_tersedia = mysqli_num_rows($result) > 0;
             overflow: hidden;
         }
 
-        .table-container th,
+        <?php if ($data_tersedia): ?>.table-container table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            text-align: center;
+            position: absolute;
+            top: 52%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 75%;
+            transition: top 0.5s ease-in-out;
+            /* Transisi halus hanya jika $data_tersedia true */
+        }
+
+        .content h1 {
+            position: absolute;
+            top: 26%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: var(--highlight-color);
+            font-size: 36px;
+            margin-bottom: 10px;
+            font-weight: bold;
+            transition: top 0.5s ease-in-out;
+            /* Transisi halus hanya jika $data_tersedia true */
+        }
+
+        <?php endif; ?>.table-container th,
         .table-container td {
             padding: 15px;
             text-align: left;
@@ -310,6 +340,19 @@ $data_tersedia = mysqli_num_rows($result) > 0;
         window.addEventListener("load", () => {
             document.body.classList.remove("fade-out");
         });
+        <?php if ($data_tersedia): ?>
+            // Script untuk mengubah posisi top setelah 3 detik
+            setTimeout(() => {
+                const table = document.querySelector('.table-container table');
+                if (table) {
+                    table.style.top = '37%'; // Mengurangi posisi top sebesar 15%
+                }
+                const heading = document.querySelector('.content h1');
+                if (heading) {
+                    heading.style.top = '11%'; // Menyesuaikan heading jika diperlukan
+                }
+            }, 250);
+        <?php endif; ?>
     </script>
 </body>
 

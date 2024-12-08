@@ -1,3 +1,49 @@
+<?php
+session_start(); // Mulai sesi
+
+if (!isset($_SESSION['nomor_telpon']) && !isset($_SESSION['email'])){
+    header("Location: login.php");
+    exit();
+}
+
+$host = "localhost";
+$user = "root";
+$password = "";
+$db = "filya_suite";
+
+// Membuat koneksi ke database
+$conn = mysqli_connect($host, $user, $password, $db);
+
+// Periksa koneksi database
+if (!$conn) {
+    die("Koneksi gagal: " . mysqli_connect_error());
+}
+
+// Ambil data dari sesi
+$nama = $_SESSION['nama'];
+$usertype = $_SESSION['usertype'];
+$nomor_telpon = $_SESSION['nomor_telpon'];
+
+// Ambil data email dari database berdasarkan nomor telepon (karena login.php menyimpan nomor telepon di sesi)
+$sql = "SELECT email FROM users WHERE nomor_telpon = ?";
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("s", $nomor_telpon);
+$stmt->execute();
+$result = $stmt->get_result();
+
+if ($result->num_rows > 0) {
+    $row = $result->fetch_assoc();
+    $email = $row['email'];
+} else {
+    echo "Data pengguna tidak ditemukan.";
+    exit();
+}
+
+// Tutup koneksi database
+$stmt->close();
+mysqli_close($conn);
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -168,13 +214,19 @@
                 <form id="booking-form" method="get">
                     <div class="mb-3">
                         <label class="form-label">Nama</label>
-                        <input type="text" class="form-control" name="guest_name" id="guest-name"
-                            placeholder="Masukkan nama" required>
+                        <input class="form-control"
+                        name="guest_name"
+                        id="guest-name"
+                        value="<?php echo htmlspecialchars($nama); ?>"
+                        required readonly>
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Email</label>
-                        <input type="email" class="form-control" name="guest_email" id="guest-email"
-                            placeholder="Masukkan email" required>
+                        <input class="form-control"
+                        name="guest_email"
+                        id="guest-email"
+                        value="<?php echo htmlspecialchars($email); ?>"
+                        required readonly>
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Pilih Villa</label>

@@ -11,10 +11,10 @@ $nama = $_SESSION['nama'] ?? 'Tamu';  // Menangani pengguna tamu
 $nomor_telpon = $_SESSION['nomor_telpon'] ?? '';
 $alamat = $_SESSION['alamat'] ?? '';
 
+
 // Cek jika pengguna adalah tamu
 $isGuest = $_SESSION['usertype'] === 'guest';
 ?>
-
 
 
 <!DOCTYPE html>

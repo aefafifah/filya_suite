@@ -13,7 +13,7 @@ if ($conn->connect_error) {
 
 // Menghapus data laporan berdasarkan ID
 $id = $_GET['id'];
-$sql = "DELETE FROM kinerja WHERE id = $id";
+$sql = "DELETE FROM kinerja WHERE id_pengaduan = $id";
 
 if ($conn->query($sql) === TRUE) {
     echo "Data berhasil dihapus.";

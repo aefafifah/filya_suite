@@ -29,39 +29,65 @@ require_once 'koneksi.php'; // Pastikan koneksi database terhubung.
         }
 
         .sidebar {
-            width: 300px;
-            background-color: #fff;
-            height: 100vh;
-            padding: 20px;
-            color: #DD761C;
-        }
+    background-color: #ffffff; 
+    width: 250px;
+    padding: 1.5em;
+    height: 100vh; 
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    color: #DD761C;
+    display: flex;
+    flex-direction: column;
+    position: fixed; 
+    top: 0; 
+    left: 0; 
+    overflow-y: auto; 
+    z-index: 1000; 
+}
 
-        .sidebar h2 {
-            font-family: 'Poppins', sans-serif;
-            font-weight: bold;
-            font-size: 36px;
-            color: #DD761C;
-            margin-bottom: 30px;
-        }
+.sidebar-header {
+    margin-bottom: 2em;
+    text-align: center;
+}
 
-        .sidebar a {
-            text-decoration: none;
-            font-weight: bold;
-            display: block;
-            padding: 10px 0;
-            color: #DD761C;
-            transition: background 0.3s;
-            margin-bottom: 15px;
-        }
+.sidebar-header h2 {
+    font-size: 1.5em;
+    font-weight: bold;
+    color: #DD761C;
+    margin-top: 70px;
+}
 
-        .sidebar a:hover {
-            background-color: #ff9800;
-        }
+.sidebar-menu {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5em;
+}
 
-        .sidebar i {
-            margin-right: 10px;
-            font-size: 18px;
-        }
+.menu-item {
+    display: flex;
+    align-items: center;
+    font-size: 1em;
+    text-decoration: none;
+    color: #DD761C;
+    padding: 0.8em 1em;
+    border-radius: 10px;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.menu-item i {
+    margin-right: 0.8em;
+    font-size: 1.2em;
+}
+
+.menu-item:hover {
+    background-color: #fef3d4; /* Warna hover */
+    color: #DD761C;
+}
+
+.menu-item.active {
+    background-color: #fef3d4; /* Warna latar item aktif */
+    font-weight: bold;
+}
+
 
         .main-content {
             flex: 1;
@@ -151,19 +177,37 @@ require_once 'koneksi.php'; // Pastikan koneksi database terhubung.
 
 <body>
 
-<div class="container-fluid">
-        <div class="row">
-            <!-- Sidebar -->
-            <div class="col-md-2 sidebar">
-                <h2>Halo Admin</h2>
-                <a href="Dashboardadmin.php"><i class="fas fa-home"></i> Dashboard</a>
-                <a href="DashbordKinerja.php"><i class="fas fa-smile"></i> Data Laporan Kinerja</a>
-                <a href="DashbordFasilitas.php"><i class="fas fa-chalkboard"></i> Data Laporan Fasilitas</a>
-                <a href="DashboardTempt.php"><i class="fas fa-thumbs-up"></i> Data Laporan Tempat</a>
-                <a href="Dashboarddatapegawai.php"><i class="fas fa-user"></i> Data Pegawai</a>
-                <a href="datavilla.php"><i class="fas fa-building"></i> Data Villa</a>
-                <a href="logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a>
-            </div>
+   <!-- Sidebar -->
+   <div class="sidebar">
+    <div class="sidebar-header">
+        <h2>Halo, Admin</h2>
+    </div>
+    <n class="sidebar-menu">
+        <a href="Dashboardadmin.php" class="menu-item">
+            <i class="fas fa-home"></i> Dashboard
+        </a>
+        <a href="DashbordKinerja.php" class="menu-item">
+            <i class="fas fa-smile"></i> Data Laporan Kinerja
+        </a>
+        <a href="DashbordFasilitas.php" class="menu-item active">
+    <i class="fas fa-chalkboard"></i> Data Laporan Fasilitas
+</a>
+
+        <a href="DashboardTempt.php" class="menu-item">
+            <i class="fas fa-thumbs-up"></i> Data Laporan Tempat
+        </a>
+        <a href="Dashboarddatapegawai.php" class="menu-item">
+            <i class="fas fa-user"></i> Data Pegawai
+        </a>
+        <a href="datavilla.php" class="menu-item">
+            <i class="fas fa-building"></i> Data Villa
+        </a>
+    <div class="sidebar-footer">
+        <a href="logout.php" class="menu-item">
+            <i class="fas fa-sign-out-alt"></i> Logout
+        </a>
+    </div>
+</div>
 
     <!-- Konten Utama -->
     <div class="main-content">

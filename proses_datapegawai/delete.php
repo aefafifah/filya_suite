@@ -6,7 +6,7 @@ if (isset($_GET['id'])) {
     $id = $_GET['id'];
 
     // Delete the employee data from the database
-    $query = "DELETE FROM data_pegawai WHERE id = $id";
+    $query = "DELETE FROM pegawai WHERE id_pegawai = $id";
 
     if (mysqli_query($conn, $query)) {
         header("Location: ../Dashboarddatapegawai.php"); // Redirect to the main page

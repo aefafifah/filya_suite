@@ -47,6 +47,7 @@ $isGuest = $_SESSION['usertype'] === 'guest';
         /* Fade-out effect for page transition */
         body.fade-out {
             opacity: 0;
+            transition: opacity 0.3s ease-in-out;
         }
 
         /* Main container */
@@ -294,6 +295,11 @@ $isGuest = $_SESSION['usertype'] === 'guest';
         </div>
     </div>
 <script>
+    document.addEventListener("DOMContentLoaded", () => {
+            if (document.body.classList.contains("fade-out")) {
+                document.body.classList.remove("fade-out");
+            }
+        });
         function toggleExtraButtons(show = false) {
             const extraButtons = document.getElementById("extraButtons");
             if (show) {

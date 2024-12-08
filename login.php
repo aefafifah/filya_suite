@@ -16,7 +16,7 @@ if (isset($_GET['guest']) && $_GET['guest'] == 'true') {
     $_SESSION['user_id'] = null; // ID pengguna tamu bisa dibiarkan null
     $_SESSION['usertype'] = 'guest'; // Set usertype sebagai tamu
     unset($_SESSION['nama']); // Hapus nama jika sebelumnya diset
-    header('location:userhome.php'); // Alihkan ke halaman home
+         // Alihkan ke halaman home
     exit(); // Hentikan eksekusi setelah header
 }
 

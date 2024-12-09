@@ -38,6 +38,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $_SESSION["nama"] = $row["nama"];
             $_SESSION["usertype"] = $row["usertype"]; // Simpan user_type di session
             $_SESSION["nomor_telpon"] = $row["nomor_telpon"];
+            $_SESSION["email"] = $row["email"];
 
             // Arahkan ke halaman sesuai dengan user_type
             if ($_SESSION["usertype"] === "admin") {

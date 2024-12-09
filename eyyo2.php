@@ -1,7 +1,44 @@
 <?php
 session_start(); // Mulai sesi
+
+$host = "localhost";
+$user = "root";
+$password = "";
+$db = "filya_suite";
+
+$conn = mysqli_connect($host, $user, $password, $db);
+
+if (!$conn) {
+    die("Koneksi gagal: " . mysqli_connect_error());
+}
+
+if (!isset($_SESSION['nomor_telpon']) && !isset($_SESSION['email'])){
+    header("Location: login.php");
+    exit();
+}
+
+$email = isset($_SESSION['email']) ? $_SESSION['email'] : null;
 $nama_pengguna = isset($_SESSION['nama']) ? htmlspecialchars($_SESSION['nama']) : '';
 $nomor_telpon = isset($_SESSION['nomor_telpon']) ? htmlspecialchars($_SESSION['nomor_telpon']) : '';
+$usertype = $_SESSION['usertype'];
+
+$sql = "SELECT tanggal_checkin, tanggal_checkout FROM pemesanan WHERE email = ?";
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("s", $email);
+$stmt->execute();
+$result = $stmt->get_result();
+
+if ($result->num_rows > 0) {
+    $row = $result->fetch_assoc();
+    $tanggal_checkin = $row['tanggal_checkin'];
+    $tanggal_checkout = $row['tanggal_checkout'];
+} else {
+    echo "<script>alert('Tidak ada data pemesanan yang ditemukan untuk email ini.'); window.location.href = 'userhome.php';</script>";
+    exit();
+}
+
+$stmt->close();
+mysqli_close($conn);
 ?>
 
 <!DOCTYPE html>

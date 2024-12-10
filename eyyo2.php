@@ -28,13 +28,14 @@ $stmt->bind_param("s", $email);
 $stmt->execute();
 $result = $stmt->get_result();
 
+$ranges = []; // Menyimpan rentang tanggal
 if ($result->num_rows > 0) {
-    $row = $result->fetch_assoc();
-    $tanggal_checkin = $row['tanggal_checkin'];
-    $tanggal_checkout = $row['tanggal_checkout'];
-} else {
-    echo "<script>alert('Tidak ada data pemesanan yang ditemukan untuk email ini.'); window.location.href = 'userhome.php';</script>";
-    exit();
+    while ($row = $result->fetch_assoc()) {
+        $ranges[] = [
+            'checkin' => $row['tanggal_checkin'],
+            'checkout' => $row['tanggal_checkout']
+        ];
+    }
 }
 
 $stmt->close();
@@ -165,6 +166,29 @@ mysqli_close($conn);
             margin: 0 5px;
             border-radius: 20px;
         }
+        /* Cursor pointer untuk input date */
+        #tanggalMenginap {
+            cursor: pointer;
+        }
+
+        /* Ketika input tanggal disabled */
+        #tanggalMenginap:disabled {
+            background-color: #e0e0e0; /* Abu-abu */
+            color: #a0a0a0;
+            cursor: not-allowed;
+        }
+
+        /* Highlight valid range dengan warna biru muda */
+        #tanggalMenginap:focus {
+            outline: none; /* Hilangkan outline default */
+            box-shadow: 0 0 5px #add8e6; /* Warna biru muda */
+        }
+
+        /* Warna biru tua untuk tanggal yang dipilih */
+        #tanggalMenginap:focus:valid {
+            background-color: #0000ff; /* Biru tua */
+            color: #ffffff; /* Warna teks putih */
+        }
     </style>
 </head>
 
@@ -270,5 +294,53 @@ mysqli_close($conn);
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+<script>
+        function setAllowedDates(inputId, ranges) {
+            const dateInput = document.getElementById(inputId);
 
+            if (ranges.length === 0) {
+                // Tidak ada rentang tanggal
+                dateInput.disabled = false; // Tetap bisa diklik
+                dateInput.addEventListener("click", () => {
+                    alert("Tidak ada tanggal yang tersedia untuk dipilih.");
+                });
+                return;
+            }
+
+            // Aktifkan input
+            dateInput.disabled = false;
+
+            // Highlight valid ranges
+            dateInput.addEventListener("focus", function () {
+                const minDates = ranges.map(range => range.checkin);
+                const maxDates = ranges.map(range => range.checkout);
+                alert(
+                    `Pilih tanggal antara:\n` +
+                    ranges
+                        .map(
+                            range => `- ${range.checkin} hingga ${range.checkout}`
+                        )
+                        .join("\n")
+                );
+            });
+
+            // Validasi input
+            dateInput.addEventListener("change", function () {
+                const selectedDate = this.value;
+                let isValid = ranges.some(range =>
+                    selectedDate >= range.checkin && selectedDate <= range.checkout
+                );
+
+                if (!isValid) {
+                    alert("Tanggal tidak valid dalam rentang yang tersedia.");
+                    this.value = ""; // Reset input jika tanggal di luar rentang
+                }
+            });
+        }
+
+        document.addEventListener("DOMContentLoaded", function () {
+            const ranges = <?php echo json_encode($ranges); ?>;
+            setAllowedDates("tanggalMenginap", ranges);
+        });
+    </script>
 </html>

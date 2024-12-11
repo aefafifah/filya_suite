@@ -1,8 +1,5 @@
 <?php
 session_start(); // Mulai sesi
-$nama_pengguna = isset($_SESSION['nama']) ? htmlspecialchars($_SESSION['nama']) : '';
-$nomor_telpon = isset($_SESSION['nomor_telpon']) ? htmlspecialchars($_SESSION['nomor_telpon']) : '';
-// Koneksi ke database
 $servername = "localhost";
 $username = "root";
 $password = "";
@@ -14,6 +11,11 @@ $conn = new mysqli($servername, $username, $password, $dbname);
 // Cek koneksi
 if ($conn->connect_error) {
     die("Koneksi gagal: " . $conn->connect_error);
+}
+
+if (!isset($_SESSION['nomor_telpon']) && !isset($_SESSION['email'])){
+    header("Location: login.php");
+    exit();
 }
 
 // Proses form saat disubmit
@@ -45,6 +47,37 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     $stmt->close();
+}
+
+$nama_pengguna = isset($_SESSION['nama']) ? htmlspecialchars($_SESSION['nama']) : '';
+$nomor_telpon = isset($_SESSION['nomor_telpon']) ? htmlspecialchars($_SESSION['nomor_telpon']) : '';
+$email = isset($_SESSION['email']) ? $_SESSION['email'] : null;
+$usertype = $_SESSION['usertype'];
+// Koneksi ke database
+
+$query = "
+SELECT id, nama_pemesan, email, villa_id, jumlah_orang, tanggal_checkin,
+    tanggal_checkout, created_at
+    FROM pemesanan
+    WHERE email = ? OR email = (
+        SELECT email FROM users WHERE nomor_telpon = ?
+    )
+";
+
+$stmt = mysqli_prepare($conn, $query);
+mysqli_stmt_bind_param($stmt, "ss", $email, $nomor_telpon);
+mysqli_stmt_execute($stmt);
+$result = mysqli_stmt_get_result($stmt);
+$data_tersedia = mysqli_num_rows($result) > 0;
+
+$ranges = []; // Menyimpan rentang tanggal
+if ($result->num_rows > 0) {
+    while ($row = $result->fetch_assoc()) {
+        $ranges[] = [
+            'checkin' => $row['tanggal_checkin'],
+            'checkout' => $row['tanggal_checkout']
+        ];
+    }
 }
 
 $conn->close();
@@ -220,8 +253,8 @@ $conn->close();
                     <textarea id="phone" name="phone"  required readonly><?php echo $nomor_telpon; ?></textarea>
                 </div>
                 <div>
-                    <label for="stay_date">Tanggal Menginap:</label>
-                    <input type="date" id="stay_date" name="stay_date" required>
+                    <label for="tanggalMenginap">Tanggal Menginap:</label>
+                    <input type="date" id="tanggalMenginap" name="tanggalMenginap" required>
                 </div>
             </div>
 
@@ -269,4 +302,74 @@ $conn->close();
         <?php endif; ?>
     </div>
 </body>
+<script>
+    function setAllowedDates(inputId, ranges) {
+        const dateInput = document.getElementById(inputId);
+
+        if (ranges.length === 0) {
+            // Tidak ada rentang tanggal
+            dateInput.disabled = false; // Tetap bisa diklik
+            dateInput.addEventListener("click", () => {
+                alert("Tidak ada tanggal yang tersedia untuk dipilih.");
+            });
+            return;
+        }
+
+        // Aktifkan input
+        dateInput.disabled = false;
+
+        // Highlight valid ranges ketika input difokuskan
+        dateInput.addEventListener("focus", function () {
+            // Tambahkan style warna biru muda ke tanggal valid
+            const picker = this;
+            const minDates = ranges.map(range => new Date(range.checkin));
+            const maxDates = ranges.map(range => new Date(range.checkout));
+
+            picker.addEventListener("input", function () {
+                const calendar = document.querySelector("input[type='date']");
+                if (calendar) {
+                    // Highlight valid dates in blue
+                    const validDates = [];
+                    ranges.forEach(range => {
+                        const start = new Date(range.checkin);
+                        const end = new Date(range.checkout);
+                        while (start <= end) {
+                            validDates.push(new Date(start).toISOString().split("T")[0]);
+                            start.setDate(start.getDate() + 1);
+                        }
+                    });
+
+                    const cells = calendar.shadowRoot.querySelectorAll(".day"); // Misal shadow DOM
+                    cells.forEach(cell => {
+                        if (validDates.includes(cell.getAttribute("data-date"))) {
+                            cell.style.backgroundColor = "#add8e6"; // Biru muda
+                        }
+                    });
+                }
+            });
+        });
+
+        // Ketika tanggal dipilih
+        dateInput.addEventListener("change", function () {
+            const selectedDate = this.value;
+            let isValid = ranges.some(range =>
+                selectedDate >= range.checkin && selectedDate <= range.checkout
+            );
+
+            if (!isValid) {
+                // Nonaktifkan klik tanggal jika invalid
+                alert("Tanggal tidak valid dalam rentang yang tersedia.");
+                this.value = ""; // Reset input jika tanggal di luar rentang
+            } else {
+                this.style.color = "#ffffff"; // Warna teks putih
+                this.blur(); // Tutup inputan setelah memilih
+            }
+        });
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+        const ranges = <?php echo json_encode($ranges); ?>;
+        setAllowedDates("tanggalMenginap", ranges);
+    });
+</script>
 </html>

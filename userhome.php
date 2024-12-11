@@ -352,7 +352,7 @@ const urlParams = new URLSearchParams(window.location.search);
             cancelButtonText: 'Tutup',
         }).then((result) => {
             if (result.isConfirmed) {
-                window.location.href = 'register.php';  // Arahkan ke halaman register
+                smoothRedirect('register.php');  // Arahkan ke halaman register
             }
         });
     } else {

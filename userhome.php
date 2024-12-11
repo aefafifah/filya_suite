@@ -356,7 +356,7 @@ const urlParams = new URLSearchParams(window.location.search);
             }
         });
     } else {
-        window.location.href = 'booking.php';  // Lanjutkan ke halaman booking jika bukan guest
+        smoothRedirect('booking.php');  // Lanjutkan ke halaman booking jika bukan guest
     }
 }
 

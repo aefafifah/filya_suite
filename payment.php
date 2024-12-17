@@ -269,8 +269,9 @@ $waLink = "https://wa.me/6281217332804?text=$waMessage";
                             GoPay: 00000 00000
                         </li>
                     </ul>
-                    <a href="<?php echo $waLink; ?>" class="btn custom-btn mb-4 mt-3 w-100" target="_blank">Klik di sini
-                        untuk Pembayaran Offline</a>
+                    <a href="#" class="btn custom-btn mb-4 mt-3 w-100" onclick="showWarningBeforeWhatsApp()">
+                        Klik di sini untuk Pembayaran Offline
+                    </a>
                 </div>
             </div>
         </div>
@@ -369,6 +370,37 @@ $waLink = "https://wa.me/6281217332804?text=$waMessage";
                 step.querySelector(".step-circle").classList.add("active");
             });
         });
+        function showWarningBeforeWhatsApp() {
+
+            Swal.fire({
+                icon: 'warning',
+                title: 'Peringatan!',
+                text: 'Anda akan diarahkan ke WhatsApp untuk konfirmasi pembayaran. Pastikan Anda menyelesaikan pembayaran sesuai hari booking!',
+                showCancelButton: true,
+                confirmButtonText: 'Lanjutkan',
+                cancelButtonText: 'Batal',
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    const waLink = "<?php echo $waLink; ?>";
+                    window.open(waLink, '_blank');
+
+
+                    setTimeout(() => {
+                        Swal.fire({
+                            icon: 'info',
+                            title: 'Jangan Lupa Bayar!',
+                            text: 'Jangan lupa untuk membayar pada hari booking!',
+                            timer: 3000,
+                            showConfirmButton: false,
+                        });
+
+                        setTimeout(() => {
+                            window.location.href = 'userhome.php';
+                        }, 3500);
+                    }, 2000);
+                }
+            });
+        }
     </script>
 </body>
 

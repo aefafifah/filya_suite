@@ -1,84 +1,109 @@
 <?php
-session_start(); // Mulai sesi
+session_start();
 $servername = "localhost";
 $username = "root";
 $password = "";
 $dbname = "filya_suite";
 
-// Membuat koneksi
 $conn = new mysqli($servername, $username, $password, $dbname);
+$query = "SELECT DISTINCT tinggi, tubuh, kulit, rambut, wajah FROM pegawai";
+$result = $conn->query($query);
 
-// Cek koneksi
+$ciri_ciri_options = [];
+if ($result->num_rows > 0) {
+    while ($row = $result->fetch_assoc()) {
+
+        $ciri_ciri_options[] = [
+            'tinggi' => $row['tinggi'],
+            'tubuh' => $row['tubuh'],
+            'kulit' => $row['kulit'],
+            'rambut' => $row['rambut'],
+            'wajah' => $row['wajah']
+        ];
+    }
+}
+
 if ($conn->connect_error) {
     die("Koneksi gagal: " . $conn->connect_error);
 }
 
-if (!isset($_SESSION['nomor_telpon']) && !isset($_SESSION['email'])){
-    header("Location: login.php");
-    exit();
+
+if (!isset($_SESSION['nomor_telpon']) && !isset($_SESSION['email'])) {
+
+    $nama_pengguna = "Tamu";
+    $usertype = "guest";
+    $nomor_telpon = "";
+} else {
+
+    $nama_pengguna = $_SESSION['nama'] ?? '';
+    $nomor_telpon = $_SESSION['nomor_telpon'] ?? '';
+    $usertype = $_SESSION['usertype'];
 }
 
-// Proses form saat disubmit
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $nama_pengadu = $_POST['name'];
+    $nama_pengguna = $_SESSION['nama'] ?? 'Guest';
+
+
+    $nomor_telpon = $_SESSION['nomor_telpon'] ?? ($_POST['noTelepon'] ?? 'Tidak Tersedia');
     $tanggal_melaporkan = $_POST['report_date'];
-    $nomor_telepon = $_POST['phone'];
-    $tanggal_menginap = $_POST['stay_date'];
+    $tanggal_menginap = $_POST['tanggalMenginap'];
     $deskripsi_masalah = $_POST['description'];
     $jenis_masalah = $_POST['category'];
     $ciri_ciri = $_POST['features'];
     $bukti_masalah = null;
 
-    // Memproses file upload
-    if (isset($_FILES['image-upload']) && $_FILES['image-upload']['error'] == 0) {
-        $bukti_masalah = file_get_contents($_FILES['image-upload']['tmp_name']);
-    } else {
-        $bukti_masalah = null;
+
+    $uploadOk = 1;
+    $target_dir = "uploads/";
+    $image = $_FILES['image-upload'];
+    $target_file = $target_dir . uniqid() . basename($image["name"]);
+    $imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
+
+    if ($image) {
+        $check = getimagesize($image["tmp_name"]);
+        if ($check === false) {
+            die("File ini bukan gambar.");
+        }
+        if ($image["size"] > 2000000) {
+            die("Maaf, file Anda terlalu besar.");
+        }
+        if (!in_array($imageFileType, ['jpg', 'jpeg', 'png', 'gif'])) {
+            die("Hanya file JPG, JPEG, PNG & GIF yang diperbolehkan.");
+        }
+        if (!move_uploaded_file($image["tmp_name"], $target_file)) {
+            die("Terjadi kesalahan saat mengunggah file.");
+        }
     }
 
-    // Query untuk menyimpan data
-    $stmt = $conn->prepare("INSERT INTO laporan (nama_pengadu, tanggal_melaporkan, nomor_telepon, tanggal_menginap, deskripsi_masalah, jenis_masalah, ciri_ciri, bukti_masalah) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
-    $stmt->bind_param("ssssssss", $nama_pengadu, $tanggal_melaporkan, $nomor_telepon, $tanggal_menginap, $deskripsi_masalah, $jenis_masalah, $ciri_ciri, $bukti_masalah);
+
+
+
+
+    list($tinggi, $tubuh, $kulit, $rambut, $wajah) = explode(", ", $ciri_ciri);
+
+    $stmt = $conn->prepare("INSERT INTO kinerja (nama_pengadu, tanggal_melapor, no_telepon_pengadu, tanggal_menginap, deskripsi_masalah, jenis_masalah, tinggi, tubuh, kulit, rambut, wajah, file_bukti) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+
+    $stmt->bind_param("ssssssssssss", $nama_pengguna, $tanggal_melaporkan, $nomor_telpon, $tanggal_menginap, $deskripsi_masalah, $jenis_masalah, $tinggi, $tubuh, $kulit, $rambut, $wajah, $target_file);
 
     if ($stmt->execute()) {
-        $success_message = "Laporan berhasil dikirim!";
+        header("Location: kinerja.php?status=success");
+        exit();
     } else {
-        $error_message = "Gagal mengirim laporan: " . $conn->error;
+        header("Location: kinerja.php?status=error");
+        exit();
     }
 
-    $stmt->close();
+
 }
 
-$nama_pengguna = isset($_SESSION['nama']) ? htmlspecialchars($_SESSION['nama']) : '';
-$nomor_telpon = isset($_SESSION['nomor_telpon']) ? htmlspecialchars($_SESSION['nomor_telpon']) : '';
-$email = isset($_SESSION['email']) ? $_SESSION['email'] : null;
-$usertype = $_SESSION['usertype'];
-// Koneksi ke database
 
-$query = "
-SELECT id, nama_pemesan, email, villa_id, jumlah_orang, tanggal_checkin,
-    tanggal_checkout, created_at
-    FROM pemesanan
-    WHERE email = ? OR email = (
-        SELECT email FROM users WHERE nomor_telpon = ?
-    )
-";
+// $nama_pengguna = isset($_SESSION['nama']) ? htmlspecialchars($_SESSION['nama']) : '';
+// $nomor_telpon = isset($_SESSION['nomor_telpon']) ? htmlspecialchars($_SESSION['nomor_telpon']) : '';
+// $email = isset($_SESSION['email']) ? $_SESSION['email'] : null;
+// $usertype = $_SESSION['usertype'];
 
-$stmt = mysqli_prepare($conn, $query);
-mysqli_stmt_bind_param($stmt, "ss", $email, $nomor_telpon);
-mysqli_stmt_execute($stmt);
-$result = mysqli_stmt_get_result($stmt);
-$data_tersedia = mysqli_num_rows($result) > 0;
 
-$ranges = []; // Menyimpan rentang tanggal
-if ($result->num_rows > 0) {
-    while ($row = $result->fetch_assoc()) {
-        $ranges[] = [
-            'checkin' => $row['tanggal_checkin'],
-            'checkout' => $row['tanggal_checkout']
-        ];
-    }
-}
 
 $conn->close();
 ?>
@@ -86,11 +111,14 @@ $conn->close();
 
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Laporan Kinerja</title>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.8/dist/sweetalert2.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.8/dist/sweetalert2.all.min.js"></script>
     <style>
         body {
             width: 100vw;
@@ -177,7 +205,7 @@ $conn->close();
         }
 
         textarea {
-            height: 110px; /* Increase the height of the textarea here */
+            height: 110px;
         }
 
         button,
@@ -229,17 +257,42 @@ $conn->close();
         }
     </style>
 </head>
+
 <body>
     <div class="blur-bg"></div>
-    
+
     <div class="form-container">
         <h1>LAPORAN KINERJA</h1>
+        <?php
+        $status = filter_input(INPUT_GET, 'status', FILTER_SANITIZE_STRING);
+        if ($status === 'success') {
+            echo "<script>
+        Swal.fire({
+            icon: 'success',
+            title: 'Pengaduan berhasil dikirim!',
+            text: 'Terima kasih atas laporan Anda.',
+            showConfirmButton: true
+        }).then(function() {
+            window.location.href = 'userhome.php';
+        });
+    </script>";
+        } elseif ($status === 'error') {
+            echo "<script>
+        Swal.fire({
+            icon: 'error',
+            title: 'Terjadi kesalahan!',
+            text: 'Silakan coba lagi.',
+            showConfirmButton: true
+        });
+    </script>";
+        }
+        ?>
 
         <form action="" method="POST" enctype="multipart/form-data">
             <div class="form-row">
                 <div>
                     <label for="name">Nama Pengadu:</label>
-                    <textarea id="name" name="name"  required readonly><?php echo $nama_pengguna; ?></textarea>
+                    <textarea id="name" name="name" required readonly><?php echo $nama_pengguna; ?></textarea>
                 </div>
                 <div>
                     <label for="report_date">Tanggal Melaporkan:</label>
@@ -249,8 +302,8 @@ $conn->close();
 
             <div class="form-row">
                 <div>
-                    <label for="phone">Nomor Telepon:</label>
-                    <textarea id="phone" name="phone"  required readonly><?php echo $nomor_telpon; ?></textarea>
+                    <label for="phone">Nomor Telpon:</label>
+                    <textarea id="phone" name="phone" required readonly><?php echo $nomor_telpon; ?></textarea>
                 </div>
                 <div>
                     <label for="tanggalMenginap">Tanggal Menginap:</label>
@@ -261,7 +314,7 @@ $conn->close();
             <div class="form-row">
                 <div style="flex: 1;">
                     <label for="description">Deskripsi Masalah:</label>
-                    <textarea id="description" name="description" rows="6" required></textarea> <!-- You can change the number of rows here -->
+                    <textarea id="description" name="description" rows="6" required></textarea>
                 </div>
                 <div style="flex: 1;">
                     <label for="category">Jenis Masalah:</label>
@@ -272,25 +325,31 @@ $conn->close();
                         <option value="Tidak Tersedia saat dibutuhkan">Tidak Tersedia saat dibutuhkan</option>
                         <option value="Lainnya">Lainnya</option>
                     </select>
-                    <!-- Dropdown Ciri-Ciri placed inside the same column -->
-                    <label for="features">Ciri-Ciri:</label>
-                    <select id="features" name="features" required>
-                        <option value="Pendek, Kurus, Sawo Matang, Oval, Gelombang">Pendek, Kurus, Sawo Matang, Oval, Gelombang</option>
-                        <option value="Sedang, Sedang, Cerah, Bulat, Lurus">Sedang, Sedang, Cerah, Bulat, Lurus</option>
-                        <option value="Tinggi, Berisi, Gelap, Persegi, Keriting">Tinggi, Berisi, Gelap, Persegi, Keriting</option>
-                        <option value="Sangat Tinggi, Gemuk, Sangat Cerah, Lonjong, Panjang">Sangat Tinggi, Gemuk, Sangat Cerah, Lonjong, Panjang</option>
-                        <option value="Sedang, Berisi, Sawo Matang, Segitiga, Bergelombang">Sedang, Berisi, Sawo Matang, Segitiga, Bergelombang</option>
-                    </select>
+
+
                 </div>
             </div>
 
-            <div class="upload-container">
+            <div class="form-row">
                 <label for="image-upload">Bukti Masalah:</label>
-                <input type="file" id="image-upload" name="image-upload" accept="image/*" required>
+                <input type="file" id="image-upload" class="form-control" name="image-upload" accept="image/*" required>
+                <label for="features">Ciri-Ciri:</label>
+                <select id="features" name="features" required>
+                    <?php
+
+                    foreach ($ciri_ciri_options as $option) {
+                        echo "<option value=\"{$option['tinggi']}, {$option['tubuh']}, {$option['kulit']}, {$option['rambut']}, {$option['wajah']}\">";
+                        echo "{$option['tinggi']}, {$option['tubuh']}, {$option['kulit']}, {$option['rambut']}, {$option['wajah']}";
+                        echo "</option>";
+                    }
+                    ?>
+                </select>
             </div>
 
+
+
             <div class="button-container">
-            <button type="button" onclick="window.location.href='userhome.php';">Kembali</button>
+                <button type="button" onclick="window.location.href='userhome.php';">Kembali</button>
                 <button type="submit" class="submit-button">Submit</button>
             </div>
         </form>
@@ -303,73 +362,41 @@ $conn->close();
     </div>
 </body>
 <script>
-    function setAllowedDates(inputId, ranges) {
-        const dateInput = document.getElementById(inputId);
 
-        if (ranges.length === 0) {
-            // Tidak ada rentang tanggal
-            dateInput.disabled = false; // Tetap bisa diklik
-            dateInput.addEventListener("click", () => {
-                alert("Tidak ada tanggal yang tersedia untuk dipilih.");
+    const checkInInput = document.getElementById('tanggalMenginap');
+    const reportInput = document.getElementById('report_date');
+
+
+    function validateDates() {
+
+        let tanggalMenginap = new Date(checkInInput.value);
+        let report_date = new Date(reportInput.value);
+        let currentDate = new Date();
+
+        // Validasi jika tanggal laporan lebih dari tanggal menginap
+        if (report_date && tanggalMenginap && report_date < tanggalMenginap) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Tanggal Laporan Tidak Valid',
+                text: 'Tanggal laporan tidak boleh lebih awal dari tanggal menginap!',
             });
             return;
         }
 
-        // Aktifkan input
-        dateInput.disabled = false;
-
-        // Highlight valid ranges ketika input difokuskan
-        dateInput.addEventListener("focus", function () {
-            // Tambahkan style warna biru muda ke tanggal valid
-            const picker = this;
-            const minDates = ranges.map(range => new Date(range.checkin));
-            const maxDates = ranges.map(range => new Date(range.checkout));
-
-            picker.addEventListener("input", function () {
-                const calendar = document.querySelector("input[type='date']");
-                if (calendar) {
-                    // Highlight valid dates in blue
-                    const validDates = [];
-                    ranges.forEach(range => {
-                        const start = new Date(range.checkin);
-                        const end = new Date(range.checkout);
-                        while (start <= end) {
-                            validDates.push(new Date(start).toISOString().split("T")[0]);
-                            start.setDate(start.getDate() + 1);
-                        }
-                    });
-
-                    const cells = calendar.shadowRoot.querySelectorAll(".day"); // Misal shadow DOM
-                    cells.forEach(cell => {
-                        if (validDates.includes(cell.getAttribute("data-date"))) {
-                            cell.style.backgroundColor = "#add8e6"; // Biru muda
-                        }
-                    });
-                }
+        // Validasi jika tanggal menginap lebih dari tanggal saat ini
+        if (tanggalMenginap && tanggalMenginap > currentDate) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Tanggal Menginap Tidak Valid',
+                text: 'Tanggal menginap tidak boleh lebih dari tanggal saat ini!',
             });
-        });
-
-        // Ketika tanggal dipilih
-        dateInput.addEventListener("change", function () {
-            const selectedDate = this.value;
-            let isValid = ranges.some(range =>
-                selectedDate >= range.checkin && selectedDate <= range.checkout
-            );
-
-            if (!isValid) {
-                // Nonaktifkan klik tanggal jika invalid
-                alert("Tanggal tidak valid dalam rentang yang tersedia.");
-                this.value = ""; // Reset input jika tanggal di luar rentang
-            } else {
-                this.style.color = "#ffffff"; // Warna teks putih
-                this.blur(); // Tutup inputan setelah memilih
-            }
-        });
+            return;
+        }
     }
 
-    document.addEventListener("DOMContentLoaded", function () {
-        const ranges = <?php echo json_encode($ranges); ?>;
-        setAllowedDates("tanggalMenginap", ranges);
-    });
+    // Tambahkan event listener untuk memeriksa setiap kali input tanggal berubah
+    checkInInput.addEventListener('input', validateDates);
+    reportInput.addEventListener('input', validateDates);
 </script>
+
 </html>

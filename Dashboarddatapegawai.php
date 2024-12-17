@@ -1,5 +1,5 @@
 <?php
-require_once 'koneksi.php'; // Pastikan koneksi database terhubung.
+require_once 'koneksi.php';
 ?>
 
 <!DOCTYPE html>
@@ -26,73 +26,74 @@ require_once 'koneksi.php'; // Pastikan koneksi database terhubung.
             font-family: Arial, sans-serif;
             background-color: #fafafa;
             display: flex;
+            min-height: 100vh;
         }
 
         .sidebar {
-    background-color: #ffffff; 
-    width: 250px;
-    padding: 1.5em;
-    height: 100vh; 
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    color: #DD761C;
-    display: flex;
-    flex-direction: column;
-    position: fixed; 
-    top: 0; 
-    left: 0; 
-    overflow-y: auto; 
-    z-index: 1000; 
-}
+            background-color: #ffffff;
+            width: 250px;
+            padding: 1.5em;
+            height: 100vh;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            color: #DD761C;
+            display: flex;
+            flex-direction: column;
+            position: fixed;
+            top: 0;
+            left: 0;
+            overflow-y: auto;
+            z-index: 1000;
+        }
 
-.sidebar-header {
-    margin-bottom: 2em;
-    text-align: center;
-}
+        .sidebar-header {
+            margin-bottom: 2em;
+            text-align: center;
+        }
 
-.sidebar-header h2 {
-    font-size: 1.5em;
-    font-weight: bold;
-    color: #DD761C;
-    margin-top: 70px;
-}
+        .sidebar-header h2 {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #DD761C;
+            margin-top: 70px;
+        }
 
-.sidebar-menu {
-    display: flex;
-    flex-direction: column;
-    gap: 1.5em;
-}
+        .sidebar-menu {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5em;
+        }
 
-.menu-item {
-    display: flex;
-    align-items: center;
-    font-size: 1em;
-    text-decoration: none;
-    color: #DD761C;
-    padding: 0.8em 1em;
-    border-radius: 10px;
-    transition: background-color 0.3s, color 0.3s;
-}
+        .menu-item {
+            display: flex;
+            align-items: center;
+            font-size: 1em;
+            text-decoration: none;
+            color: #DD761C;
+            padding: 0.8em 1em;
+            border-radius: 10px;
+            transition: background-color 0.3s, color 0.3s;
+        }
 
-.menu-item i {
-    margin-right: 0.8em;
-    font-size: 1.2em;
-}
+        .menu-item i {
+            margin-right: 0.8em;
+            font-size: 1.2em;
+        }
 
-.menu-item:hover {
-    background-color: #fef3d4; /* Warna hover */
-    color: #DD761C;
-}
+        .menu-item:hover {
+            background-color: #fef3d4;
+            color: #DD761C;
+        }
 
-.menu-item.active {
-    background-color: #fef3d4; /* Warna latar item aktif */
-    font-weight: bold;
-}
-
+        .menu-item.active {
+            background-color: #fef3d4;
+            font-weight: bold;
+        }
 
         .main-content {
             flex: 1;
             padding: 30px 20px;
             background-color: #FDE49E;
+            margin-left: 250px;
             text-align: center;
             background-image: url('blubrown.jpg');
             background-size: cover;
@@ -108,37 +109,26 @@ require_once 'koneksi.php'; // Pastikan koneksi database terhubung.
             left: 0;
             right: 0;
             bottom: 0;
-            background-color: #FDE49E;
-            opacity: 0.7;
+            background-color: rgba(253, 228, 158, 0.7);
             z-index: 1;
         }
 
         .main-content h1 {
             position: relative;
             z-index: 2;
-            font-family: 'Baloo 2', cursive;
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
             font-size: 2.5rem;
             font-weight: bold;
             color: black;
             margin-bottom: 90px;
+            margin-top: 50px;
         }
 
-        /* Button Tambah Pegawai */
-        .btn-tambah {
-            position: absolute;
-            top: 30px;
-            left: 20px;
-            z-index: 2;
-        }
-
-        /* Tabel */
-        .table-table-striped {
+        .table-responsive {
             overflow-x: auto;
-            overflow-y: auto;
-            margin-top: 90px;
-            z-index: 2;
+            margin-top: 20px;
             position: relative;
-            max-height: 500px;
         }
 
         table {
@@ -146,14 +136,10 @@ require_once 'koneksi.php'; // Pastikan koneksi database terhubung.
             border-collapse: collapse;
             background-color: #fff;
             border-radius: 5px;
-            overflow: hidden;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
             position: relative;
             z-index: 2;
-            border-collapse: collapse;
-            table-layout: auto;
         }
-
 
         th,
         td {
@@ -172,52 +158,64 @@ require_once 'koneksi.php'; // Pastikan koneksi database terhubung.
         tr:hover {
             background-color: #f9f9f9;
         }
+
+        img {
+            max-width: 50px;
+            height: auto;
+        }
+
+        .btn-tambah {
+            position: absolute;
+            top: 30px;
+            left: 20px;
+            z-index: 2;
+        }
     </style>
 </head>
 
 <body>
 
-   <!-- Sidebar -->
-   <div class="sidebar">
-    <div class="sidebar-header">
-        <h2>Halo, Admin</h2>
-    </div>
-    <n class="sidebar-menu">
-        <a href="Dashboardadmin.php" class="menu-item">
-            <i class="fas fa-home"></i> Dashboard
-        </a>
-        <a href="DashbordKinerja.php" class="menu-item">
-            <i class="fas fa-smile"></i> Data Laporan Kinerja
-        </a>
-        <a href="DashbordFasilitas.php" class="menu-item active">
-    <i class="fas fa-chalkboard"></i> Data Laporan Fasilitas
-</a>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <h2>Halo, Admin</h2>
+        </div>
+        <n class="sidebar-menu">
+            <a href="Dashboardadmin.php" class="menu-item">
+                <i class="fas fa-home"></i> Dashboard
+            </a>
+            <a href="DashbordKinerja.php" class="menu-item">
+                <i class="fas fa-smile"></i> Data Laporan Kinerja
+            </a>
+            <a href="DashbordFasilitas.php" class="menu-item">
+                <i class="fas fa-chalkboard"></i> Data Laporan Fasilitas
+            </a>
 
-        <a href="DashboardTempt.php" class="menu-item">
-            <i class="fas fa-thumbs-up"></i> Data Laporan Tempat
-        </a>
-        <a href="Dashboarddatapegawai.php" class="menu-item">
-            <i class="fas fa-user"></i> Data Pegawai
-        </a>
-        <a href="datavilla.php" class="menu-item">
-            <i class="fas fa-building"></i> Data Villa
-        </a>
-    <div class="sidebar-footer">
-        <a href="logout.php" class="menu-item">
-            <i class="fas fa-sign-out-alt"></i> Logout
-        </a>
+            <a href="DashboardTempt.php" class="menu-item">
+                <i class="fas fa-thumbs-up"></i> Data Laporan Tempat
+            </a>
+            <a href="Dashboarddatapegawai.php" class="menu-item active">
+                <i class="fas fa-user"></i> Data Pegawai
+            </a>
+            <a href="datavilla.php" class="menu-item">
+                <i class="fas fa-building"></i> Data Villa
+            </a>
+            <div class="sidebar-footer">
+                <a href="logout.php" class="menu-item">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </a>
+            </div>
     </div>
-</div>
 
     <!-- Konten Utama -->
     <div class="main-content">
         <h1><strong>Data Pegawai</strong></h1>
 
-        <!-- Button Tambah Pegawai di pojok kiri atas -->
-        <a href="tambah_pegawai.php" class="btn btn-primary btn-tambah">Tambah Pegawai</a>
+
 
         <!-- Tabel Data Pegawai -->
         <table class="table-table-striped">
+
             <thead>
                 <tr>
                     <th>Nama</th>
@@ -275,6 +273,7 @@ require_once 'koneksi.php'; // Pastikan koneksi database terhubung.
                 }
                 ?>
             </tbody>
+            <a href="tambah_pegawai.php" class="btn btn-primary btn-tambah">Tambah Pegawai</a>
         </table>
     </div>
 

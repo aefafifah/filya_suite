@@ -1,5 +1,5 @@
 <?php
-session_start(); // Mulai sesi
+session_start();
 
 $host = "localhost";
 $user = "root";
@@ -11,15 +11,19 @@ if (!$data) {
     die("Koneksi gagal: " . mysqli_connect_error());
 }
 
-if (!isset($_SESSION['nomor_telpon']) && !isset($_SESSION['email'])){
-    header("Location: login.php");
-    exit();
-}
 
-$email = isset($_SESSION['email']) ? $_SESSION['email'] : null;
-$nama_pengguna = isset($_SESSION['nama']) ? $_SESSION['nama'] : null;
-$nomor_telpon = isset($_SESSION['nomor_telpon']) ? $_SESSION['nomor_telpon'] : null;
-$usertype = $_SESSION['usertype'];
+if (!isset($_SESSION['nomor_telpon']) && !isset($_SESSION['email'])) {
+
+    $nama_pengguna = "Tamu";
+    $usertype = "guest";
+    $nomor_telpon = "";
+} else {
+
+    $email = $_SESSION['email'] ?? null;
+    $nama_pengguna = $_SESSION['nama'] ?? null;
+    $nomor_telpon = $_SESSION['nomor_telpon'] ?? null;
+    $usertype = $_SESSION['usertype'];
+}
 
 
 $query = "
@@ -37,20 +41,9 @@ mysqli_stmt_execute($stmt);
 $result = mysqli_stmt_get_result($stmt);
 $data_tersedia = mysqli_num_rows($result) > 0;
 
-$ranges = []; // Menyimpan rentang tanggal
-if ($result->num_rows > 0) {
-    while ($row = $result->fetch_assoc()) {
-        $ranges[] = [
-            'checkin' => $row['tanggal_checkin'],
-            'checkout' => $row['tanggal_checkout']
-        ];
-    }
-}
-
 $stmt->close();
 mysqli_close($data);
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -58,9 +51,22 @@ mysqli_close($data);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Laporan Pengaduan</title>
-    <!-- Bootstrap CSS -->
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.8/dist/sweetalert2.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.8/dist/sweetalert2.all.min.js"></script>
     <style>
+        body {
+            width: 100vw;
+            height: 100vh;
+            margin: 0;
+            font-family: 'Outfit', sans-serif;
+            color: #FDE49E;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
         .blur-bg {
             background-image: url('bglogin-register.jpg');
             background-size: cover;
@@ -73,10 +79,6 @@ mysqli_close($data);
             z-index: -1;
         }
 
-        label.form-label {
-            color: #FDE49E;
-        }
-
         .blur-bg::before {
             content: "";
             position: absolute;
@@ -86,292 +88,278 @@ mysqli_close($data);
             height: 100%;
             background-color: rgba(28, 24, 24, 0.7);
             z-index: 1;
-            pointer-events: none;
-        }
-
-        .form-overlay {
-            background-color: rgba(255, 255, 255, 0.9);
-            border-radius: 10px;
-            padding: 20px;
-            width: 90%;
-            max-width: 600px;
-            margin: 50px auto;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-            position: relative;
-            z-index: 2;
-        }
-
-        .container-form {
-            display: flex;
-            justify-content: center;
-            align-items: flex-start;
-            padding-top: 80px;
-            min-height: calc(100vh - 100px);
-        }
-
-        body {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
         }
 
         .form-container {
-            display: flex;
-            width: 800px;
+            padding: 40px;
+            border-radius: 10px;
+            position: relative;
+            z-index: 2;
+            width: 90%;
+            max-width: 800px;
         }
 
-        .form-column {
-            flex: 1;
-            padding: 20px;
-        }
-
-        .form-control,
-        .form-select {
-            width: 100%;
-            height: 78px;
-            border-radius: 20px;
-        }
-
-        .btn-custom {
-            background-color: #DD761C;
-            color: #FDE49E;
-            border: none;
-            width: 100%;
-            border-radius: 20px;
-        }
-
-        .btn-custom:hover {
-            background-color: #FDE49E;
-        }
-
-        .btn-large {
-            background-color: #DD761C;
-            color: #FDE49E;
-            width: 400px;
-            height: 77px;
-            border: none;
-            font-size: 16px;
-            border-radius: 20px;
-        }
-
-        .btn-small {
-            background-color: white;
+        h1 {
             color: #DD761C;
-            width: 181.5px;
-            height: 50px;
-            border: 2px solid #DD761C;
-            margin: 0 5px;
-            border-radius: 20px;
+            font-size: 64px;
+            text-align: center;
+            margin-bottom: 20px;
         }
 
-        .btn-small-submit {
-            background-color: #DD761C;
-            color: #FDE49E;
-            width: 181.5px;
-            height: 50px;
-            border: none;
-            margin: 0 5px;
-            border-radius: 20px;
+        label {
+            font-size: 14px;
+            display: block;
+            margin: 10px 0 5px;
         }
-        /* Cursor pointer untuk input date */
-        #tanggalMenginap {
+
+        .form-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+
+        .form-row div {
+            flex: 1;
+            margin-right: 30px;
+        }
+
+        .form-row div:last-child {
+            margin-right: 0;
+        }
+
+        input[type="text"],
+        input[type="tel"],
+        input[type="date"],
+        textarea,
+        select {
+            width: 100%;
+            height: 50px;
+            padding: 10px;
+            font-size: 14px;
+            border: none;
+            border-radius: 5px;
+        }
+
+        .masalah-form-control {
+            height: 140px;
+        }
+
+        button,
+        .upload-button {
+            height: 45px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
             cursor: pointer;
         }
 
-        /* Ketika input tanggal disabled */
-        #tanggalMenginap:disabled {
-            background-color: #e0e0e0; /* Abu-abu */
-            color: #a0a0a0;
-            cursor: not-allowed;
+        .upload-button {
+            width: 200px;
+            margin-top: 10px;
         }
 
-        /* Highlight valid range dengan warna biru muda */
-        #tanggalMenginap:focus {
-            outline: none; /* Hilangkan outline default */
-            box-shadow: 0 0 5px #add8e6; /* Warna biru muda */
+        .button-container {
+            text-align: right;
+            margin-top: 20px;
         }
 
-        /* Warna biru tua untuk tanggal yang dipilih */
-        #tanggalMenginap:focus:valid {
-            background-color: #0000ff; /* Biru tua */
-            color: #ffffff; /* Warna teks putih */
+        .button-container .back-button {
+            width: 120px;
+            background-color: white;
+            color: #DD761C;
+            display: inline-block;
+            margin-right: 10px;
+        }
+
+        .button-container .submit-button {
+            width: 120px;
+            background-color: #DD761C;
+            color: white;
+            display: inline-block;
+        }
+
+        button:hover {
+            opacity: 0.8;
+        }
+
+        .message {
+            color: white;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .upload-container {
+            margin-top: 10px;
         }
     </style>
 </head>
 
-<body>
 
+
+<body>
     <!-- Blurred background -->
     <div class="blur-bg"></div>
 
     <!-- Form section overlay -->
-    <div class="container-form">
-        <div class="form-overlay">
+    <div class="form-container">
+        <h1>LAPORAN FASILITAS</h1>
 
-            <!-- Pesan Status -->
-            <?php
-            if (isset($_GET['status'])) {
-                if ($_GET['status'] == 'success') {
-                    echo "<div class='alert alert-success text-center'>Pengaduan berhasil dikirim!</div>";
-                } elseif ($_GET['status'] == 'error') {
-                    echo "<div class='alert alert-danger text-center'>Terjadi kesalahan, silakan coba lagi.</div>";
-                }
+
+        <?php
+        if (isset($_GET['status'])) {
+            if ($_GET['status'] == 'success') {
+                echo "<script>
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Pengaduan berhasil dikirim!',
+                    text: 'Terima kasih atas laporan anda.',
+                    showConfirmButton: true
+                }).then(function() {
+                    window.location.href = 'userhome.php'; // Arahkan ke halaman userhome.php setelah menutup notifikasi
+                });
+            </script>";
+            } elseif ($_GET['status'] == 'error') {
+                echo "<script>
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Terjadi kesalahan!',
+                    text: 'Silakan coba lagi.',
+                    showConfirmButton: true
+                });
+            </script>";
             }
-            ?>
+        }
+        ?>
 
-            <form method="POST" action="fasilitas.php" enctype="multipart/form-data">
-                <div class="row">
-                    <!-- Kolom Kiri -->
-                    <div class="col-md-6">
-                        <div class="mb-3">
-                            <label for="namaPengadu" class="form-label">Nama Pengadu</label>
-                            <textarea class="form-control" id="namaPengadu" name="namaPengadu" rows="3" placeholder="Masukkan nama anda" required readonly><?php echo $nama_pengguna; ?></textarea>
-                        </div>
 
-                        <div class="mb-3">
-                            <label for="noTeleponPengadu" class="form-label">No Telepon Pengadu</label>
-                            <textarea class="form-control" id="noTeleponPengadu" name="noTeleponPengadu" rows="3" placeholder="Masukkan nomor anda" required readonly><?php echo $nomor_telpon; ?></textarea>
-                        </div>
+        <form method="POST" action="fasilitas.php" enctype="multipart/form-data">
+            <div class="form-row">
+                <!-- Kolom Kiri -->
+                <div>
+                    <label for="namaPengadu">Nama Pengadu:</label>
+                    <textarea class="form-control" id="namaPengadu" name="namaPengadu" rows="3"
+                        placeholder="Masukkan nama anda" required readonly><?php echo $nama_pengguna; ?></textarea>
+                </div>
+                <div>
+                    <label for="tanggalMelaporkan">Tanggal Melaporkan:</label>
+                    <input type="date" class="form-control" id="tanggalMelaporkan" name="tanggalMelaporkan" required>
+                </div>
+            </div>
 
-                        <div class="mb-3">
-                            <label for="tanggalMenginap" class="form-label">Tanggal Menginap</label>
-                            <input type="date" class="form-control" id="tanggalMenginap" name="tanggalMenginap" required>
-                        </div>
+            <div class="form-row">
+                <!-- Kolom Kanan -->
+                <div>
+                    <label for="noTeleponPengadu">No Telepon Pengadu:</label>
+                    <textarea class="form-control" id="noTeleponPengadu" name="noTeleponPengadu" rows="3"
+                        placeholder="Masukkan nomor anda" required <?php if ($usertype === 'guest'): ?>     <?php echo ''; ?>
+                        <?php else: ?> readonly <?php endif; ?>><?php echo $nomor_telpon; ?></textarea>
+                </div>
 
-                        <div class="mb-3">
-                            <label for="deskripsiMasalah" class="form-label">Deskripsi Masalah</label>
-                            <textarea class="form-control" id="deskripsiMasalah" name="deskripsiMasalah" rows="3" placeholder="Deskripsikan masalah yang terjadi" required></textarea>
-                        </div>
+                <div>
+                    <label for="tanggalMenginap">Tanggal Menginap:</label>
+                    <input type="date" class="form-control" id="tanggalMenginap" name="tanggalMenginap" required>
+                </div>
 
-                        <div class="mb-3">
-                            <label for="uploadBukti" class="form-label">Upload Bukti</label>
-                            <input type="file" class="form-control" id="uploadBukti" name="uploadBukti" accept="image/*" required>
-                            <small class="form-text text-muted">Upload bukti dalam format gambar (JPG, PNG, etc.).</small>
-                        </div>
-                    </div>
+            </div>
 
-                    <!-- Kolom Kanan -->
-                    <div class="col-md-6">
-                        <div class="mb-3">
-                            <label for="tanggalMelaporkan" class="form-label">Tanggal Melaporkan</label>
-                            <input type="date" class="form-control" id="tanggalMelaporkan" name="tanggalMelaporkan" required>
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="tempatKerusakan" class="form-label">Tempat Kerusakan</label>
-                            <input type="text" class="form-control" id="tempatKerusakan" name="tempatKerusakan" placeholder="Lokasi Kerusakan" required>
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="jenisMasalah" class="form-label">Jenis Masalah</label>
-                            <select class="form-select" id="jenisMasalah" name="jenisMasalah" required>
-                                <option selected disabled>Pilih Jenis Masalah</option>
-                                <option value="Wifi">Wifi</option>
-                                <option value="Air Conditioner">Air Conditioner</option>
-                                <option value="Water Heater">Water Heater</option>
-                                <option value="Wastafel">Wastafel</option>
-                                <option value="Bed">Bed</option>
-                                <option value="Lainnya">Lainnya</option>
-                            </select>
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="pilihKategori" class="form-label">Pilih Kategori</label>
-                            <select class="form-select" id="pilihKategori" name="pilihKategori" required>
-                                <option selected disabled>Pilih Kategori</option>
-                                <option value="Fasilitas yang dijanjikan tidak tersedia">Fasilitas yang dijanjikan tidak tersedia</option>
-                                <option value="Fasilitas tidak berfungsi">Fasilitas tidak berfungsi</option>
-                                <option value="Kualitas fasilitas buruk">Kualitas fasilitas buruk</option>
-                                <option value="Lainnya">Lainnya</option>
-                            </select>
-                        </div>
+            <div class="form-row">
+                <!-- Kolom Kiri -->
+                <div style="flex;">
+                    <label for="deskripsiMasalah">Deskripsi Masalah:</label>
+                    <textarea class="masalah-form-control" id="deskripsiMasalah" name="deskripsiMasalah" rows="6"
+                        placeholder="Deskripsikan masalah yang terjadi" required></textarea>
+                    <div class="upload-container">
+                        <label for="uploadBukti">Upload Bukti:</label>
+                        <input type="file" class="form-control" id="uploadBukti" name="uploadBukti" accept="image/*"
+                            required>
+                        <!-- <small class="form-text text-muted">Upload bukti dalam format gambar (JPG, PNG, etc.).</small> -->
                     </div>
                 </div>
 
-                <div class="mb-3 text-center">
-                    <!-- Tombol Back -->
-                    <button type="button" onclick="window.location.href='userhome.php';">Kembali</button>
-                    <!-- Tombol Submit -->
-                    <button type="submit" class="btn-small-submit">Submit</button>
-                </div>
-            </form>
-        </div>
-    </div>
 
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+                <!-- Kolom Kanan -->
+                <div style="flex;">
+                    <label for="jenisMasalah">Jenis Masalah:</label>
+                    <select class="form-select" id="jenisMasalah" name="jenisMasalah" required>
+                        <option selected disabled>Pilih Jenis Masalah</option>
+                        <option value="Wifi">Wifi</option>
+                        <option value="Air Conditioner">Air Conditioner</option>
+                        <option value="Water Heater">Water Heater</option>
+                        <option value="Wastafel">Wastafel</option>
+                        <option value="Bed">Bed</option>
+                        <option value="Lainnya">Lainnya</option>
+                    </select>
+
+                    <label for="pilihKategori">Pilih Kategori:</label>
+                    <select class="form-select" id="pilihKategori" name="pilihKategori" required>
+                        <option selected disabled>Pilih Kategori</option>
+                        <option value="Fasilitas yang dijanjikan tidak tersedia">Fasilitas yang dijanjikan tidak
+                            tersedia</option>
+                        <option value="Fasilitas tidak berfungsi">Fasilitas tidak berfungsi</option>
+                        <option value="Kualitas fasilitas buruk">Kualitas fasilitas buruk</option>
+                        <option value="Lainnya">Lainnya</option>
+                    </select>
+
+
+                    <label for="tempatKerusakan">Tempat Kerusakan</label>
+                    <input type="text" class="form-control" id="tempatKerusakan" name="tempatKerusakan"
+                        placeholder="Lokasi Kerusakan" required>
+
+                </div>
+            </div>
+
+
+
+            <div class="button-container">
+                <!-- Tombol Back -->
+                <button type="button" class="back-button"
+                    onclick="window.location.href='userhome.php';">Kembali</button>
+                <!-- Tombol Submit -->
+                <button type="submit" class="submit-button">Submit</button>
+            </div>
+        </form>
+
+        <!-- Bootstrap JS -->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 </body>
-<script>
-    function setAllowedDates(inputId, ranges) {
-        const dateInput = document.getElementById(inputId);
 
-        if (ranges.length === 0) {
-            // Tidak ada rentang tanggal
-            dateInput.disabled = false; // Tetap bisa diklik
-            dateInput.addEventListener("click", () => {
-                alert("Tidak ada tanggal yang tersedia untuk dipilih.");
+
+<script>
+    // Ambil elemen input
+    const checkInInput = document.getElementById('tanggalMenginap');
+    const reportInput = document.getElementById('tanggalMelaporkan');
+
+    // Fungsi validasi
+    function validateDates() {
+        // Ambil nilai input tanggal
+        let tanggalMenginap = new Date(checkInInput.value);
+        let tanggalMelaporkan = new Date(reportInput.value);
+        let currentDate = new Date();
+
+        // Validasi jika tanggal laporan lebih dari tanggal menginap
+        if (tanggalMelaporkan && tanggalMenginap && tanggalMelaporkan < tanggalMenginap) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Tanggal Laporan Tidak Valid',
+                text: 'Tanggal laporan tidak boleh lebih awal dari tanggal menginap!',
             });
             return;
         }
 
-        // Aktifkan input
-        dateInput.disabled = false;
-
-        // Highlight valid ranges ketika input difokuskan
-        dateInput.addEventListener("focus", function () {
-            // Tambahkan style warna biru muda ke tanggal valid
-            const picker = this;
-            const minDates = ranges.map(range => new Date(range.checkin));
-            const maxDates = ranges.map(range => new Date(range.checkout));
-
-            picker.addEventListener("input", function () {
-                const calendar = document.querySelector("input[type='date']");
-                if (calendar) {
-                    // Highlight valid dates in blue
-                    const validDates = [];
-                    ranges.forEach(range => {
-                        const start = new Date(range.checkin);
-                        const end = new Date(range.checkout);
-                        while (start <= end) {
-                            validDates.push(new Date(start).toISOString().split("T")[0]);
-                            start.setDate(start.getDate() + 1);
-                        }
-                    });
-
-                    const cells = calendar.shadowRoot.querySelectorAll(".day"); // Misal shadow DOM
-                    cells.forEach(cell => {
-                        if (validDates.includes(cell.getAttribute("data-date"))) {
-                            cell.style.backgroundColor = "#add8e6"; // Biru muda
-                        }
-                    });
-                }
+        // Validasi jika tanggal menginap lebih dari tanggal saat ini
+        if (tanggalMenginap && tanggalMenginap > currentDate) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Tanggal Menginap Tidak Valid',
+                text: 'Tanggal menginap tidak boleh lebih dari tanggal saat ini!',
             });
-        });
-
-        // Ketika tanggal dipilih
-        dateInput.addEventListener("change", function () {
-            const selectedDate = this.value;
-            let isValid = ranges.some(range =>
-                selectedDate >= range.checkin && selectedDate <= range.checkout
-            );
-
-            if (!isValid) {
-                // Nonaktifkan klik tanggal jika invalid
-                alert("Tanggal tidak valid dalam rentang yang tersedia.");
-                this.value = ""; // Reset input jika tanggal di luar rentang
-            } else {
-                this.style.color = "#ffffff"; // Warna teks putih
-                this.blur(); // Tutup inputan setelah memilih
-            }
-        });
+            return;
+        }
     }
 
-    document.addEventListener("DOMContentLoaded", function () {
-        const ranges = <?php echo json_encode($ranges); ?>;
-        setAllowedDates("tanggalMenginap", ranges);
-    });
+    // Tambahkan event listener untuk memeriksa setiap kali input tanggal berubah
+    checkInInput.addEventListener('input', validateDates);
+    reportInput.addEventListener('input', validateDates);
 </script>
 
 </html>

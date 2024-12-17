@@ -27,12 +27,12 @@ $query = "
     jenis_masalah, deskripsi_masalah_fasilitas AS deskripsi, status
     FROM fasilitas WHERE no_telepon_pengadu = ?
     UNION
-    SELECT 'kinerja' AS kategori, tanggal_menginap, waktu_kejadian AS tanggal_laporan, '' AS tempat_objek,
-    jenis_masalah, deskripsi_masalah AS deskripsi, '' AS status
+    SELECT 'kinerja' AS kategori, tanggal_menginap, tanggal_melapor AS tanggal_laporan, '' AS tempat_objek,
+    jenis_masalah, deskripsi_masalah AS deskripsi, status AS status
     FROM kinerja WHERE no_telepon_pengadu = ?
     UNION
     SELECT 'tempat' AS kategori, tanggal_menginap, waktu_pengaduan AS tanggal_laporan, '' AS tempat_objek,
-    jenis_masalah, deskripsi_masalah AS deskripsi, '' AS status
+    jenis_masalah, deskripsi_masalah AS deskripsi, status AS status
     FROM tempat WHERE no_telepon_pengadu = ?
 ";
 
@@ -51,7 +51,6 @@ $data_tersedia = mysqli_num_rows($result) > 0;
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Data Laporan Saya - Filya Suite</title>
     <style>
-        /* Reset CSS */
         * {
             margin: 0;
             padding: 0;
@@ -78,7 +77,7 @@ $data_tersedia = mysqli_num_rows($result) > 0;
             opacity: 0;
         }
 
-        /* Sidebar */
+
         .sidebar {
             background-color: #f7d76e;
             width: 20%;
@@ -86,9 +85,11 @@ $data_tersedia = mysqli_num_rows($result) > 0;
             color: #f07126;
             display: flex;
             flex-direction: column;
-            justify-content: center;
-            align-items: flex-start;
+            justify-content: flex-start;
             height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
         }
 
         .sidebar h2 {
@@ -123,38 +124,22 @@ $data_tersedia = mysqli_num_rows($result) > 0;
             cursor: pointer;
         }
 
-        /*pemberian jarak antar menu ke simbol*/
         .menu-item img {
             margin-right: 0.6em;
-            /* Tambah jarak antara ikon dan teks */
             width: 24px;
             height: 24px;
         }
 
-        .menu-item:hover {
+        .menu-item.active {
+            color: white;
             background-color: #FFFFFF;
             color: #DD761C;
         }
 
-        .menu-item:hover::before {
-            content: '';
-            position: absolute;
-            left: -14px;
-            width: 8px;
-            height: 8px;
-            background-color: #FFFFFF;
-            border-radius: 50%;
-        }
-
-        .menu-item.active {
-            color: white;
-            /* Warna putih permanen */
-            font-weight: bold;
-            /* Opsional: Menambahkan penekanan visual */
-        }
 
         .content {
             flex: 1;
+            margin-left: 20%;
             padding: 2em;
             background-image: url('abcd.jpg');
             background-size: cover;
@@ -166,11 +151,9 @@ $data_tersedia = mysqli_num_rows($result) > 0;
             align-items: center;
             color: #f07126;
             height: 100vh;
-            /* Full page height */
             overflow: hidden;
         }
 
-        /* Smoke overlay */
         .content::before {
             content: '';
             position: absolute;
@@ -179,22 +162,31 @@ $data_tersedia = mysqli_num_rows($result) > 0;
             width: 100%;
             height: 100%;
             background: rgba(255, 255, 255, 0.7);
-            /* Semi-transparent white for smoke effect */
-
             z-index: -1;
-            /* Place behind the content */
         }
 
 
         .content h1 {
-            position: absolute;
-            top: 26%;
+            position: sticky;
+            top: 10%;
             left: 50%;
-            transform: translate(-50%, -50%);
+            transform: translateX(-50%);
             color: var(--highlight-color);
             font-size: 36px;
             margin-bottom: 10px;
             font-weight: bold;
+            transition: top 0.5s ease-in-out;
+            z-index: 10;
+        }
+
+
+        .table-container {
+            position: relative;
+            margin-top: 5%;
+            width: 100%;
+            text-align: center;
+            overflow-y: auto;
+            max-height: auto;
         }
 
         .table-container table {
@@ -203,37 +195,11 @@ $data_tersedia = mysqli_num_rows($result) > 0;
             background-color: rgba(255, 255, 255, 0.9);
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            overflow: hidden;
+            transition: top 0.5s ease-in-out;
+            margin-top: 30px;
+            height: auto;
         }
 
-        <?php if ($data_tersedia): ?>
-    .table-container table {
-        width: 100%;
-        border-collapse: collapse;
-        background-color: rgba(255, 255, 255, 0.9);
-        border-radius: 10px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        overflow: hidden;
-        text-align: center;
-        position: absolute;
-        top: 52%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        width: 75%;
-        transition: top 0.5s ease-in-out; /* Transisi halus hanya jika $data_tersedia true */
-    }
-    .content h1 {
-        position: absolute;
-        top: 26%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        color: var(--highlight-color);
-        font-size: 36px;
-        margin-bottom: 10px;
-        font-weight: bold;
-        transition: top 0.5s ease-in-out; /* Transisi halus hanya jika $data_tersedia true */
-    }
-    <?php endif; ?>
 
         .table-container th,
         .table-container td {
@@ -243,8 +209,14 @@ $data_tersedia = mysqli_num_rows($result) > 0;
         }
 
         .table-container th {
+            position: sticky;
+            top: 0;
             background-color: var(--primary-color);
             color: var(--text-color);
+            z-index: 2;
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
         }
 
         .table-container tr:hover {
@@ -262,6 +234,44 @@ $data_tersedia = mysqli_num_rows($result) > 0;
             transform: translate(-50%, -50%);
             width: 75%;
         }
+
+
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+            }
+
+            .content {
+                margin-left: 0;
+                padding: 1.5em;
+            }
+
+            .content h1 {
+                font-size: 28px;
+            }
+
+            .table-container {
+                margin-top: 3%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .menu-item {
+                font-size: 1em;
+                padding: 0.5em 1em;
+            }
+
+            .content h1 {
+                font-size: 24px;
+            }
+
+            .table-container th,
+            .table-container td {
+                padding: 10px;
+            }
+        }
     </style>
 </head>
 
@@ -272,7 +282,7 @@ $data_tersedia = mysqli_num_rows($result) > 0;
             <img src="https://img.icons8.com/material-outlined/24/000000/home--v2.png" alt="Home Icon" />
             Halaman Utama
         </a>
-        <a onclick="smoothRedirect('data_laporan.php')" class="menu-item">
+        <a onclick="smoothRedirect('data_laporan.php')" class="menu-item active">
             <img src="https://img.icons8.com/ios/24/000000/happy--v1.png" alt="Report Icon" />
             Data Laporan Saya
         </a>
@@ -316,47 +326,52 @@ $data_tersedia = mysqli_num_rows($result) > 0;
                 <div class="no-data">
                     <p>Belum ada Kamar villa yang anda booking</p>
                     <p>Mengalami kendala atau merasa kurang puas dengan villa Filya Suite?<br>
-                        Yuk ajukan pengaduan Anda di <a href="#" onclick="smoothRedirect('userhome.php?showExtra=true')">sini</a>, dan bantu kami dalam meningkatkan kualitas villa Filya Suite.<br>
-                        Kami sangat menghargai setiap masukan dari Anda untuk terus menyempurnakan pengalaman Anda bersama kami.</p>
+                        Yuk ajukan pengaduan Anda di <a href="#"
+                            onclick="smoothRedirect('userhome.php?showExtra=true')">sini</a>, dan bantu kami dalam
+                        meningkatkan kualitas villa Filya Suite.<br>
+                        Kami sangat menghargai setiap masukan dari Anda untuk terus menyempurnakan pengalaman Anda bersama
+                        kami.</p>
                 </div>
             <?php endif; ?>
         </div>
     </div>
     <script>
-    // Script untuk smooth redirect
-    function smoothRedirect(url) {
-        document.body.classList.add("fade-out");
-        setTimeout(() => {
-            window.location.href = url;
-        }, 300); // Waktu transisi
-    }
 
-    // Fade-in effect for page load or reload
-    window.addEventListener("pageshow", (event) => {
-        if (event.persisted || event.type === "pageshow") {
+        function smoothRedirect(url) {
+            document.body.classList.add("fade-out");
+            setTimeout(() => {
+                window.location.href = url;
+            }, 300);
+        }
+
+
+        window.addEventListener("pageshow", (event) => {
+            if (event.persisted || event.type === "pageshow") {
+                document.body.classList.remove("fade-out");
+            }
+        });
+
+
+        window.addEventListener("load", () => {
             document.body.classList.remove("fade-out");
-        }
-    });
+        });
 
-    // Menghapus fade-out saat halaman pertama kali dimuat
-    window.addEventListener("load", () => {
-        document.body.classList.remove("fade-out");
-    });
+        <?php if ($data_tersedia): ?>
+            setTimeout(() => {
+                const table = document.querySelector('.table-container table');
+                if (table) {
+                    table.style.top = '37%';
+                }
+                const heading = document.querySelector('.content h1');
+                if (heading) {
+                    heading.style.top = '10%';
+                }
+            }, 250);
+        <?php endif; ?>
 
-    <?php if ($data_tersedia): ?>
-    // Script untuk mengubah posisi top setelah 3 detik
-    setTimeout(() => {
-        const table = document.querySelector('.table-container table');
-        if (table) {
-            table.style.top = '37%'; // Mengurangi posisi top sebesar 15%
-        }
-        const heading = document.querySelector('.content h1');
-        if (heading) {
-            heading.style.top = '11%'; // Menyesuaikan heading jika diperlukan
-        }
-    }, 250); // Setelah 3 detik
-    <?php endif; ?>
-</script>
+
+
+    </script>
 </body>
 
 </html>

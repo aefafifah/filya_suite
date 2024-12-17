@@ -1,18 +1,17 @@
 <?php
 session_start();
 
-// Redirect ke login.php jika pengguna belum login
 if (!isset($_SESSION['usertype'])) {
     header("Location: login.php");
     exit();
 }
 
-$nama = $_SESSION['nama'] ?? 'Tamu';  // Menangani pengguna tamu
+$nama = $_SESSION['nama'] ?? 'Tamu'; 
 $nomor_telpon = $_SESSION['nomor_telpon'] ?? '';
 $alamat = $_SESSION['alamat'] ?? '';
 
 
-// Cek jika pengguna adalah tamu
+
 $isGuest = $_SESSION['usertype'] === 'guest';
 ?>
 
@@ -26,7 +25,7 @@ $isGuest = $_SESSION['usertype'] === 'guest';
     <title>Filya Suite</title>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
-        /* Reset CSS */
+      
         * {
             margin: 0;
             padding: 0;
@@ -44,20 +43,20 @@ $isGuest = $_SESSION['usertype'] === 'guest';
             transition: opacity 0.5s ease;
         }
 
-        /* Fade-out effect for page transition */
+        
         body.fade-out {
             opacity: 0;
             transition: opacity 0.3s ease-in-out;
         }
 
-        /* Main container */
+        
         .container {
             display: flex;
             width: 100%;
             height: 100%;
         }
 
-        /* Sidebar */
+       
         .sidebar {
             background-color: #f7d76e;
             width: 20%;
@@ -77,19 +76,17 @@ $isGuest = $_SESSION['usertype'] === 'guest';
             color: #DD761C;
         }
 
-        /* Tambahkan kelas khusus untuk "Halo User" yaitu menyamakan
-        baris dengan menu */
+       
         .user-greeting {
             font-size: 1.8em;
             font-weight: bold;
             color: #DD761C;
             padding: 0.8em 1em;
-            /* padding agar selaras dengan menu */
             margin-bottom: 1.5em;
             display: flex;
             align-items: center;
             justify-content: flex-start;
-            /* selaras dengan menu */
+         
         }
 
         .menu-item {
@@ -107,30 +104,19 @@ $isGuest = $_SESSION['usertype'] === 'guest';
 
         }
 
-        /*pemberian jarak antar menu ke simbol*/
+        
         .menu-item img {
             margin-right: 0.6em;
-            /* Tambah jarak antara ikon dan teks */
             width: 24px;
             height: 24px;
         }
 
-        .menu-item:hover {
-            background-color: #FFFFFF;
-            color: #DD761C;
-        }
+        .menu-item.active {
+    color: white;
+    background-color: #FFFFFF;
+    color: #DD761C;
+}
 
-        .menu-item:hover::before {
-            content: '';
-            position: absolute;
-            left: -14px;
-            width: 8px;
-            height: 8px;
-            background-color: #FFFFFF;
-            border-radius: 50%;
-        }
-
-        /* Main content */
         .content {
             position: relative;
             width: 80%;
@@ -201,7 +187,6 @@ $isGuest = $_SESSION['usertype'] === 'guest';
             color: #DD761C;
         }
 
-        /* Extra buttons styling and hover effects */
         .extra-buttons {
             overflow: hidden;
             max-height: 0;
@@ -243,10 +228,10 @@ $isGuest = $_SESSION['usertype'] === 'guest';
             background-color: #FFFFFF;
             border-radius: 50%;
         }
-        /* Flashing animation for triggered effect */
+
         @keyframes flash {
             0%, 100% { background-color: #f7d76e; }
-            50% { background-color: #FFD700; } /* Warna flash */
+            50% { background-color: #FFD700; } 
         }
         .flash-triggered {
             animation: flash 0.5s ease-in-out infinite;
@@ -258,7 +243,7 @@ $isGuest = $_SESSION['usertype'] === 'guest';
     <div class="container">
     <div class="sidebar">
     <h2 class="user-greeting">Halo, <?php echo htmlspecialchars($nama); ?>!</h2>
-    <a onclick="smoothRedirect('userhome.php')" class="menu-item">
+    <a onclick="smoothRedirect('userhome.php')" class="menu-item active">
         <img src="https://img.icons8.com/material-outlined/24/000000/home--v2.png" alt="Home Icon" />
         Halaman Utama
     </a>
@@ -279,7 +264,6 @@ $isGuest = $_SESSION['usertype'] === 'guest';
         Logout
     </a>
     </div>
-        <!-- Main Content -->
         <div class="content">
             <h1>Selamat Datang Di Filya Suite</h1>
             <div class="button-container">
@@ -313,7 +297,7 @@ $isGuest = $_SESSION['usertype'] === 'guest';
             document.body.classList.add("fade-out");
             setTimeout(() => {
                 window.location.href = url;
-            }, 300); // Waktu transisi
+            }, 300); 
         }
 
         window.addEventListener("pageshow", (event) => {
@@ -325,14 +309,14 @@ $isGuest = $_SESSION['usertype'] === 'guest';
         window.addEventListener("load", () => {
             document.body.classList.remove("fade-out");
 
-// Periksa apakah showExtra ada di URL
+
 const urlParams = new URLSearchParams(window.location.search);
             if (urlParams.has('showExtra')) {
-                toggleExtraButtons(true); // Tampilkan ekstra tombol
+                toggleExtraButtons(true); 
                 const extraButtons = document.querySelectorAll(".extra-button");
                 extraButtons.forEach(button => button.classList.add("flash-triggered"));
                 
-                // Hentikan efek flash setelah 3 detik
+               
                 setTimeout(() => {
                     extraButtons.forEach(button => button.classList.remove("flash-triggered"));
                 }, 3000);
@@ -340,7 +324,7 @@ const urlParams = new URLSearchParams(window.location.search);
         });
 
         function handleBooking() {
-    const isGuest = <?php echo json_encode($isGuest); ?>; // Mendapatkan status guest dari PHP
+    const isGuest = <?php echo json_encode($isGuest); ?>; 
 
     if (isGuest) {
         Swal.fire({
@@ -352,14 +336,13 @@ const urlParams = new URLSearchParams(window.location.search);
             cancelButtonText: 'Tutup',
         }).then((result) => {
             if (result.isConfirmed) {
-                smoothRedirect('register.php');  // Arahkan ke halaman register
+                smoothRedirect('register.php');  
             }
         });
     } else {
-        smoothRedirect('booking.php');  // Lanjutkan ke halaman booking jika bukan guest
-    }
+        smoothRedirect('booking.php');  
 }
-
+        }
     </script>
 </body>
 

@@ -14,17 +14,16 @@ $db = "filya_suite";
 // Membuat koneksi ke database
 $conn = mysqli_connect($host, $user, $password, $db);
 
-// Periksa koneksi database
+
 if (!$conn) {
     die("Koneksi gagal: " . mysqli_connect_error());
 }
 
-// Ambil data dari sesi
 $nama = $_SESSION['nama'];
 $usertype = $_SESSION['usertype'];
 $nomor_telpon = $_SESSION['nomor_telpon'];
 
-// Ambil data email dari database berdasarkan nomor telepon (karena login.php menyimpan nomor telepon di sesi)
+
 $sql = "SELECT email FROM users WHERE nomor_telpon = ?";
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("s", $nomor_telpon);
@@ -262,6 +261,52 @@ mysqli_close($conn);
                 element.placeholder = placeholderText;
             }
         }
+        // Fungsi untuk memvalidasi tanggal
+function validateDates() {
+    const checkinDate = document.getElementById('checkin').value;
+    const checkoutDate = document.getElementById('checkout').value;
+    const today = new Date().toISOString().split('T')[0]; // Tanggal hari ini dalam format YYYY-MM-DD
+
+    if (checkinDate < today) {
+        Swal.fire('Tanggal Tidak Valid!', 'Tanggal check-in tidak boleh sebelum hari ini.', 'error');
+        document.getElementById('checkin').value = ''; // Reset input check-in
+        return false;
+    }
+
+    if (checkoutDate && checkoutDate <= checkinDate) {
+        Swal.fire('Tanggal Tidak Valid!', 'Tanggal check-out harus setelah tanggal check-in.', 'error');
+        document.getElementById('checkout').value = ''; // Reset input check-out
+        return false;
+    }
+
+    return true;
+}
+
+// Tambahkan event listener untuk memvalidasi tanggal
+document.getElementById('checkin').addEventListener('change', validateDates);
+document.getElementById('checkout').addEventListener('change', validateDates);
+
+// Highlight Rentang Tanggal
+function highlightDateRange() {
+    const checkin = document.getElementById('checkin').value;
+    const checkout = document.getElementById('checkout').value;
+
+    if (checkin && checkout) {
+        const checkinDate = new Date(checkin);
+        const checkoutDate = new Date(checkout);
+
+        const days = Math.ceil((checkoutDate - checkinDate) / (1000 * 60 * 60 * 24));
+        Swal.fire({
+            title: 'Rentang Tanggal Dipilih',
+            text: `Anda memilih rentang ${days} hari antara ${checkin} dan ${checkout}.`,
+            icon: 'info'
+        });
+    }
+}
+
+// Tambahkan validasi rentang saat kedua tanggal sudah dipilih
+document.getElementById('checkin').addEventListener('change', highlightDateRange);
+document.getElementById('checkout').addEventListener('change', highlightDateRange);
 
         // function checkAvailability() {
         // const villaName = document.getElementById('villa-name').value.toLowerCase();

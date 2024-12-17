@@ -1,16 +1,9 @@
 <?php
-// Sertakan file koneksi ke database
 include '../koneksi.php';
-
-// Periksa apakah ID pegawai tersedia di URL
 if (isset($_GET['id'])) {
     $id = $_GET['id'];
-
-    // Ambil data pegawai berdasarkan ID
     $query = "SELECT * FROM pegawai WHERE id_pegawai = '$id'";
     $result = mysqli_query($conn, $query);
-
-    // Periksa apakah data pegawai ditemukan
     if (mysqli_num_rows($result) > 0) {
         $pegawai = mysqli_fetch_assoc($result);
     } else {
@@ -21,8 +14,6 @@ if (isset($_GET['id'])) {
     echo "<script>alert('ID pegawai tidak ditemukan.'); window.location.href='Dashboarddatapegawai.php';</script>";
     exit();
 }
-
-// Proses update data pegawai jika form disubmit
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $nama = mysqli_real_escape_string($conn, $_POST['nama']);
     $jabatan = mysqli_real_escape_string($conn, $_POST['jabatan']);
@@ -32,8 +23,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $tubuh = mysqli_real_escape_string($conn, $_POST['tubuh']);
     $kulit = mysqli_real_escape_string($conn, $_POST['kulit']);
     $rambut = mysqli_real_escape_string($conn, $_POST['rambut']);
-
-    // Query untuk update data pegawai
     $query = "UPDATE pegawai SET 
               nama = '$nama', 
               jabatan = '$jabatan', 
@@ -64,20 +53,100 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <style>
         body {
             background-color: #f3f4f6;
+            background-image: url('../blubrown.jpg');
             font-family: Arial, sans-serif;
         }
 
+        .blur-bg {
+            background-image: url('../blubrown.jpg');
+            background-size: cover;
+            background-position: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            z-index: -1;
+        }
+
+        .blur-bg::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(28, 24, 24, 0.7);
+            z-index: 1;
+        }
+
         .container {
+            max-width: 600px;
             background-color: #ffffff;
-            border-radius: 8px;
             padding: 30px;
-            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+            margin: 50px auto;
+            border-radius: 12px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
         }
 
         h2 {
-            font-size: 2rem;
+            text-align: center;
             color: #333;
+            font-size: 24px;
             font-weight: bold;
+            margin-bottom: 25px;
+        }
+
+        label {
+            color: #555;
+            font-weight: 500;
+        }
+
+        .form-control {
+            border: 1px solid #ced4da;
+            border-radius: 6px;
+            margin-bottom: 15px;
+            padding: 10px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus {
+            border-color: #007bff;
+            box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+        }
+
+        .btn-primary {
+            background-color: #007bff;
+            border: none;
+            font-size: 16px;
+            padding: 10px 20px;
+            border-radius: 6px;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
+
+        .btn-secondary {
+            background-color: #6c757d;
+            border: none;
+            font-size: 16px;
+            padding: 10px 20px;
+            border-radius: 6px;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-secondary:hover {
+            background-color: #5a6268;
+        }
+
+        .d-flex {
+            display: flex;
+            gap: 10px;
+            justify-content: space-between;
+            margin-top: 20px;
         }
     </style>
 </head>
@@ -85,14 +154,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <body>
     <div class="container mt-5">
         <h2 class="text-center mb-4">Edit Data Pegawai</h2>
+        <div class="blur-bg"></div>
         <form action="" method="POST" class="mb-4">
             <div class="row">
                 <div class="col-md-6">
-                    <input type="text" name="nama" class="form-control mb-2" value="<?= htmlspecialchars($pegawai['nama']); ?>" required>
+                    <input type="text" name="nama" class="form-control mb-2"
+                        value="<?= htmlspecialchars($pegawai['nama']); ?>" required>
                     <select name="jabatan" class="form-control mb-2" required>
-                        <option value="Resepsionis" <?= $pegawai['jabatan'] == 'Resepsionis' ? 'selected' : ''; ?>>Resepsionis</option>
-                        <option value="House Keeper" <?= $pegawai['jabatan'] == 'House Keeper' ? 'selected' : ''; ?>>House Keeper</option>
-                        <option value="Security" <?= $pegawai['jabatan'] == 'Security' ? 'selected' : ''; ?>>Security</option>
+                        <option value="Resepsionis" <?= $pegawai['jabatan'] == 'Resepsionis' ? 'selected' : ''; ?>>
+                            Resepsionis</option>
+                        <option value="House Keeper" <?= $pegawai['jabatan'] == 'House Keeper' ? 'selected' : ''; ?>>House
+                            Keeper</option>
+                        <option value="Security" <?= $pegawai['jabatan'] == 'Security' ? 'selected' : ''; ?>>Security
+                        </option>
                     </select>
                     <select name="hari" class="form-control mb-2" required>
                         <option value="Senin" <?= $pegawai['hari'] == 'Senin' ? 'selected' : ''; ?>>Senin</option>
@@ -103,14 +177,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         <option value="Sabtu" <?= $pegawai['hari'] == 'Sabtu' ? 'selected' : ''; ?>>Sabtu</option>
                         <option value="Minggu" <?= $pegawai['hari'] == 'Minggu' ? 'selected' : ''; ?>>Minggu</option>
                     </select>
-                    <input type="time" name="waktu_shift" class="form-control mb-2" value="<?= htmlspecialchars($pegawai['waktu_shift']); ?>" required>
+                    <input type="time" name="waktu_shift" class="form-control mb-2"
+                        value="<?= htmlspecialchars($pegawai['waktu_shift']); ?>" required>
                 </div>
                 <div class="col-md-6">
                     <select name="tinggi" class="form-control mb-2" required>
                         <option value="pendek" <?= $pegawai['tinggi'] == 'pendek' ? 'selected' : ''; ?>>Pendek</option>
                         <option value="sedang" <?= $pegawai['tinggi'] == 'sedang' ? 'selected' : ''; ?>>Sedang</option>
                         <option value="tinggi" <?= $pegawai['tinggi'] == 'tinggi' ? 'selected' : ''; ?>>Tinggi</option>
-                        <option value="sangat tinggi" <?= $pegawai['tinggi'] == 'sangat tinggi' ? 'selected' : ''; ?>>Sangat Tinggi</option>
+                        <option value="sangat tinggi" <?= $pegawai['tinggi'] == 'sangat tinggi' ? 'selected' : ''; ?>>
+                            Sangat Tinggi</option>
                     </select>
                     <select name="tubuh" class="form-control mb-2" required>
                         <option value="kurus" <?= $pegawai['tubuh'] == 'kurus' ? 'selected' : ''; ?>>Kurus</option>
@@ -120,12 +196,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     </select>
                     <select name="kulit" class="form-control mb-2" required>
                         <option value="cerah" <?= $pegawai['kulit'] == 'cerah' ? 'selected' : ''; ?>>Cerah</option>
-                        <option value="sawo matang" <?= $pegawai['kulit'] == 'sawo matang' ? 'selected' : ''; ?>>Sawo Matang</option>
+                        <option value="sawo matang" <?= $pegawai['kulit'] == 'sawo matang' ? 'selected' : ''; ?>>Sawo
+                            Matang</option>
                         <option value="gelap" <?= $pegawai['kulit'] == 'gelap' ? 'selected' : ''; ?>>Gelap</option>
-                        <option value="sangat cerah" <?= $pegawai['kulit'] == 'sangat cerah' ? 'selected' : ''; ?>>Sangat Cerah</option>
-                        <option value="sangat gelap" <?= $pegawai['kulit'] == 'sangat gelap' ? 'selected' : ''; ?>>Sangat Gelap</option>
+                        <option value="sangat cerah" <?= $pegawai['kulit'] == 'sangat cerah' ? 'selected' : ''; ?>>Sangat
+                            Cerah</option>
+                        <option value="sangat gelap" <?= $pegawai['kulit'] == 'sangat gelap' ? 'selected' : ''; ?>>Sangat
+                            Gelap</option>
                     </select>
-                    <input type="text" name="rambut" class="form-control mb-2" value="<?= htmlspecialchars($pegawai['rambut']); ?>" required>
+                    <input type="text" name="rambut" class="form-control mb-2"
+                        value="<?= htmlspecialchars($pegawai['rambut']); ?>" required>
                 </div>
             </div>
             <div class="d-flex justify-content-between">

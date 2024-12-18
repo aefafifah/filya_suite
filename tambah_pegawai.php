@@ -42,24 +42,107 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <style>
         body {
             background-color: #f3f4f6;
+            background-image: url('blubrown.jpg');
             font-family: Arial, sans-serif;
         }
-        .container {
-            background-color: #ffffff;
-            border-radius: 8px;
-            padding: 30px;
-            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+
+        .blur-bg {
+            background-image: url('blubrown.jpg');
+            background-size: cover;
+            background-position: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            z-index: -1;
         }
+
+        .blur-bg::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(28, 24, 24, 0.7);
+            z-index: 1;
+        }
+
+        .container {
+            max-width: 600px;
+            background-color: #ffffff;
+            padding: 30px;
+            margin: 50px auto;
+            border-radius: 12px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+        }
+
         h2 {
-            font-size: 2rem;
+            text-align: center;
             color: #333;
+            font-size: 24px;
             font-weight: bold;
+            margin-bottom: 25px;
+        }
+
+        label {
+            color: #555;
+            font-weight: 500;
+        }
+
+        .form-control {
+            border: 1px solid #ced4da;
+            border-radius: 6px;
+            margin-bottom: 15px;
+            padding: 10px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus {
+            border-color: #007bff;
+            box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+        }
+
+        .btn-primary {
+            background-color: #007bff;
+            border: none;
+            font-size: 16px;
+            padding: 10px 20px;
+            border-radius: 6px;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
+
+        .btn-secondary {
+            background-color: #6c757d;
+            border: none;
+            font-size: 16px;
+            padding: 10px 20px;
+            border-radius: 6px;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-secondary:hover {
+            background-color: #5a6268;
+        }
+
+        .d-flex {
+            display: flex;
+            gap: 10px;
+            justify-content: space-between;
+            margin-top: 20px;
         }
     </style>
 </head>
 <body>
 <div class="container mt-5">
     <h2 class="text-center mb-4">Tambah Data Pegawai</h2>
+    <div class="blur-bg"></div>
     <form action="" method="POST" class="mb-4">
         <div class="row">
             <div class="col-md-6">

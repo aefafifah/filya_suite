@@ -26,7 +26,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $id_pegawai = $_POST['id_pegawai'];
     $nama_pegawai = $_POST['nama_pegawai'];
     $jabatan_pegawai = $_POST['jabatan_pegawai'];
-    $waktu_kejadian = $_POST['waktu_kejadian'];
+    $tanggal_melapor = $_POST['tanggal_melapor'];
     $jenis_masalah = $_POST['jenis_masalah'];
     $deskripsi_masalah = $_POST['deskripsi_masalah'];
     $file_bukti = $_POST['file_bukti'];
@@ -43,7 +43,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             id_pegawai='$id_pegawai', 
             nama_pegawai='$nama_pegawai', 
             jabatan_pegawai='$jabatan_pegawai', 
-            waktu_kejadian='$waktu_kejadian', 
+            tanggal_melapor='$tanggal_melapor', 
             jenis_masalah='$jenis_masalah', 
             deskripsi_masalah='$deskripsi_masalah', 
             file_bukti='$file_bukti', 

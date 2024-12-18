@@ -152,6 +152,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 </head>
 
 <body>
+    
     <div class="container mt-5">
         <h2 class="text-center mb-4">Edit Data Pegawai</h2>
         <div class="blur-bg"></div>

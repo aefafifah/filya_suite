@@ -36,16 +36,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $currentDate = date("Y-m-d"); 
 
   
-    if ($tanggalMenginap > $currentDate) {
-        header("Location: fasilitas.php?status=error&message=dateExceedsCurrentDate");
-        exit();
-    }
+    // if ($tanggalMenginap > $currentDate) {
+    //     header("Location: fasilitas.php?status=error&message=dateExceedsCurrentDate");
+    //     exit();
+    // }
 
    
-    if ($tanggalMelaporkan > $tanggalMenginap) {
-        header("Location: fasilitas.php?status=error&message=invalidReportDate");
-        exit();
-    }
+    // if ($tanggalMelaporkan > $tanggalMenginap) {
+    //     header("Location: fasilitas.php?status=error&message=invalidReportDate");
+    //     exit();
+    // }
 
     $targetFilePath = null;
     if (isset($_FILES['uploadBukti']) && $_FILES['uploadBukti']['error'] == 0) {

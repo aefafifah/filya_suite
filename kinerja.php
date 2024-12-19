@@ -159,14 +159,15 @@ $conn->close();
             border-radius: 10px;
             position: relative;
             z-index: 2;
-            width: 90%;
-            max-width: 800px;
+            width: 95%;
+            max-width: 850px;
         }
 
         h1 {
             color: #DD761C;
             font-size: 64px;
             text-align: center;
+            margin-top: 40px;
             margin-bottom: 20px;
         }
 
@@ -179,12 +180,12 @@ $conn->close();
         .form-row {
             display: flex;
             justify-content: space-between;
-            margin-bottom: 10px;
+            margin-bottom: 20px;
         }
 
         .form-row div {
             flex: 1;
-            margin-right: 30px;
+            margin-right: 20px;
         }
 
         .form-row div:last-child {
@@ -197,63 +198,73 @@ $conn->close();
         textarea,
         select {
             width: 100%;
-            height: 50px;
-            padding: 10px;
-            font-size: 14px;
+            height: 55px;
+            padding: 12px;
+            font-size: 16px;
             border: none;
             border-radius: 5px;
+            box-sizing: border-box;
         }
 
         textarea {
-            height: 110px;
+            height: 55px;
+            resize: none;
         }
 
-        button,
-        .upload-button {
-            height: 45px;
+        #image-upload {
+            height: 55px;
+            padding: 12px;
+            font-size: 16px;
             border: none;
             border-radius: 5px;
-            font-size: 16px;
+            box-sizing: border-box;
+        }
+
+        button {
+            height: 50px;
+            border: none;
+            border-radius: 5px;
+            font-size: 18px;
             cursor: pointer;
         }
 
-        .upload-button {
-            width: 200px;
-            margin-top: 10px;
+        .button-container {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 20px;
         }
 
-        .button-container {
-            text-align: right;
-            margin-top: 20px;
+        .button-container button {
+            width: 130px;
         }
 
         .button-container .back-button {
-            width: 120px;
             background-color: white;
             color: #DD761C;
-            display: inline-block;
-            margin-right: 10px;
         }
 
         .button-container .submit-button {
-            width: 120px;
             background-color: #DD761C;
             color: white;
-            display: inline-block;
         }
 
-        button:hover {
-            opacity: 0.8;
+        input[type="text"],
+        input[type="tel"],
+        input[type="date"],
+        textarea,
+        select {
+            width: calc(100% + 20px);
+            margin-bottom: 10px;
         }
 
-        .message {
-            color: white;
-            text-align: center;
-            margin-top: 20px;
+        #image-upload {
+            width: calc(100% + 20px);
+            margin-bottom: 10px;
         }
 
-        .upload-container {
-            margin-top: 10px;
+        .form-row {
+            gap: 20px;
         }
     </style>
 </head>
@@ -288,71 +299,76 @@ $conn->close();
         }
         ?>
 
-        <form action="" method="POST" enctype="multipart/form-data">
-            <div class="form-row">
-                <div>
-                    <label for="name">Nama Pengadu:</label>
-                    <textarea id="name" name="name" required readonly><?php echo $nama_pengguna; ?></textarea>
-                </div>
-                <div>
-                    <label for="report_date">Tanggal Melaporkan:</label>
-                    <input type="date" id="report_date" name="report_date" required>
-                </div>
-            </div>
+<form action="" method="POST" enctype="multipart/form-data">
+    <!-- Baris Nama Pengadu dan Tanggal Melaporkan -->
+    <div class="form-row">
+        <div>
+            <label for="name">Nama Pengadu:</label>
+            <textarea id="name" name="name" readonly required><?php echo htmlspecialchars($nama_pengguna, ENT_QUOTES, 'UTF-8'); ?></textarea>
+        </div>
+        <div>
+            <label for="report_date">Tanggal Melaporkan:</label>
+            <input type="date" id="report_date" name="report_date" required>
+        </div>
+    </div>
 
-            <div class="form-row">
-                <div>
-                    <label for="phone">Nomor Telpon:</label>
-                    <textarea id="phone" name="phone" required readonly><?php echo $nomor_telpon; ?></textarea>
-                </div>
-                <div>
-                    <label for="tanggalMenginap">Tanggal Menginap:</label>
-                    <input type="date" id="tanggalMenginap" name="tanggalMenginap" required>
-                </div>
-            </div>
+    <!-- Baris Nomor Telepon dan Tanggal Menginap -->
+    <div class="form-row">
+        <div>
+            <label for="phone">Nomor Telpon:</label>
+            <textarea id="phone" name="phone" readonly required><?php echo htmlspecialchars($nomor_telpon, ENT_QUOTES, 'UTF-8'); ?></textarea>
+        </div>
+        <div>
+            <label for="tanggalMenginap">Tanggal Menginap:</label>
+            <input type="date" id="tanggalMenginap" name="tanggalMenginap" required>
+        </div>
+    </div>
 
-            <div class="form-row">
-                <div style="flex: 1;">
-                    <label for="description">Deskripsi Masalah:</label>
-                    <textarea id="description" name="description" rows="6" required></textarea>
-                </div>
-                <div style="flex: 1;">
-                    <label for="category">Jenis Masalah:</label>
-                    <select id="category" name="category" required>
-                        <option value="Sikap Tidak Profesional">Sikap Tidak Profesional</option>
-                        <option value="Pelayanan Tidak Ramah">Pelayanan Tidak Ramah</option>
-                        <option value="Pelayanan Tidak Memuaskan">Pelayanan Tidak Memuaskan</option>
-                        <option value="Tidak Tersedia saat dibutuhkan">Tidak Tersedia saat dibutuhkan</option>
-                        <option value="Lainnya">Lainnya</option>
-                    </select>
+    <!-- Baris Deskripsi Masalah dan Jenis Masalah -->
+    <div class="form-row">
+        <div>
+            <label for="description">Deskripsi Masalah:</label>
+            <textarea id="description" name="description" rows="6" required></textarea>
+        </div>
+        <div>
+            <label for="category">Jenis Masalah:</label>
+            <select id="category" name="category" required>
+                <option value="Sikap Tidak Profesional">Sikap Tidak Profesional</option>
+                <option value="Pelayanan Tidak Ramah">Pelayanan Tidak Ramah</option>
+                <option value="Pelayanan Tidak Memuaskan">Pelayanan Tidak Memuaskan</option>
+                <option value="Tidak Tersedia saat dibutuhkan">Tidak Tersedia saat dibutuhkan</option>
+                <option value="Lainnya">Lainnya</option>
+            </select>
+        </div>
+    </div>
 
+    <!-- Baris Bukti Masalah dan Ciri-Ciri -->
+    <div class="form-row">
+    <div class="upload-container">
+                        <label for="uploadBukti">Upload Bukti:</label>
+                        <input type="file" class="form-control" id="uploadBukti" name="uploadBukti" accept="image/*"
+                            required>
+                        <!-- <small class="form-text text-muted">Upload bukti dalam format gambar (JPG, PNG, etc.).</small> -->
+        </div>
+        <div>
+            <label for="features">Ciri-Ciri:</label>
+            <select id="features" name="features" required>
+                <?php foreach ($ciri_ciri_options as $option): ?>
+                    <option value="<?php echo htmlspecialchars(implode(', ', $option), ENT_QUOTES, 'UTF-8'); ?>">
+                        <?php echo htmlspecialchars(implode(', ', $option), ENT_QUOTES, 'UTF-8'); ?>
+                    </option>
+                <?php endforeach; ?>
+            </select>
+        </div>
+    </div>
 
-                </div>
-            </div>
+    <!-- Tombol Kembali dan Submit -->
+    <div class="button-container">
+        <button type="button" onclick="window.location.href='userhome.php';" class="back-button">Kembali</button>
+        <button type="submit" class="submit-button">Submit</button>
+    </div>
+</form>
 
-            <div class="form-row">
-                <label for="image-upload">Bukti Masalah:</label>
-                <input type="file" id="image-upload" class="form-control" name="image-upload" accept="image/*" required>
-                <label for="features">Ciri-Ciri:</label>
-                <select id="features" name="features" required>
-                    <?php
-
-                    foreach ($ciri_ciri_options as $option) {
-                        echo "<option value=\"{$option['tinggi']}, {$option['tubuh']}, {$option['kulit']}, {$option['rambut']}, {$option['wajah']}\">";
-                        echo "{$option['tinggi']}, {$option['tubuh']}, {$option['kulit']}, {$option['rambut']}, {$option['wajah']}";
-                        echo "</option>";
-                    }
-                    ?>
-                </select>
-            </div>
-
-
-
-            <div class="button-container">
-                <button type="button" onclick="window.location.href='userhome.php';">Kembali</button>
-                <button type="submit" class="submit-button">Submit</button>
-            </div>
-        </form>
 
         <?php if (isset($success_message)): ?>
             <div class="message"><?php echo $success_message; ?></div>
@@ -362,7 +378,6 @@ $conn->close();
     </div>
 </body>
 <script>
-
     const checkInInput = document.getElementById('tanggalMenginap');
     const reportInput = document.getElementById('report_date');
 
@@ -373,7 +388,6 @@ $conn->close();
         let report_date = new Date(reportInput.value);
         let currentDate = new Date();
 
-        // Validasi jika tanggal laporan lebih dari tanggal menginap
         if (report_date && tanggalMenginap && report_date < tanggalMenginap) {
             Swal.fire({
                 icon: 'error',
@@ -394,7 +408,6 @@ $conn->close();
         }
     }
 
-    // Tambahkan event listener untuk memeriksa setiap kali input tanggal berubah
     checkInInput.addEventListener('input', validateDates);
     reportInput.addEventListener('input', validateDates);
 </script>

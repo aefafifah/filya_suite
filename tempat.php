@@ -75,7 +75,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 
 
-    // Tambahkan data laporan ke tabel `tempat`
+    // Tambahkan data laporan ke tabel tempat
     $stmt = $data->prepare("INSERT INTO tempat (nama_pengadu, no_telepon_pengadu, tanggal_menginap, nomor_kamar, jenis_masalah, deskripsi_masalah, file_bukti, waktu_pengaduan) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
     $stmt->bind_param("ssssssss", $nama_pengguna, $nomor_telpon, $tanggalMenginap, $damage_location, $category, $description, $target_file, $report_date);
 
@@ -142,15 +142,15 @@ $data->close();
             border-radius: 10px;
             position: relative;
             z-index: 2;
-            width: 95%;
-            max-width: 850px;
+            width: 90%;
+            max-width: 800px;
         }
 
         h1 {
             color: #DD761C;
             font-size: 64px;
             text-align: center;
-            margin-top: 40px;
+            margin-top: 100px;
             margin-bottom: 20px;
         }
 
@@ -163,12 +163,12 @@ $data->close();
         .form-row {
             display: flex;
             justify-content: space-between;
-            margin-bottom: 20px;
+            margin-bottom: 10px;
         }
 
         .form-row div {
             flex: 1;
-            margin-right: 20px;
+            margin-right: 30px;
         }
 
         .form-row div:last-child {
@@ -181,76 +181,79 @@ $data->close();
         textarea,
         select {
             width: 100%;
-            height: 55px;
-            padding: 12px;
-            font-size: 16px;
+            height: 50px;
+            padding: 10px;
+            font-size: 14px;
             border: none;
             border-radius: 5px;
-            box-sizing: border-box;
         }
 
         textarea {
-            height: 55px;
-            resize: none;
+            height: auto;
         }
 
-        #image-upload {
-            height: 55px;
-            padding: 12px;
-            font-size: 16px;
-            border: none;
-            border-radius: 5px;
-            box-sizing: border-box;
-        }
-
-        button {
-            height: 50px;
-            border: none;
-            border-radius: 5px;
-            font-size: 18px;
-            cursor: pointer;
-        }
-
-        .button-container {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            margin-top: 20px;
-        }
-
-        .button-container button {
-            width: 130px;
-        }
-
-        .button-container .back-button {
-            background-color: white;
-            color: #DD761C;
-        }
-
-        .button-container .submit-button {
-            background-color: #DD761C;
-            color: white;
-        }
 
         input[type="text"],
         input[type="tel"],
         input[type="date"],
         textarea,
-        select {
-            width: calc(100% + 20px);
-            margin-bottom: 10px;
+        .image-upload select {
+            width: 100%;
+            height: 50px;
+            padding: 10px;
+            font-size: 14px;
+            border: none;
+            border-radius: 5px;
         }
 
-        #image-upload {
-            width: calc(100% + 20px);
-            margin-bottom: 10px;
+        .description {
+            height: 150px;
         }
 
-        .form-row {
-            gap: 20px;
+        button,
+        .upload-button {
+            height: 45px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .upload-button {
+            width: 200px;
+            margin-top: 10px;
+        }
+
+        .button-container {
+            text-align: right;
+            margin-top: 20px;
+        }
+
+        .button-container .back-button {
+            width: 120px;
+            background-color: white;
+            color: #DD761C;
+            display: inline-block;
+            margin-right: 10px;
+        }
+
+        .button-container .submit-button {
+            width: 120px;
+            background-color: #DD761C;
+            color: white;
+            display: inline-block;
+        }
+
+        button:hover {
+            opacity: 0.8;
+        }
+
+        .message {
+            color: white;
+            text-align: center;
+            margin-top: 20px;
         }
     </style>
-
 </head>
 
 <body>

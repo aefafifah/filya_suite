@@ -56,142 +56,139 @@ mysqli_close($data);
     <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.8/dist/sweetalert2.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.8/dist/sweetalert2.all.min.js"></script>
     <style>
-        body {
-            width: 100vw;
-            height: 100vh;
-            margin: 0;
-            font-family: 'Outfit', sans-serif;
-            color: #FDE49E;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
+            body {
+                width: 100vw;
+                height: 100vh;
+                margin: 0;
+                font-family: 'Outfit', sans-serif;
+                color: #FDE49E;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
 
-        .blur-bg {
-            background-image: url('bglogin-register.jpg');
-            background-size: cover;
-            background-position: center;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100vh;
-            z-index: -1;
-        }
+            .blur-bg {
+                background-image: url('bglogin-register.jpg');
+                background-size: cover;
+                background-position: center;
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100vh;
+                z-index: -1;
+            }
 
-        .blur-bg::before {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(28, 24, 24, 0.7);
-            z-index: 1;
-        }
+            .blur-bg::before {
+                content: "";
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background-color: rgba(28, 24, 24, 0.7);
+                z-index: 1;
+            }
 
-        .form-container {
-            padding: 40px;
-            border-radius: 10px;
-            position: relative;
-            z-index: 2;
-            width: 90%;
-            max-width: 800px;
-        }
+            .form-container {
+                padding: 40px;
+                border-radius: 10px;
+                position: relative;
+                z-index: 2;
+                width: 95%;
+                max-width: 850px;
+            }
 
-        h1 {
-            color: #DD761C;
-            font-size: 64px;
-            text-align: center;
-            margin-bottom: 20px;
-        }
+            h1 {
+                color: #DD761C;
+                font-size: 64px;
+                text-align: center;
+                margin-top: 40px;
+                margin-bottom: 20px;
+            }
 
-        label {
-            font-size: 14px;
-            display: block;
-            margin: 10px 0 5px;
-        }
+            label {
+                font-size: 14px;
+                display: block;
+                margin: 10px 0 5px;
+            }
 
-        .form-row {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 10px;
-        }
+            .form-row {
+                display: flex;
+                justify-content: space-between;
+                margin-bottom: 20px;
+                gap: 20px;
+            }
 
-        .form-row div {
-            flex: 1;
-            margin-right: 30px;
-        }
+            .form-row div {
+                flex: 1;
+            }
 
-        .form-row div:last-child {
-            margin-right: 0;
-        }
+            input[type="text"],
+            input[type="tel"],
+            input[type="date"],
+            textarea,
+            select {
+                width: 100%;
+                height: 55px;
+                padding: 12px;
+                font-size: 16px;
+                border: none;
+                border-radius: 5px;
+                box-sizing: border-box;
+            }
 
-        input[type="text"],
-        input[type="tel"],
-        input[type="date"],
-        textarea,
-        select {
-            width: 100%;
-            height: 50px;
-            padding: 10px;
-            font-size: 14px;
-            border: none;
-            border-radius: 5px;
-        }
+            textarea {
+                height: 55px;
+                resize: none;
+            }
 
-        .masalah-form-control {
-            height: 140px;
-        }
+            #image-upload {
+                height: 55px;
+                padding: 12px;
+                font-size: 16px;
+                border: none;
+                border-radius: 5px;
+                box-sizing: border-box;
+                width: 100%;
+            }
 
-        button,
-        .upload-button {
-            height: 45px;
-            border: none;
-            border-radius: 5px;
-            font-size: 16px;
-            cursor: pointer;
-        }
+            button {
+                height: 50px;
+                border: none;
+                border-radius: 5px;
+                font-size: 18px;
+                cursor: pointer;
+            }
 
-        .upload-button {
-            width: 200px;
-            margin-top: 10px;
-        }
+            .button-container {
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+        margin-top: 30px; 
+    }
 
-        .button-container {
-            text-align: right;
-            margin-top: 20px;
-        }
+            .button-container button {
+                width: 130px;
+            }
 
-        .button-container .back-button {
-            width: 120px;
-            background-color: white;
-            color: #DD761C;
-            display: inline-block;
-            margin-right: 10px;
-        }
+            .button-container .back-button {
+                background-color: white;
+                color: #DD761C;
+            }
 
-        .button-container .submit-button {
-            width: 120px;
-            background-color: #DD761C;
-            color: white;
-            display: inline-block;
-        }
+            .button-container .submit-button {
+                background-color: #DD761C;
+                color: white;
+            }
 
-        button:hover {
-            opacity: 0.8;
-        }
-
-        .message {
-            color: white;
-            text-align: center;
-            margin-top: 20px;
-        }
-
-        .upload-container {
-            margin-top: 10px;
-        }
-    </style>
+            .form-row-wide {
+                display: flex;
+                flex-direction: column;
+                gap: 20px;
+            }
+        </style>
+    </head>
 </head>
 
 
@@ -232,92 +229,81 @@ mysqli_close($data);
         ?>
 
 
-        <form method="POST" action="fasilitas.php" enctype="multipart/form-data">
-            <div class="form-row">
-                <!-- Kolom Kiri -->
-                <div>
-                    <label for="namaPengadu">Nama Pengadu:</label>
-                    <textarea class="form-control" id="namaPengadu" name="namaPengadu" rows="3"
-                        placeholder="Masukkan nama anda" required readonly><?php echo $nama_pengguna; ?></textarea>
-                </div>
-                <div>
-                    <label for="tanggalMelaporkan">Tanggal Melaporkan:</label>
-                    <input type="date" class="form-control" id="tanggalMelaporkan" name="tanggalMelaporkan" required>
-                </div>
-            </div>
+<form method="POST" action="fasilitas.php" enctype="multipart/form-data">
+    <div class="form-row">
+        <!-- Kolom Kiri -->
+        <div>
+            <label for="namaPengadu">Nama Pengadu:</label>
+            <textarea class="form-control" id="namaPengadu" name="namaPengadu" rows="3" placeholder="Masukkan nama anda" required readonly><?php echo $nama_pengguna; ?></textarea>
+        </div>
+        <div>
+            <label for="tanggalMelaporkan">Tanggal Melaporkan:</label>
+            <input type="date" class="form-control" id="tanggalMelaporkan" name="tanggalMelaporkan" required>
+        </div>
+    </div>
 
-            <div class="form-row">
-                <!-- Kolom Kanan -->
-                <div>
-                    <label for="noTeleponPengadu">No Telepon Pengadu:</label>
-                    <textarea class="form-control" id="noTeleponPengadu" name="noTeleponPengadu" rows="3"
-                        placeholder="Masukkan nomor anda" required <?php if ($usertype === 'guest'): ?>     <?php echo ''; ?>
-                        <?php else: ?> readonly <?php endif; ?>><?php echo $nomor_telpon; ?></textarea>
-                </div>
+    <div class="form-row">
+        <!-- Kolom Kanan -->
+        <div>
+            <label for="noTeleponPengadu">No Telepon Pengadu:</label>
+            <textarea class="form-control" id="noTeleponPengadu" name="noTeleponPengadu" rows="3" placeholder="Masukkan nomor anda" required <?php if ($usertype === 'guest'): ?><?php echo ''; ?><?php else: ?> readonly <?php endif; ?>><?php echo $nomor_telpon; ?></textarea>
+        </div>
+        <div>
+            <label for="tanggalMenginap">Tanggal Menginap:</label>
+            <input type="date" class="form-control" id="tanggalMenginap" name="tanggalMenginap" required>
+        </div>
+    </div>
 
-                <div>
-                    <label for="tanggalMenginap">Tanggal Menginap:</label>
-                    <input type="date" class="form-control" id="tanggalMenginap" name="tanggalMenginap" required>
-                </div>
+    <div class="form-row">
+        <!-- Kolom Kiri -->
+        <div style="flex: 1;">
+            <label for="deskripsiMasalah">Deskripsi Masalah:</label>
+            <textarea class="masalah-form-control" id="deskripsiMasalah" name="deskripsiMasalah" rows="6" placeholder="Deskripsikan masalah yang terjadi" required></textarea>
 
-            </div>
+            <label for="tempatKerusakan">Tempat Kerusakan:</label>
+            <textarea class="masalah-form-control" id="tempatKerusakan" name="tempatKerusakan" rows="6" placeholder="Lokasi Kerusakan" required></textarea>
+        </div>
 
-            <div class="form-row">
-                <!-- Kolom Kiri -->
-                <div style="flex;">
-                    <label for="deskripsiMasalah">Deskripsi Masalah:</label>
-                    <textarea class="masalah-form-control" id="deskripsiMasalah" name="deskripsiMasalah" rows="6"
-                        placeholder="Deskripsikan masalah yang terjadi" required></textarea>
-                    <div class="upload-container">
-                        <label for="uploadBukti">Upload Bukti:</label>
-                        <input type="file" class="form-control" id="uploadBukti" name="uploadBukti" accept="image/*"
-                            required>
-                        <!-- <small class="form-text text-muted">Upload bukti dalam format gambar (JPG, PNG, etc.).</small> -->
-                    </div>
-                </div>
+        <!-- Kolom Kanan -->
+        <div style="flex: 1;">
+            <label for="jenisMasalah">Jenis Masalah:</label>
+            <select class="form-select" id="jenisMasalah" name="jenisMasalah" required>
+                <option selected disabled>Pilih Jenis Masalah</option>
+                <option value="Wifi">Wifi</option>
+                <option value="Air Conditioner">Air Conditioner</option>
+                <option value="Water Heater">Water Heater</option>
+                <option value="Wastafel">Wastafel</option>
+                <option value="Bed">Bed</option>
+                <option value="Lainnya">Lainnya</option>
+            </select>
 
+            <label for="pilihKategori">Pilih Kategori:</label>
+            <select class="form-select" id="pilihKategori" name="pilihKategori" required>
+                <option selected disabled>Pilih Kategori</option>
+                <option value="Fasilitas yang dijanjikan tidak tersedia">Fasilitas yang dijanjikan tidak tersedia</option>
+                <option value="Fasilitas tidak berfungsi">Fasilitas tidak berfungsi</option>
+                <option value="Kualitas fasilitas buruk">Kualitas fasilitas buruk</option>
+                <option value="Lainnya">Lainnya</option>
+            </select>
+        </div>
+    </div>
 
-                <!-- Kolom Kanan -->
-                <div style="flex;">
-                    <label for="jenisMasalah">Jenis Masalah:</label>
-                    <select class="form-select" id="jenisMasalah" name="jenisMasalah" required>
-                        <option selected disabled>Pilih Jenis Masalah</option>
-                        <option value="Wifi">Wifi</option>
-                        <option value="Air Conditioner">Air Conditioner</option>
-                        <option value="Water Heater">Water Heater</option>
-                        <option value="Wastafel">Wastafel</option>
-                        <option value="Bed">Bed</option>
-                        <option value="Lainnya">Lainnya</option>
-                    </select>
+    <div class="form-row">
+        <!-- Upload Bukti -->
+        <div style="flex: 1;">
+            <label for="uploadBukti">Upload Bukti:</label>
+            <input type="file" class="form-control" id="uploadBukti" name="uploadBukti" accept="image/*" required>
+        </div>
+    </div>
 
-                    <label for="pilihKategori">Pilih Kategori:</label>
-                    <select class="form-select" id="pilihKategori" name="pilihKategori" required>
-                        <option selected disabled>Pilih Kategori</option>
-                        <option value="Fasilitas yang dijanjikan tidak tersedia">Fasilitas yang dijanjikan tidak
-                            tersedia</option>
-                        <option value="Fasilitas tidak berfungsi">Fasilitas tidak berfungsi</option>
-                        <option value="Kualitas fasilitas buruk">Kualitas fasilitas buruk</option>
-                        <option value="Lainnya">Lainnya</option>
-                    </select>
+    <div class="button-container">
+        <!-- Tombol Back -->
+        <button type="button" class="back-button" onclick="window.location.href='userhome.php';">Kembali</button>
+        <!-- Tombol Submit -->
+        <button type="submit" class="submit-button">Submit</button>
+    </div>
+</form>
 
-
-                    <label for="tempatKerusakan">Tempat Kerusakan</label>
-                    <input type="text" class="form-control" id="tempatKerusakan" name="tempatKerusakan"
-                        placeholder="Lokasi Kerusakan" required>
-
-                </div>
-            </div>
-
-
-
-            <div class="button-container">
-                <!-- Tombol Back -->
-                <button type="button" class="back-button"
-                    onclick="window.location.href='userhome.php';">Kembali</button>
-                <!-- Tombol Submit -->
-                <button type="submit" class="submit-button">Submit</button>
-            </div>
-        </form>
 
         <!-- Bootstrap JS -->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>

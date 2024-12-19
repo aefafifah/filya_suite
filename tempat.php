@@ -73,8 +73,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
     }
 
-
-
     // Tambahkan data laporan ke tabel tempat
     $stmt = $data->prepare("INSERT INTO tempat (nama_pengadu, no_telepon_pengadu, tanggal_menginap, nomor_kamar, jenis_masalah, deskripsi_masalah, file_bukti, waktu_pengaduan) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
     $stmt->bind_param("ssssssss", $nama_pengguna, $nomor_telpon, $tanggalMenginap, $damage_location, $category, $description, $target_file, $report_date);
@@ -142,15 +140,15 @@ $data->close();
             border-radius: 10px;
             position: relative;
             z-index: 2;
-            width: 90%;
-            max-width: 800px;
+            width: 95%;
+            max-width: 850px;
         }
 
         h1 {
             color: #DD761C;
             font-size: 64px;
             text-align: center;
-            margin-top: 100px;
+            margin-top: 40px;
             margin-bottom: 20px;
         }
 
@@ -163,12 +161,12 @@ $data->close();
         .form-row {
             display: flex;
             justify-content: space-between;
-            margin-bottom: 10px;
+            margin-bottom: 20px;
         }
 
         .form-row div {
             flex: 1;
-            margin-right: 30px;
+            margin-right: 20px;
         }
 
         .form-row div:last-child {
@@ -181,79 +179,76 @@ $data->close();
         textarea,
         select {
             width: 100%;
-            height: 50px;
-            padding: 10px;
-            font-size: 14px;
+            height: 55px;
+            padding: 12px;
+            font-size: 16px;
             border: none;
             border-radius: 5px;
+            box-sizing: border-box;
         }
 
         textarea {
-            height: auto;
+            height: 55px;
+            resize: none;
         }
 
+        #image-upload {
+            height: 55px;
+            padding: 12px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+
+        button {
+            height: 50px;
+            border: none;
+            border-radius: 5px;
+            font-size: 18px;
+            cursor: pointer;
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .button-container button {
+            width: 130px;
+        }
+
+        .button-container .back-button {
+            background-color: white;
+            color: #DD761C;
+        }
+
+        .button-container .submit-button {
+            background-color: #DD761C;
+            color: white;
+        }
 
         input[type="text"],
         input[type="tel"],
         input[type="date"],
         textarea,
-        .image-upload select {
-            width: 100%;
-            height: 50px;
-            padding: 10px;
-            font-size: 14px;
-            border: none;
-            border-radius: 5px;
+        select {
+            width: calc(100% + 20px);
+            margin-bottom: 10px;
         }
 
-        .description {
-            height: 150px;
+        #image-upload {
+            width: calc(100% + 20px);
+            margin-bottom: 10px;
         }
 
-        button,
-        .upload-button {
-            height: 45px;
-            border: none;
-            border-radius: 5px;
-            font-size: 16px;
-            cursor: pointer;
-        }
-
-        .upload-button {
-            width: 200px;
-            margin-top: 10px;
-        }
-
-        .button-container {
-            text-align: right;
-            margin-top: 20px;
-        }
-
-        .button-container .back-button {
-            width: 120px;
-            background-color: white;
-            color: #DD761C;
-            display: inline-block;
-            margin-right: 10px;
-        }
-
-        .button-container .submit-button {
-            width: 120px;
-            background-color: #DD761C;
-            color: white;
-            display: inline-block;
-        }
-
-        button:hover {
-            opacity: 0.8;
-        }
-
-        .message {
-            color: white;
-            text-align: center;
-            margin-top: 20px;
+        .form-row {
+            gap: 20px;
         }
     </style>
+
 </head>
 
 <body>
@@ -290,7 +285,7 @@ $data->close();
             <div class="form-row">
                 <div>
                     <label for="name">Nama Pengadu:</label>
-                    <textarea id="name" name="name" required readonly><?php echo $nama_pengguna; ?></textarea>
+                    <textarea id="name" name="name" required><?php echo $nama_pengguna; ?></textarea>
                 </div>
                 <div>
                     <label for="report_date">Tanggal Melaporkan:</label>
@@ -298,14 +293,11 @@ $data->close();
                 </div>
             </div>
 
+            <!-- Baris Nomor Telepon dan Tanggal Menginap -->
             <div class="form-row">
                 <div>
-                    <label for="phone">Nomor Telepon:</label>
-                    <textarea id="phone" name="phone" required readonly><?php if ($usertype === 'guest'): ?> 
-                <?php echo ''; ?> 
-        <?php else: ?> 
-                readonly 
-        <?php endif; ?>><?php echo $nomor_telpon; ?></textarea>
+                    <label for="phone">Nomor Telpon:</label>
+                    <textarea id="phone" name="phone" readonly required><?php echo htmlspecialchars($nomor_telpon, ENT_QUOTES, 'UTF-8'); ?></textarea>
                 </div>
                 <div>
                     <label for="tanggalMenginap">Tanggal Menginap:</label>
@@ -356,8 +348,6 @@ $data->close();
                 <button type="submit" class="submit-button">Submit</button>
             </div>
         </form>
-
-
     </div>
 </body>
 

@@ -87,27 +87,43 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $stmt->bind_param("ssssssssssss", $nama_pengguna, $tanggal_melaporkan, $nomor_telpon, $tanggal_menginap, $deskripsi_masalah, $jenis_masalah, $tinggi, $tubuh, $kulit, $rambut, $wajah, $target_file);
 
     if ($stmt->execute()) {
+        $id_pengaduan = $stmt->insert_id;
+
+       
+        $query = "SELECT id_pegawai, nama, jabatan
+                  FROM pegawai
+                  WHERE tinggi = ? AND tubuh = ? AND kulit = ? AND rambut = ? AND wajah = ?
+                  LIMIT 1";
+        $stmt_select = $conn->prepare($query);
+        $stmt_select->bind_param("sssss", $tinggi, $tubuh, $kulit, $rambut, $wajah);
+        $stmt_select->execute();
+        $result = $stmt_select->get_result();
+
+        if ($result->num_rows > 0) {
+            $pegawai = $result->fetch_assoc();
+            $v_id_pegawai = $pegawai['id_pegawai'];
+            $v_nama = $pegawai['nama'];
+            $v_jabatan = $pegawai['jabatan'];
+
+           
+            $update_query = "UPDATE kinerja
+                             SET id_pegawai = ?, nama_pegawai = ?, jabatan_pegawai = ?
+                             WHERE id_pengaduan = ?";
+            $stmt_update = $conn->prepare($update_query);
+            $stmt_update->bind_param("issi", $v_id_pegawai, $v_nama, $v_jabatan, $id_pengaduan);
+            $stmt_update->execute();
+        }
+
         header("Location: kinerja.php?status=success");
         exit();
     } else {
         header("Location: kinerja.php?status=error");
         exit();
     }
-
-
 }
-
-
-// $nama_pengguna = isset($_SESSION['nama']) ? htmlspecialchars($_SESSION['nama']) : '';
-// $nomor_telpon = isset($_SESSION['nomor_telpon']) ? htmlspecialchars($_SESSION['nomor_telpon']) : '';
-// $email = isset($_SESSION['email']) ? $_SESSION['email'] : null;
-// $usertype = $_SESSION['usertype'];
-
-
 
 $conn->close();
 ?>
-
 
 <!DOCTYPE html>
 <html lang="id">
@@ -299,51 +315,49 @@ $conn->close();
         }
         ?>
 
-<form action="" method="POST" enctype="multipart/form-data">
-    <!-- Baris Nama Pengadu dan Tanggal Melaporkan -->
-    <div class="form-row">
-        <div>
-            <label for="name">Nama Pengadu:</label>
-            <textarea id="name" name="name" readonly required><?php echo htmlspecialchars($nama_pengguna, ENT_QUOTES, 'UTF-8'); ?></textarea>
-        </div>
-        <div>
-            <label for="report_date">Tanggal Melaporkan:</label>
-            <input type="date" id="report_date" name="report_date" required>
-        </div>
-    </div>
+        <form action="" method="POST" enctype="multipart/form-data">
+            <div class="form-row">
+                <div>
+                    <label for="name">Nama Pengadu:</label>
+                    <textarea id="name" name="name" required readonly><?php echo $nama_pengguna; ?></textarea>
+                </div>
+                <div>
+                    <label for="report_date">Tanggal Melaporkan:</label>
+                    <input type="date" id="report_date" name="report_date" required>
+                </div>
+            </div>
 
-    <!-- Baris Nomor Telepon dan Tanggal Menginap -->
-    <div class="form-row">
-        <div>
-            <label for="phone">Nomor Telpon:</label>
-            <textarea id="phone" name="phone" readonly required><?php echo htmlspecialchars($nomor_telpon, ENT_QUOTES, 'UTF-8'); ?></textarea>
-        </div>
-        <div>
-            <label for="tanggalMenginap">Tanggal Menginap:</label>
-            <input type="date" id="tanggalMenginap" name="tanggalMenginap" required>
-        </div>
-    </div>
+            <div class="form-row">
+                <div>
+                    <label for="phone">Nomor Telpon:</label>
+                    <textarea id="phone" name="phone" required readonly><?php echo $nomor_telpon; ?></textarea>
+                </div>
+                <div>
+                    <label for="tanggalMenginap">Tanggal Menginap:</label>
+                    <input type="date" id="tanggalMenginap" name="tanggalMenginap" required>
+                </div>
+            </div>
 
-    <!-- Baris Deskripsi Masalah dan Jenis Masalah -->
-    <div class="form-row">
-        <div>
-            <label for="description">Deskripsi Masalah:</label>
-            <textarea id="description" name="description" rows="6" required></textarea>
-        </div>
-        <div>
-            <label for="category">Jenis Masalah:</label>
-            <select id="category" name="category" required>
-                <option value="Sikap Tidak Profesional">Sikap Tidak Profesional</option>
-                <option value="Pelayanan Tidak Ramah">Pelayanan Tidak Ramah</option>
-                <option value="Pelayanan Tidak Memuaskan">Pelayanan Tidak Memuaskan</option>
-                <option value="Tidak Tersedia saat dibutuhkan">Tidak Tersedia saat dibutuhkan</option>
-                <option value="Lainnya">Lainnya</option>
-            </select>
-        </div>
-    </div>
+            <div class="form-row">
+                <div style="flex: 1;">
+                    <label for="description">Deskripsi Masalah:</label>
+                    <textarea id="description" name="description" rows="6" required></textarea>
+                </div>
+                <div style="flex: 1;">
+                    <label for="category">Jenis Masalah:</label>
+                    <select id="category" name="category" required>
+                        <option value="Sikap Tidak Profesional">Sikap Tidak Profesional</option>
+                        <option value="Pelayanan Tidak Ramah">Pelayanan Tidak Ramah</option>
+                        <option value="Pelayanan Tidak Memuaskan">Pelayanan Tidak Memuaskan</option>
+                        <option value="Tidak Tersedia saat dibutuhkan">Tidak Tersedia saat dibutuhkan</option>
+                        <option value="Lainnya">Lainnya</option>
+                    </select>
 
-    <!-- Baris Bukti Masalah dan Ciri-Ciri -->
-    <div class="form-row">
+
+                </div>
+            </div>
+
+            <div class="form-row">
     <div class="upload-container">
                         <label for="uploadBukti">Upload Bukti:</label>
                         <input type="file" class="form-control" id="uploadBukti" name="uploadBukti" accept="image/*"
@@ -362,13 +376,13 @@ $conn->close();
         </div>
     </div>
 
-    <!-- Tombol Kembali dan Submit -->
-    <div class="button-container">
-        <button type="button" onclick="window.location.href='userhome.php';" class="back-button">Kembali</button>
-        <button type="submit" class="submit-button">Submit</button>
-    </div>
-</form>
 
+
+            <div class="button-container">
+                <button type="button" onclick="window.location.href='userhome.php';">Kembali</button>
+                <button type="submit" class="submit-button">Submit</button>
+            </div>
+        </form>
 
         <?php if (isset($success_message)): ?>
             <div class="message"><?php echo $success_message; ?></div>
@@ -378,6 +392,7 @@ $conn->close();
     </div>
 </body>
 <script>
+
     const checkInInput = document.getElementById('tanggalMenginap');
     const reportInput = document.getElementById('report_date');
 
@@ -388,6 +403,7 @@ $conn->close();
         let report_date = new Date(reportInput.value);
         let currentDate = new Date();
 
+        // Validasi jika tanggal laporan lebih dari tanggal menginap
         if (report_date && tanggalMenginap && report_date < tanggalMenginap) {
             Swal.fire({
                 icon: 'error',
@@ -408,6 +424,7 @@ $conn->close();
         }
     }
 
+    // Tambahkan event listener untuk memeriksa setiap kali input tanggal berubah
     checkInInput.addEventListener('input', validateDates);
     reportInput.addEventListener('input', validateDates);
 </script>

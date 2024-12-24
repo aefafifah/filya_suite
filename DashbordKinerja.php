@@ -269,9 +269,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_status'])) {
                                 <td><?php echo $laporan['deskripsi_masalah']; ?></td>
                                 <td>
                                     <?php if (!empty($laporan['file_bukti'])): ?>
-                                        <a href="abcd.jpg" target="_blank">Lihat Bukti</a>
+                                        <a href="<?php echo htmlspecialchars($laporan['file_bukti']); ?>" target="_blank">Lihat
+                                            Bukti</a>
                                     <?php else: ?>
-                                        Tidak Ada Bukti
+                                        Tidak ada bukti
                                     <?php endif; ?>
                                 </td>
                                 <td>

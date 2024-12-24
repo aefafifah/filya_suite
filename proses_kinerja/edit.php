@@ -291,8 +291,8 @@ $conn->close();
                 </select>
             </div>
             <div class="d-flex">
-                <button type="submit" class="btn btn-primary">Update Laporan</button>
                 <a href="../DashbordKinerja.php" class="btn btn-secondary">Batal</a>
+                <button type="submit" class="btn btn-primary">Update Laporan</button
             </div>
         </form>
     </div>

@@ -12,22 +12,7 @@ if ($conn->connect_error) {
     die("Koneksi gagal: " . $conn->connect_error);
 }
 
-$limit = 10;
-$page = isset($_GET['page']) ? (int) $_GET['page'] : 1;
-$page = max($page, 1);
-$offset = ($page - 1) * $limit;
-
-
-$total_query = "SELECT COUNT(*) AS total FROM fasilitas";
-$total_result = $conn->query($total_query);
-$total_row = $total_result->fetch_assoc();
-$total_data = $total_row['total'];
-
-
-$total_pages = ceil($total_data / $limit);
-
-
-$sql = "SELECT * FROM fasilitas LIMIT $limit OFFSET $offset";
+$sql = "SELECT * FROM fasilitas";
 $result = $conn->query($sql);
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_status'])) {

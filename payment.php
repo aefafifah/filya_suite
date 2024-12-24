@@ -128,7 +128,7 @@ $waLink = "https://wa.me/6281217332804?text=$waMessage";
 
         .pay-button {
             background-color: #DD761C;
-            color: #fff;
+            color: #ff7a00;
             border: none;
             border-radius: 20px;
             width: 181.5px;
@@ -228,15 +228,15 @@ $waLink = "https://wa.me/6281217332804?text=$waMessage";
         <div class="progress-line"></div>
         <div class="step active" id="step1">
             <div class="step-circle active">1</div>
-            <span>Billing</span>
+            <span>Kwitansi</span>
         </div>
         <div class="step active" id="step2">
             <div class="step-circle active">2</div>
-            <span>Payment</span>
+            <span>Pembayaran</span>
         </div>
         <div class="step" id="step3">
             <div class="step-circle inactive">3</div>
-            <span>Confirmation</span>
+            <span>Konfirmasi</span>
         </div>
     </div>
     <div class="container-wrapper">

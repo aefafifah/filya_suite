@@ -445,12 +445,7 @@ document.getElementById('checkout').addEventListener('change', highlightDateRang
         function selectVilla(villaName) {
             document.getElementById('villa-name').value = villaName;
         }
-
-
     </script>
-
-
-
     </script>
 </body>
 

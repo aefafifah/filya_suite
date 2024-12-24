@@ -76,103 +76,133 @@ $conn->close();
     <title>Edit Data Laporan Fasilitas</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        body {
-            background-color: #f3f4f6;
-            background-image: url('../blubrown.jpg');
-            font-family: Arial, sans-serif;
-        }
+                    body {
+                background-color: #f3f4f6;
+                background-image: url('../blubrown.jpg');
+                font-family: Arial, sans-serif;
+                margin: 0;
+                padding: 0;
+            }
+            
+            .blur-bg {
+                background-image: url('../blubrown.jpg');
+                background-size: cover;
+                background-position: center;
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100vh;
+                z-index: -1;
+            }
+            
+            .blur-bg::before {
+                content: "";
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background-color: rgba(28, 24, 24, 0.7);
+                z-index: 1;
+            }
+            
+            .container {
+                max-width: 600px;
+                background-color: #ffffff;
+                padding: 30px;
+                margin: 50px auto;
+                border-radius: 12px;
+                box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+                box-sizing: border-box;
+            }
+            
+            h2 {
+                text-align: center;
+                color: #333;
+                font-size: 24px;
+                font-weight: bold;
+                margin-bottom: 25px;
+            }
+            
+            label {
+                color: #555;
+                font-weight: 500;
+                display: block;
+                margin-bottom: 5px;
+            }
+            
+            .form-control {
+                width: 100%;
+                border: 1px solid #ced4da;
+                border-radius: 6px;
+                padding: 10px;
+                font-size: 16px;
+                transition: border-color 0.3s ease, box-shadow 0.3s ease;
+                margin-bottom: 15px;
+                box-sizing: border-box;
+            }
+            
+            .form-control:focus {
+                border-color: #007bff;
+                box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+                outline: none;
+            }
+            
+            .btn-primary {
+                background-color: #28a745;
+                border: none;
+                color: #ffffff;
+                font-size: 16px;
+                padding: 10px 20px;
+                border-radius: 6px;
+                cursor: pointer;
+                transition: background-color 0.3s ease;
+            }
+            
+            .btn-primary:hover {
+                background-color: #218838;
+            }
+            
+            .btn-secondary {
+                background-color: #6c757d;
+                border: none;
+                color: #ffffff;
+                font-size: 16px;
+                padding: 10px 20px;
+                border-radius: 6px;
+                cursor: pointer;
+                transition: background-color 0.3s ease;
+            }
+            
+            .btn-secondary:hover {
+                background-color: #5a6268;
+            }
+            
+            /* Gaya untuk tombol biru */
+            .btn-blue {
+                background-color: #007bff; /* Warna biru */
+                border: none;
+                color: #ffffff;
+                font-size: 16px;
+                padding: 10px 20px;
+                border-radius: 6px;
+                cursor: pointer;
+                transition: background-color 0.3s ease;
+            }
+            
+            .btn-blue:hover {
+                background-color: #0056b3; /* Warna biru lebih gelap saat hover */
+            }
+            
+            .d-flex {
+                display: flex;
+                gap: 10px;
+                justify-content: space-between;
+                margin-top: 20px;
+            }
 
-        .blur-bg {
-            background-image: url('../blubrown.jpg');
-            background-size: cover;
-            background-position: center;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100vh;
-            z-index: -1;
-        }
 
-        .blur-bg::before {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(28, 24, 24, 0.7);
-            z-index: 1;
-        }
-
-        .container {
-            max-width: 600px;
-            background-color: #ffffff;
-            padding: 30px;
-            margin: 50px auto;
-            border-radius: 12px;
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
-        }
-
-        h2 {
-            text-align: center;
-            color: #333;
-            font-size: 24px;
-            font-weight: bold;
-            margin-bottom: 25px;
-        }
-
-        label {
-            color: #555;
-            font-weight: 500;
-        }
-
-        .form-control {
-            border: 1px solid #ced4da;
-            border-radius: 6px;
-            margin-bottom: 15px;
-            padding: 10px;
-            font-size: 16px;
-            transition: all 0.3s ease;
-        }
-
-        .form-control:focus {
-            border-color: #007bff;
-            box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
-        }
-
-        .btn-primary {
-            background-color: #007bff;
-            border: none;
-            font-size: 16px;
-            padding: 10px 20px;
-            border-radius: 6px;
-            transition: background-color 0.3s ease;
-        }
-
-        .btn-primary:hover {
-            background-color: #0056b3;
-        }
-
-        .btn-secondary {
-            background-color: #6c757d;
-            border: none;
-            font-size: 16px;
-            padding: 10px 20px;
-            border-radius: 6px;
-            transition: background-color 0.3s ease;
-        }
-
-        .btn-secondary:hover {
-            background-color: #5a6268;
-        }
-
-        .d-flex {
-            display: flex;
-            gap: 10px;
-            justify-content: space-between;
-            margin-top: 20px;
-        }
     </style>
 </head>
 
@@ -233,7 +263,7 @@ $conn->close();
 
             <div class="d-flex">
                 <a href="../DashbordFasilitas.php" class="btn-secondary">Kembali</a>
-                <button type="submit">Simpan</button>
+                <button type="submit" class="btn-blue">Update</button>
             </div>
         </form>
     </div>

@@ -307,7 +307,7 @@ mysqli_close($data);
 
 <script>
     const checkInInput = document.getElementById('tanggalMenginap');
-    const reportInput = document.getElementById('report_date');
+    const reportInput = document.getElementById('tanggalMelaporkan');
 
 
     function validateDates() {

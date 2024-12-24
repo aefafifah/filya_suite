@@ -182,21 +182,21 @@ mysqli_close($conn);
                     <div class="villa-card">
                         <img src="assets/bg-1.png" alt="Villa Dreamy" class="img-fluid">
                         <div class="villa-name">Dreamy</div>
-                        <div class="villa-price">$990/malam</div>
+                        <div class="villa-price">Rp. 990.000/malam</div>
                     </div>
                 </div>
                 <div class="col-md-4 col-sm-6 mb-4" onclick="selectVilla('Charming')">
                     <div class="villa-card">
                         <img src="assets/bg-1.png" alt="Villa Charming" class="img-fluid">
                         <div class="villa-name">Charming</div>
-                        <div class="villa-price">$990/malam</div>
+                        <div class="villa-price">Rp. 990.000/malam</div>
                     </div>
                 </div>
                 <div class="col-md-4 col-sm-6 mb-4" onclick="selectVilla('Fancy')">
                     <div class="villa-card">
                         <img src="assets/bg-1.png" alt="Villa Fancy" class="img-fluid">
                         <div class="villa-name">Fancy</div>
-                        <div class="villa-price">$990/malam</div>
+                        <div class="villa-price">Rp. 990.000/malam</div>
                     </div>
                 </div>
             </div>
@@ -209,7 +209,7 @@ mysqli_close($conn);
         <div class="overlay"></div>
         <section class="container">
             <div class="booking-form">
-                <h3 class="text-center">$190 per Malam</h3>
+                <h3 class="text-center">Rp. 190.000 per Malam</h3>
                 <form id="booking-form" method="get">
                     <div class="mb-3">
                         <label class="form-label">Nama</label>

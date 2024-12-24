@@ -174,7 +174,7 @@ if(isset($_POST['submit'])){
 <body>
 <div class="card">
     <div class="card-header">
-        <div onclick="window.location.href='login.php'">LOGIN</div>
+        <div onclick="window.location.href='index.php'">LOGIN</div>
         <div class="active">REGISTER</div>
     </div>
     <div class="card-body">
@@ -187,33 +187,33 @@ if(isset($_POST['submit'])){
                 }
             } ?>
             <div class="mb-2">
-                <label for="nama" class="form-label">Name</label>
-                <input type="text" class="form-control" name="nama" id="nama" required placeholder="Enter your name">
+                <label for="nama" class="form-label">Nama</label>
+                <input type="text" class="form-control" name="nama" id="nama" required placeholder="Masukkan Nama Anda">
             </div>
             <div class="mb-2">
                 <label for="email" class="form-label">Email</label>
-                <input type="email" class="form-control" name="email" id="email" required placeholder="Enter your email">
+                <input type="email" class="form-control" name="email" id="email" required placeholder="Masukkan Email Anda">
             </div>
             <div class="mb-2">
                 <label for="password" class="form-label">Password</label>
-                <input type="password" class="form-control" name="password" id="password" required placeholder="Enter your password">
+                <input type="password" class="form-control" name="password" id="password" required placeholder="Masukkan Password Anda">
             </div>
             <div class="mb-2">
-                <label for="cpassword" class="form-label">Confirm Password</label>
-                <input type="password" class="form-control" name="cpassword" id="cpassword" required placeholder="Confirm your password">
+                <label for="cpassword" class="form-label">Konfirmasi Password</label>
+                <input type="password" class="form-control" name="cpassword" id="cpassword" required placeholder="Konfirmasi Password Anda">
             </div>
             <div class="mb-2">
-                <label for="nomor_telpon" class="form-label">Phone Number</label>
-                <input type="text" class="form-control" name="nomor_telpon" id="nomor_telpon" required placeholder="Enter your phone number">
+                <label for="nomor_telpon" class="form-label">Nomor Telpon</label>
+                <input type="text" class="form-control" name="nomor_telpon" id="nomor_telpon" required placeholder="Masukkan Nomor Telpon Anda">
             </div>
             <div class="mb-2">
-                <label for="alamat" class="form-label">Address</label>
-                <input type="text" class="form-control" name="alamat" id="alamat" required placeholder="Enter your address">
+                <label for="alamat" class="form-label">Alamat</label>
+                <input type="text" class="form-control" name="alamat" id="alamat" required placeholder="Masukkan Alamat Anda">
             </div>
             <div class="d-grid mt-4">
-                <button type="submit" class="btn btn-primary" name="submit">Register Now</button>
+                <button type="submit" class="btn btn-primary" name="submit">Registrasi Sekarang</button>
             </div>
-            <p class="text-center mt-3">Already have an account? <a href="login.php">Login now</a></p>
+            <p class="text-center mt-3">Apakah Anda Sudah Mempunyai Akun? <a href="index.php">Login Sekarang</a></p>
         </form>
     </div>
 </div>

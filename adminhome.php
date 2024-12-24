@@ -3,15 +3,15 @@ session_start();
 
 // Cek apakah pengguna sudah login dan apakah mereka admin
 if (!isset($_SESSION["nama"]) || $_SESSION["usertype"] !== 'admin') {
-    header("location:login.php");
+    header("location:index.php");
     exit();
 }
 
 // Koneksi ke database
 $servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "filya_suite";
+$username = "u976363923_filyasuite";
+$password = "Bagus_2024";
+$dbname = "u976363923_filyasuite";
 
 $conn = new mysqli($servername, $username, $password, $dbname);
 
@@ -90,7 +90,7 @@ $result = $conn->query($sql);
                     <a class="nav-link" href="#">Settings</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="login.php">Logout</a>
+                    <a class="nav-link" href="index.php">Logout</a>
                 </li>
             </ul>
         </div>
@@ -105,7 +105,7 @@ $result = $conn->query($sql);
                 <div class="card-body text-center">
                     <h1 class="display-4 text-primary">Welcome to Admin Home Page</h1>
                     <p class="lead mt-4">Selamat datang, <?php echo htmlspecialchars($_SESSION["nama"]); ?>!</p>
-                    <a href="login.php" class="btn btn-danger mt-3">Logout</a>
+                    <a href="index.php" class="btn btn-danger mt-3">Logout</a>
                     <p>login as <a href="userhome.php">user</a></p>
                 </div>
             </div>

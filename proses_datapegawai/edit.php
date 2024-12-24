@@ -210,7 +210,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 </div>
             </div>
             <div class="d-flex justify-content-between">
-                <a href="Dashboarddatapegawai.php" class="btn btn-secondary">Kembali</a>
+                <a href="../../Dashboarddatapegawai.php" class="btn btn-secondary">Kembali</a>
                 <button type="submit" class="btn btn-primary">Update Pegawai</button>
             </div>
         </form>

@@ -14,7 +14,7 @@ if ($data === false) {
 }
 
 if (!isset($_SESSION['nomor_telpon'])) {
-    header("Location: login.php");
+    header("Location: index.php");
     exit();
 }
 

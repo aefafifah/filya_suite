@@ -10,7 +10,7 @@ $conn = new mysqli($servername, $username, $password, $dbname);
 
 // Redirect ke login.php jika pengguna belum login
 if (!isset($_SESSION['nama']) || !isset($_SESSION['usertype'])) {
-    header("Location: login.php");
+    header("Location: index.php");
     exit();
 }
 

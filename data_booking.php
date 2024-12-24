@@ -16,7 +16,7 @@ if ($data === false) {
 
 // Memeriksa apakah sesi login tersedia
 if (!isset($_SESSION['email']) && !isset($_SESSION['nomor_telpon'])) {
-    header("Location: login.php"); // Jika tidak login, arahkan ke login
+    header("Location: index.php"); // Jika tidak login, arahkan ke login
     exit();
 }
 

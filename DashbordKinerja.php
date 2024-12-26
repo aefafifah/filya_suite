@@ -247,7 +247,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_status'])) {
                         <th>Tanggal Menginap</th>
                         <th>Nama Pegawai</th>
                         <th>Jabatan Pegawai</th>
-                        <th>Waktu Kejadian</th>
+                        <th>Tanggal Melapor</th>
                         <th>Jenis Masalah</th>
                         <th>Deskripsi Masalah</th>
                         <th>File Bukti</th>

@@ -213,9 +213,9 @@ $conn->close();
                 </select>
             </div>
             <div class="mb-3">
-                <label for="waktu_kejadian" class="form-label">Waktu Kejadian</label>
-                <input type="datetime-local" class="form-control" id="waktu_kejadian" name="waktu_kejadian"
-                    value="<?php echo $laporan['waktu_kejadian']; ?>" required>
+                <label for="tanggal_melapor" class="form-label">Tanggal melapor</label>
+                <input type="date" class="form-control" id="tanggal_melapor" name="tanggal_melapor"
+                    value="<?php echo $laporan['tanggal_melapor']; ?>" required>
             </div>
             <div class="mb-3">
                 <label for="jenis_masalah" class="form-label">Jenis Masalah</label>
